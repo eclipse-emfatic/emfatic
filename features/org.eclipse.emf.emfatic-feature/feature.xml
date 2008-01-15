@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.emf.emfatic_feature"
+      label="Emfatic (Incubation)"
+      version="0.3.0.qualifier"
+      provider-name="Eclipse.org">
+
+   <description url="http://wiki.eclipse.org/Emfatic">
+      Emfatic is a text editor supporting navigation, editing,  and conversion of Ecore models, using a compact and human-readable syntax similar to Java.  The EPLed Emfatic now hosted at EMFT extends the Feb 2005 alphaworks release with support for  EMF Generics, folding, &quot;red squigglies&quot;, an EMF Type Hierarchy, hyperlinks, AutoEdits, and the possibility to define templates to speed up document creation, among other usability features. The best way to gain hands-on experience with Emfatic is to right-click on any .ecore file and choose Generate Emfatic source, a similar converter works in the opposite direction.  Online help is also available.  
+
+Emfatic is hosted as an EMFT component with Incubation status.
+   </description>
+
+   <copyright>
+      Copyright (c) 2006 IBM Corporation and others.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      Eclipse Public License - v 1.0
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.emf.ecore.edit"/>
+      <import plugin="org.eclipse.emf.edit.ui"/>
+      <import plugin="org.eclipse.gymnast.runtime.core"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="org.eclipse.gymnast.runtime.ui"/>
+      <import feature="org.eclipse.gymnast.runtime_feature" version="0.1.0"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.emf.emfatic.core"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.emfatic.ui"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.emfatic.doc.user"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+</feature>

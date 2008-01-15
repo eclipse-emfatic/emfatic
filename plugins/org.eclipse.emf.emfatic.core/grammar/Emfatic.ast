@@ -1,0 +1,119 @@
+language Emfatic;
+
+options { k=3; 
+          parserPackageName="org.eclipse.emf.emfatic.core.lang.gen.parser"; 
+          astPackageName="org.eclipse.emf.emfatic.core.lang.gen.ast"; 
+          astBaseClassName="EmfaticASTNode";
+        }
+
+
+sequence compUnit [entry] : packageDecl importStmts topLevelDecls  ;
+
+sequence packageDecl : annotations "package" name=qualifiedID SEMI ;
+
+list qualifiedID : id1=ID (qidSeparator idn=ID)* ;
+token qidSeparator : DOT | DOLLAR ;
+
+abstract stringLiteralOrQualifiedID : stringLiteralContainer | qualifiedIDContainer ;
+sequence stringLiteralContainer : STRING_LITERAL ;
+sequence qualifiedIDContainer : qualifiedID ;
+
+list annotations : annotation* ;
+sequence annotation : AT source=stringLiteralOrQualifiedID LPAREN keyEqualsValueList RPAREN ;
+list keyEqualsValueList : kv1=keyEqualsValue (COMMA kvn=keyEqualsValue)* ;
+sequence keyEqualsValue : key=stringLiteralOrQualifiedID EQUALS value=stringLiteralOrQualifiedID ;
+
+list importStmts : importStmt* ; 
+
+sequence importStmt : "import" (alias=ID EQUALS)? uri=stringLiteralOrQualifiedID SEMI ;
+
+list topLevelDecls : topLevelDecl* ;
+
+abstract topLevelDecl : (annotations) 
+  subPackageDecl | classDecl | dataTypeDecl | enumDecl | mapEntryDecl ;
+
+sequence subPackageDecl : "package" name=ID LCURLY topLevelDecls RCURLY ;
+
+sequence classDecl : (abstractModifier)? 
+                     classKind name=ID 
+                     (typeParamsInfo=typeParamsInfo)?
+                     ("extends" superTypes=commaListBoundExceptWild)? 
+                     (COLON instClassName=boundExceptWildcard)? 
+                     LCURLY classMemberDecls RCURLY ;
+list commaListBoundExceptWild : tb1=boundExceptWildcard (COMMA tbn=boundExceptWildcard)*;
+
+sequence abstractModifier : "abstract" ;
+token classKind : "class" | "interface" ;
+
+sequence typeParamsInfo : LT oneOrMoreTypeParams GT ; 
+list oneOrMoreTypeParams : tp1=typeParam (COMMA tpn=typeParam)* ;
+sequence typeParam : typeVarName=ID (typeBoundsInfo=typeBoundsInfo)? ; 
+sequence typeBoundsInfo : "extends" oneOrMoreTypeParamBounds ; 
+list oneOrMoreTypeParamBounds : tb1=boundExceptWildcard (AMP tbn=boundExceptWildcard)*; 
+sequence boundExceptWildcard : rawTNameOrTVarOrParamzedTName=qualifiedID (LT oneOrMoreTypeArgs GT)? ; 
+list oneOrMoreTypeArgs : ta1=typeArg (COMMA tan=typeArg)*;
+abstract typeArg : boundExceptWildcard | wildcard  ;
+sequence wildcard : QMARK ( extendsOrSuper boundExceptWildcard )? ; 
+token extendsOrSuper : "extends" | "super" ; 
+
+// there are no array types in EMF
+/* dot means package nesting, there are no inner classes in EMF */
+
+
+list classMemberDecls : classMemberDecl* ;
+abstract classMemberDecl : (annotations modifiers) attribute | reference | operation ;
+
+sequence attribute : "attr" typeWithMulti name=ID (EQUALS defaultValueExpr)? SEMI ; 
+
+sequence typeWithMulti : name=boundExceptWildcard (multiplicity)? ;
+
+sequence multiplicity : LSQUARE (multiplicityExpr)? RSQUARE ;
+sequence multiplicityExpr : lowerBound=simpleMultiplicityExpr (DOT_DOT upperBound=simpleMultiplicityExpr)? ;
+token simpleMultiplicityExpr : STAR | PLUS | QMARK | INT_LITERAL ;
+
+sequence reference : referenceKind typeWithMulti (HASH oppositeName=ID)? name=ID SEMI ;
+token referenceKind : "ref" | "val" ;
+
+list modifiers : optNegatedModifier* ;
+sequence optNegatedModifier : (BANG)? modifier ;
+token modifier
+// keyword        EMF meaning
+: "readonly"   // EStructuralFeature.changeable = false
+| "volatile"   // EStructuralFeature.volatile   = true
+| "transient"  // EStructuralFeature.transient  = true
+| "unsettable" // EStructuralFeature.unsettable = true
+| "derived"    // EStructuralFeature.derived    = true
+| "unique"     // *ETypedElement.unique         = true  -- bag?
+| "ordered"    // *ETypedElement.ordered        = true  -- random?
+| "resolve"    // *EReference.resolveProxies    = true  -- local?
+| "id"         // EAttribute.id                 = true
+;
+
+abstract defaultValueExpr : boolExpr | intExpr | stringExpr | charExpr ;
+sequence boolExpr : trueOrFalse ;
+token trueOrFalse : "true" | "false" ;
+sequence intExpr : (MINUS)? INT_LITERAL ;
+sequence stringExpr : STRING_LITERAL ;
+sequence charExpr : CHAR_LITERAL ;
+
+sequence operation : "op" (typeParamsInfo=typeParamsInfo)? 
+   resType=resultType name=ID LPAREN (params)? RPAREN 
+   ("throws" exceptions=commaListBoundExceptWild)? SEMI ;
+
+abstract resultType : typeWithMulti | voidContainer ; 
+sequence voidContainer : "void" ; 
+
+list params : p1=param (COMMA pn=param)*; 
+sequence param : leadingAnnotations=annotations modifiers typeWithMulti name=ID trailingAnnotations=annotations ;
+
+// "transient" means !serializable
+sequence dataTypeDecl : (transientModifier)? "datatype" name=ID COLON instClassName=stringLiteralOrQualifiedID SEMI ; // TODO datatypes should accept type parameters
+sequence transientModifier : "transient" ;
+
+sequence enumDecl : "enum" name=ID LCURLY enumLiterals RCURLY ;
+list enumLiterals : enumLiteral* ;
+sequence enumLiteral : leadingAnnotations=annotations name=ID (EQUALS val=INT_LITERAL)? trailingAnnotations=annotations SEMI ;
+
+sequence mapEntryDecl : "mapentry" name=ID COLON key=typeWithMulti MINUS_GT value=typeWithMulti SEMI ;
+
+// the following tokens were added to cater for generics syntax : AMP, LT, GT 

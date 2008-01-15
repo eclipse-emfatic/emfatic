@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="EmfaticEditor"
+            extensions="emf"
+            icon="icons/emfatic.gif"
+            class="org.eclipse.emf.emfatic.ui.editor.EmfaticEditor"
+            contributorClass="org.eclipse.emf.emfatic.ui.editor.EmfaticEditorActionContributor"
+            id="org.eclipse.emf.emfatic.ui.editor.EmfaticEditor">
+      </editor>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            nameFilter="*.emf"
+            id="org.eclipse.emf.emfatic.ui.actions.GenerateEcore">
+         <action
+               label="Generate Ecore Model"
+               icon="icons/emfatic.gif"
+               class="org.eclipse.emf.emfatic.ui.actions.GenerateEcore"
+               menubarPath="additions"
+               enablesFor="1"
+               id="GenerateEcore">
+         </action>
+      </objectContribution>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            nameFilter="*.ecore"
+            id="org.eclipse.emf.emfatic.ui.actions.GenerateEmfatic">
+         <action
+               label="Generate Emfatic Source"
+               icon="icons/emfatic.gif"
+               class="org.eclipse.emf.emfatic.ui.actions.GenerateEmfatic"
+               menubarPath="additions"
+               enablesFor="1"
+               id="GenerateEmfatic">
+         </action>
+      </objectContribution>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            class="org.eclipse.emf.emfatic.ui.wizards.EmfaticNewWizard"
+            icon="icons/emfatic.gif"
+            id="org.eclipse.emf.emfatic.ui.wizards.EmfaticNewWizard"
+            name="Emfatic file">
+         <selection
+               class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.emf.emfatic.ui.preferences.EmfaticPreferencePage"
+            id="org.eclipse.emf.emfatic.ui.preferences.EmfaticPreferencePage"
+            name="Emfatic">
+      </page>
+      <page
+            category="org.eclipse.emf.emfatic.ui.preferences.EmfaticPreferencePage"
+            class="org.eclipse.emf.emfatic.ui.preferences.EmfaticTemplatesPreferencePage"
+            id="org.eclipse.emf.emfatic.ui.preferences.EmfaticTemplatesPreferencePage"
+            name="Templates">
+      </page>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.emf.emfatic.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors.templates">
+      <contextType
+            class="org.eclipse.emf.emfatic.ui.templates.EmfaticContextType"
+            id="org.eclipse.emf.emfatic.ui.templates.EmfaticContextType">
+      </contextType>
+      
+      <template
+        contextTypeId="org.eclipse.emf.emfatic.ui.templates.EmfaticContextType"
+        icon="icons/template.gif"
+        description="Template for an OCL invariant"
+        name="inv"
+        id="org.eclipse.emf.emfatic.ui.templates.EmfaticOCLInv">
+       	<pattern>
+@"http://www.eclipse.org/ocl/examples/OCL"(${invName}=" ${booleanExpression} ")
+        </pattern>
+        </template>
+      
+      <template
+        contextTypeId="org.eclipse.emf.emfatic.ui.templates.EmfaticContextType"
+        icon="icons/template.gif"
+        description="Template for an OCL derive"
+        name="der"
+        id="org.eclipse.emf.emfatic.ui.templates.EmfaticOCLDer">
+       	<pattern>
+@"http://www.eclipse.org/ocl/examples/OCL"(derive=" ${cursor} ")
+        </pattern>
+        </template>
+
+      <template
+        contextTypeId="org.eclipse.emf.emfatic.ui.templates.EmfaticContextType"
+        icon="icons/template.gif"
+        description="Template for an OCL body"
+        name="body"
+        id="org.eclipse.emf.emfatic.ui.templates.EmfaticOCLBody">
+       	<pattern>
+@"http://www.eclipse.org/ocl/examples/OCL"(body=" ${cursor} ")
+        </pattern>
+        </template>
+        
+  </extension>
+  
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.eclipse.emf.emfatic"
+            name="Emfatic">
+      </category>
+      <view
+            allowMultiple="false"
+            category="org.eclipse.emf.emfatic"
+            class="org.eclipse.emf.emfatic.ui.views.TypesView"
+            icon="icons/class_hi.gif"
+            id="org.eclipse.emf.emfatic.ui.views.TypesView"
+            name="EMF Type Hierarchy">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <showInPart
+               id="org.eclipse.emf.emfatic.ui.views.TypesView">
+         </showInPart>
+      </perspectiveExtension>
+   </extension>
+
+</plugin>
