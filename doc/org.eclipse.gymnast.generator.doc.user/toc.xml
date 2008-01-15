@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="EMFT Gymnast Generator">
+	<topic label="Getting Started"> 
+		<topic label="How to use Gymnast Generator" href="html/howto.html"/> 
+	</topic>
+</toc>

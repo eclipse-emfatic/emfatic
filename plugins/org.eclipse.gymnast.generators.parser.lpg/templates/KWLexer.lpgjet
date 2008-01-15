@@ -1,0 +1,64 @@
+<%@ jet package="org.eclipse.gymnast.generators.parser.lpg.templates"
+        imports="org.eclipse.gymnast.generator.core.generator.GeneratorContext"
+        class="KWLexerTemplate"
+        skeleton="KWLexer.skeleton" %>
+--
+-- <%= _context.getGeneratedByText() %>
+--
+%options slr
+%options fp=<%= _context.getASTName() %>KWLexer
+%options prefix=Char_
+%options noserialize
+%options package=<%= _context.getParserPackageName() %>
+%options template=KeyWordTemplateB.g
+%options export_terminals=("<%= _context.getASTName() %>Parsersym.java", "TK_")
+
+$Define
+    --
+    -- Definition of macros used in the KeyWordTemplateB.g template
+    --
+    -- $import_classes /.import java.util.*;./
+    -- $action_class /.$file_prefix./
+    $eof_char /.Char_EOF./
+
+$End
+
+$Include
+    KWLexerMap.g
+$End
+
+$Export
+<%
+String[] literals = _context.getGrammarInfo().getLiterals();
+for (int i = 0; i < literals.length; i++) {
+%>
+  KW_<%= literals[i] %>
+<%
+}
+%>
+$End
+
+$Eof
+    EOF
+$End
+
+$Start
+    KeyWord
+$End
+
+$Rules
+KeyWord ::=
+
+<%
+for (int i = 0; i < literals.length; i++) {
+%>
+<%=i>0?"| ":"  "%><%= space(literals[i]) %>
+/.$BeginAction
+    $setResult($_KW_<%= literals[i] %>);
+  $EndAction
+./
+
+<%
+}
+%>
+$End

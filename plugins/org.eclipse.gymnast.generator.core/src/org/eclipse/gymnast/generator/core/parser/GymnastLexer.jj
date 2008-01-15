@@ -1,0 +1,47 @@
+
+TOKEN : { <STRING_LITERAL : "\"" (<ESC> | ~["\""])* "\"" > }
+TOKEN : {
+  <#ESC: "\\" ["t","f","r","n","\"","'","\\"] >
+}
+
+TOKEN : {
+  <ID : ("~")? (["a"-"z","A"-"Z","_"]) (["a"-"z","A"-"Z","_"] | <DIGIT>)* >
+}
+
+TOKEN : { <INT_LITERAL: (<DIGIT>)+ > }
+TOKEN : { <#DIGIT: ["0"-"9"] > }
+
+TOKEN :
+{ <LCURLY  : "{">
+| <RCURLY  : "}">
+| <LSQUARE : "[">
+| <RSQUARE : "]">
+| <LPAREN  : "(">
+| <RPAREN  : ")">
+
+| <DOT     : ".">
+| <COMMA   : ",">
+| <COLON   : ":">
+| <SEMI    : ";">
+| <PIPE    : "|">
+
+| <STAR    : "*">
+| <PLUS    : "+">
+| <EQUALS  : "=">
+| <QMARK   : "?">
+| <BANG    : "!">
+}
+
+SKIP :
+{
+  " "
+| "\t"
+| "\f"
+| "\r"
+| "\n"
+}
+
+SKIP :
+{ <SINGLE_LINE_COMMENT: "//" (~["\r","\n"])* ["\r","\n"] >
+| <MULTI_LINE_COMMENT: "/*" ("*/" | (~["!"] (~["*"] | ("*" ~["/"]))* "*/")) >
+}

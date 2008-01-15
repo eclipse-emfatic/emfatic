@@ -1,0 +1,34 @@
+// $ANTLR : Gymnast.g -> GymnastParserTokenTypes.txt$
+GymnastParser    // output token vocab name
+LITERAL_language="language"=4
+SEMI=5
+LITERAL_options="options"=6
+LCURLY=7
+RCURLY=8
+EQUALS=9
+ID=10
+STRING_LITERAL=11
+INT_LITERAL=12
+COLON=13
+LITERAL_abstract="abstract"=14
+LITERAL_container="container"=15
+LITERAL_interface="interface"=16
+PIPE=17
+LPAREN=18
+RPAREN=19
+LITERAL_list="list"=20
+STAR=21
+PLUS=22
+LITERAL_sequence="sequence"=23
+LITERAL_token="token"=24
+QMARK=25
+LSQUARE=26
+RSQUARE=27
+COMMA=28
+DOT=29
+BANG=30
+ESC=31
+DIGIT=32
+WS=33
+SINGLE_LINE_COMMENT=34
+MULTI_LINE_COMMENT=35

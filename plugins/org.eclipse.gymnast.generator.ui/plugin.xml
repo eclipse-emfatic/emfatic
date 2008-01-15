@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+  <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Gymnast Editor"
+            extensions="ast"
+            icon="icons/obj16/gymnast.gif"
+            class="org.eclipse.gymnast.generator.ui.editor.GymnastEditor"
+            contributorClass="org.eclipse.gymnast.generator.ui.editor.GymnastEditorActionContributor"
+            id="org.eclipse.gymnast.generator.ui.editor.GymnastEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            nameFilter="*.ast"
+            id="org.eclipse.gymnast.generator.ui.GymnastPopupActions">
+         <action
+               label="Generate AST"
+               icon="icons/obj16/gymnast.gif"
+               class="org.eclipse.gymnast.generator.ui.actions.GenerateAST"
+               menubarPath="additions"
+               enablesFor="1"
+               id="GenerateAST">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

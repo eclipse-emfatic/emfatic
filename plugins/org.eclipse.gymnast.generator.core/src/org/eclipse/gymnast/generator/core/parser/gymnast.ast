@@ -1,0 +1,77 @@
+/*******************************************************************************
+ * Copyright (c) 2004, 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+ 
+language Gymnast;
+
+options { k=2; }
+
+sequence compUnit [entry] : headerSection grammar ;
+
+sequence headerSection : "language" name=id SEMI (optionsSection)? ;
+
+sequence optionsSection : "options" LCURLY optionList RCURLY ;
+list optionList : option* ;
+sequence option : name=id EQUALS value=optionValue SEMI ;
+token optionValue : ID | STRING_LITERAL | INT_LITERAL ;
+
+list grammar : rule* ;
+abstract rule : altRule | listRule | seqRule | tokenRule ;
+
+sequence altRule : decl=altRuleDecl body=altRuleBody SEMI ;
+sequence altRuleDecl : kind=altRuleKind name=id (attrs)? COLON ;
+token altRuleKind : "abstract" | "container" | "interface" ;
+sequence altRuleBody : (preSeq=altSeq)? alts (postSeq=altSeq)? ;
+list alts : se1=simpleExpr (PIPE sen=simpleExpr)* ;
+sequence altSeq : LPAREN seq RPAREN ;
+
+sequence listRule : decl=listRuleDecl body=listRuleBody SEMI ;
+sequence listRuleDecl : "list" name=id (attrs)? COLON ;
+sequence listRuleBody : listExpr=simpleExpr (LPAREN separator=simpleExpr listExpr2=simpleExpr RPAREN)? listMark ;
+token listMark : STAR | PLUS ;
+
+sequence seqRule : decl=seqRuleDecl body=seq SEMI ;
+sequence seqRuleDecl : "sequence" name=id (attrs)? COLON ;
+list seq : expr+ ;
+
+sequence tokenRule : decl=tokenRuleDecl body=alts SEMI ;
+sequence tokenRuleDecl : "token" name=id (attrs)? COLON ;
+
+abstract expr : optSubSeq | simpleExpr ;
+sequence optSubSeq : LPAREN seq RPAREN QMARK ;
+sequence simpleExpr : (name=id EQUALS)? value=atom (attrs)? ;
+
+sequence attrs : LSQUARE attrList RSQUARE ;
+list attrList : id1=ID (COMMA idn=ID)* ;
+
+token atom
+: ID
+| STRING_LITERAL
+| "abstract"
+| "container"
+| "interface"
+| "language"
+| "list"
+| "options"
+| "sequence"
+| "token"
+;
+
+token id
+: ID
+| "abstract"
+| "container"
+| "interface"
+| "language"
+| "list"
+| "options"
+| "sequence"
+| "token"
+;

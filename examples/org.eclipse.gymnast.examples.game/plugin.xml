@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="GameEditor"
+            icon="icons/gymnast.gif"
+            extensions="game"
+            class="org.eclipse.gymnast.examples.game.ui.GameEditor"
+            contributorClass="org.eclipse.gymnast.examples.game.ui.GameEditorActionContributor"
+            id="org.eclipse.gymnast.examples.game.ui.GameEditor">
+      </editor>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            nameFilter="*.game"
+            id="org.eclipse.gymnast.examples.game.ui.GamePlayAction">
+         <action
+               label="Play Game!"
+               icon="icons/gymnast.gif"
+               class="org.eclipse.gymnast.examples.game.ui.GamePlayAction"
+               menubarPath="additions"
+               enablesFor="1"
+               id="org.eclipse.gymnast.examples.game.ui.GamePlayAction">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

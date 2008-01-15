@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.gymnast.generator_feature"
+      label="Gymnast Generator (Incubation)"
+      version="0.3.0.qualifier"
+      provider-name="Eclipse.org">
+
+   <description url="http://www.sts.tu-harburg.de/%7Emi.garcia/SoC2007/GymnastSlides.pdf">
+      Gymnast is a framework for jumpstarting text editors for custom Domain Specific Languages. 
+      Gymnast comprises two main parts (Runtime and Generator), each of which can in
+      turn be divided into Core and User Interface. 
+      Technical documentation on how to use Gymnast can be found in Ch. 1 and 2 of the technical report &quot;Generation of Eclipse-based IDEs for
+Custom DSLs&quot;, to be found at http://www.sts.tu-harburg.de/%7Emi.garcia/SoC2007/draftreport.pdf
+
+  Gymnast is hosted as an EMFT component with Incubation status.
+   </description>
+
+   <copyright>
+      Copyright (c) 2006 IBM Corporation and others.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      Eclipse Public License - v 1.0
+   </license>
+
+   <requires>
+      <import feature="org.eclipse.gymnast.runtime_feature" version="0.1.0"/>
+      <import plugin="org.antlr"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.gymnast.runtime.core"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.gymnast.runtime.ui"/>
+      <import plugin="org.eclipse.text"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.gymnast.generator.core"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.gymnast.generator.ui"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.gymnast.generators.parser.antlr"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.gymnast.generators.parser.javacc"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.gymnast.generators.ast.primordial"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.gymnast.generators.parser.lpg"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.gymnast.generator.doc.user"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"/>
+
+</feature>

@@ -1,0 +1,237 @@
+
+$Start
+    Token
+$End
+
+$Export
+    ASSIGN  LEFT_BRACKET  RIGHT_BRACKET SEMICOLON
+    PLUS  MINUS  DIVIDE  STAR
+    LEFT_PARENTHESIS RIGHT_PARENTHESIS
+    CONSTANT EOF_SYMBOL ERROR_SYMBOL
+
+    IDENTIFIER 
+$End
+
+$Terminals
+
+    CtlCharNotWS
+
+    Space
+
+    LF  CR  HT  FF
+
+    a    b    c    d    e    f    g    h    i    j    k    l    m
+    n    o    p    q    r    s    t    u    v    w    x    y    z    _
+
+    A    B    C    D    E    F    G    H    I    J    K    L    M
+    N    O    P    Q    R    S    T    U    V    W    X    Y    Z
+
+    0    1    2    3    4    5    6    7    8    9
+
+    Plus        Minus        Slash        Star        LeftParen RightParen
+    Equal       DoubleQuote  AtSign       BackQuote   Tilde     Exclamation
+    Sharp       DollarSign   Percent      Ampersand   Caret     Colon
+    SemiColon   SingleQuote  BackSlash    VerticalBar LeftBrace RightBrace
+    LeftBracket RightBracket QuestionMark Comma       Dot       LessThan
+    GreaterThan
+
+    AfterASCII
+
+    EOF
+
+$End
+
+$Alias
+
+    ' ' ::= Space
+    '"' ::= DoubleQuote
+    "'" ::= SingleQuote
+    '%' ::= Percent
+    '|' ::= VerticalBar
+    '!' ::= Exclamation
+    '@' ::= AtSign
+    '`' ::= BackQuote
+    '~' ::= Tilde
+    '#' ::= Sharp
+    '$' ::= DollarSign
+    '&' ::= Ampersand
+    '^' ::= Caret
+    ':' ::= Colon
+    ';' ::= SemiColon
+    '\' ::= BackSlash
+    '{' ::= LeftBrace
+    '}' ::= RightBrace
+    '[' ::= LeftBracket
+    ']' ::= RightBracket
+    '?' ::= QuestionMark
+    ',' ::= Comma
+    '.' ::= Dot
+    '<' ::= LessThan
+    '>' ::= GreaterThan
+    '+' ::= Plus
+    '-' ::= Minus
+    '/' ::= Slash
+    '*' ::= Star
+    '(' ::= LeftParen
+    ')' ::= RightParen
+    '=' ::= Equal
+    '\u0080..\ufffe' ::= AfterASCII
+
+$End
+
+$Rules
+    Token ::= Identifier
+        /.$BeginAction
+                    checkForKeyWord();
+          $EndAction
+        ./
+
+    Token ::= WhiteSpace
+        /.$BeginAction
+                    skipToken();
+          $EndAction
+        ./
+
+    Token ::= '/' '*' Inside Stars '/'
+        /.$BeginAction
+                    skipToken();
+          $EndAction
+        ./
+
+    Token ::= SLComment
+        /.$BeginAction
+                    skipToken();
+          $EndAction
+        ./
+
+    Token ::= Integer
+        /.$BeginAction
+                    makeToken($_CONSTANT);
+          $EndAction
+        ./
+
+    Token ::= '+'
+        /.$BeginAction
+                    makeToken($_PLUS);
+          $EndAction
+        ./
+
+    Token ::= '-'
+        /.$BeginAction
+                    makeToken($_MINUS);
+          $EndAction
+        ./
+
+    Token ::= '*'
+        /.$BeginAction
+                    makeToken($_STAR);
+          $EndAction
+        ./
+
+    Token ::= '/'
+        /.$BeginAction
+                    makeToken($_DIVIDE);
+          $EndAction
+        ./
+
+    Token ::= '('
+        /.$BeginAction
+                    makeToken($_LEFT_PARENTHESIS);
+          $EndAction
+        ./
+
+    Token ::= ')'
+        /.$BeginAction
+                    makeToken($_RIGHT_PARENTHESIS);
+          $EndAction
+        ./
+
+    Token ::= '='
+        /.$BeginAction
+                    makeToken($_ASSIGN);
+          $EndAction
+        ./
+
+    Token ::= '['
+        /.$BeginAction
+                    makeToken($_LEFT_BRACKET);
+          $EndAction
+        ./
+
+    Token ::= ']'
+        /.$BeginAction
+                    makeToken($_RIGHT_BRACKET);
+          $EndAction
+        ./
+
+    Token ::= ';'
+        /.$BeginAction
+                    makeToken($_SEMICOLON);
+          $EndAction
+        ./
+
+    Identifier -> Letter
+                | Identifier Letter
+                | Identifier Digit
+
+    Integer -> Digit
+             | Integer Digit
+
+    WhiteSpace -> WSChar
+                | WhiteSpace WSChar
+
+    Inside ::= Inside Stars NotSlashOrStar
+             | Inside '/'
+             | Inside NotSlashOrStar
+             | $empty
+
+    Stars -> '*'
+           | Stars '*'
+
+    SLComment ::= '/' '/'
+                | SLComment NotEol
+
+    WSChar -> Space
+            | Eol
+            | CtlCharNotWS
+
+    Letter -> LowerCaseLetter
+            | UpperCaseLetter
+            | _
+            | '$'
+            | '\u0080..\ufffe'
+
+    LowerCaseLetter -> a | b | c | d | e | f | g | h | i | j | k | l | m |
+                       n | o | p | q | r | s | t | u | v | w | x | y | z
+
+    UpperCaseLetter -> A | B | C | D | E | F | G | H | I | J | K | L | M |
+                       N | O | P | Q | R | S | T | U | V | W | X | Y | Z
+
+    Digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+    SpecialNotStar -> '+' | '-' | '/' | '(' | ')' | '"' | '!' | '@' | '`' | '~' |
+                      '%' | '&' | '^' | ':' | ';' | "'" | '\' | '|' | '{' | '}' |
+                      '[' | ']' | '?' | ',' | '.' | '<' | '>' | '=' | '#'
+
+    SpecialNotSlash -> '+' | '-' | -- exclude the star as well
+                       '(' | ')' | '"' | '!' | '@' | '`' | '~' |
+                       '%' | '&' | '^' | ':' | ';' | "'" | '\' | '|' | '{' | '}' |
+                       '[' | ']' | '?' | ',' | '.' | '<' | '>' | '=' | '#'
+
+    NotSlashOrStar -> Letter
+                    | Digit
+                    | SpecialNotSlash
+                    | WSChar
+
+    Eol -> LF
+         | CR
+
+    NotEol -> Letter
+            | Digit
+            | Space
+            | '*'
+            | SpecialNotStar
+            | HT
+            | FF
+            | CtlCharNotWS
+$End

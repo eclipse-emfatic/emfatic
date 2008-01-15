@@ -1,0 +1,18 @@
+<%@ jet package="org.eclipse.gymnast.generators.parser.javacc.templates"
+        imports="org.eclipse.gymnast.generator.core.generator.GeneratorContext"
+        class="ExtTokenTemplate"
+        skeleton="extToken.skeleton" %>
+/**
+ * <%= _context.getGeneratedByText() %>
+ */
+
+package <%= _context.getParserPackageName() %>;
+
+public class ExtToken extends Token {
+
+	/**
+	 * The start position of the token in the input stream.
+	 */
+	public int tokenOffset;
+
+}

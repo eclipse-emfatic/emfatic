@@ -1,0 +1,12 @@
+// $ANTLR : Game.g -> GameParserTokenTypes.txt$
+GameParser    // output token vocab name
+INT_LITERAL=4
+LITERAL_fire="fire"=5
+SEMI=6
+LITERAL_move="move"=7
+LITERAL_left="left"=8
+LITERAL_right="right"=9
+ID=10
+DIGIT=11
+WS=12
+SINGLE_LINE_COMMENT=13

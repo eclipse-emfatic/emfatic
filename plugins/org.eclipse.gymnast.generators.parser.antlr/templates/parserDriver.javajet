@@ -1,0 +1,90 @@
+<%@ jet package="org.eclipse.gymnast.generators.parser.antlr.templates"
+        imports="org.eclipse.gymnast.generator.core.generator.GeneratorContext"
+        class="ParserDriverTemplate"
+        skeleton="parserDriver.skeleton" %>
+/**
+ * <%= _context.getGeneratedByText() %>
+ */
+
+package <%= _context.getParserPackageName() %>;
+
+import java.io.Reader;
+
+import antlr.MismatchedCharException;
+import antlr.MismatchedTokenException;
+import antlr.NoViableAltException;
+import antlr.NoViableAltForCharException;
+import antlr.RecognitionException;
+import antlr.TokenStreamRecognitionException;
+
+import <%= _context.getASTPackageName() %>.*;
+import <%= _context.getLDT_ParserPackageName() %>.*;
+
+public class <%= _context.getASTName() %>ParserDriver implements IParser {
+
+    public ParseContext parse(Reader input) {
+    	<%= _context.getASTName() %>Lexer lexer = new <%= _context.getASTName() %>Lexer(input);
+		lexer.setColumn(0);
+		lexer.setTabSize(1);
+		
+		<%= _context.getASTName() %>Parser parser = new <%= _context.getASTName() %>Parser(lexer);
+		ParseContext parseContext = new ParseContext();
+		parser.setParseContext(parseContext);
+		
+		parseCompUnit(parser, parseContext);
+	
+		if (parseContext.getMessageCount() == 0) {
+			System.out.println("Parse OK!");
+		}
+		else {
+			ParseMessage[] msgs = parseContext.getMessages();
+			for (int i = 0; i < msgs.length; i++) {
+				System.err.println(msgs[i].getMessage());
+			}
+		}
+		
+		return parseContext;
+    }
+
+	private void parseCompUnit(<%= _context.getASTName() %>Parser parser, ParseContext parseContext) {
+	    try {
+	        <%= _context.getEntryRuleClassName() %> compUnit = parser.<%= _context.getEntryRuleName() %>();
+	        parseContext.setParseRoot(compUnit);
+	    }
+	    catch (RecognitionException rex) {
+	        parseContext.addParseMessage(createParseError(rex));
+	    }
+	    catch (TokenStreamRecognitionException tex) {
+	    	RecognitionException rex = tex.recog;
+	        parseContext.addParseMessage(createParseError(rex));
+	    }
+	    catch (Exception ex) {
+	        parseContext.addParseMessage(new ParseError(ex.getMessage(), 1));
+	    }
+	}
+
+	static ParseError createParseError(RecognitionException ex) {
+		String message = ex.getMessage();
+		int offset = ex.getColumn();
+		int length = 0;
+
+		if (ex instanceof MismatchedCharException) {
+			length = 1;
+		} else if (ex instanceof MismatchedTokenException) {
+			MismatchedTokenException ex2 = (MismatchedTokenException) ex;
+			if ((ex2.token != null) && (ex2.token.getText() != null)) {
+				length = ex2.token.getText().length();
+			}
+		} else if (ex instanceof NoViableAltException) {
+			NoViableAltException ex2 = (NoViableAltException) ex;
+			if ((ex2.token != null) && (ex2.token.getText() != null)) {
+				length = ex2.token.getText().length();
+			}
+		} else if (ex instanceof NoViableAltForCharException) {
+			length = 1;
+		}
+		
+		return new ParseError(message, offset, length);
+	}
+
+}

@@ -1,0 +1,45 @@
+<%@ jet package="org.eclipse.gymnast.generators.parser.javacc.templates"
+        imports="org.eclipse.gymnast.generator.core.generator.GeneratorContext"
+        class="ExtSimpleCharStreamTemplate"
+        skeleton="extSimpleCharStream.skeleton" %>
+/**
+ * <%= _context.getGeneratedByText() %>
+ */
+
+package <%= _context.getParserPackageName() %>;
+
+public class ExtSimpleCharStream extends SimpleCharStream {
+
+	/**
+	 * The current character position in the input stream.
+	 */
+	public int inputOffset = -1;
+	
+	/**
+	 * The start position of the current token in the input stream.
+	 */
+	public int tokenBeginOffset;
+	
+	
+	public ExtSimpleCharStream(java.io.Reader dstream) {
+		super(dstream);
+	}
+	
+	public char BeginToken() throws java.io.IOException {
+		tokenBegin = -1;
+		tokenBeginOffset = -1;
+		
+		char c = readChar();
+		
+		tokenBegin = bufpos;
+		tokenBeginOffset = inputOffset;
+
+		return c;
+	}
+	
+	protected void UpdateLineColumn(char c) {
+		inputOffset++;
+		super.UpdateLineColumn(c);
+	}
+	
+}

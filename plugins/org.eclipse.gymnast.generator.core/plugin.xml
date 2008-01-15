@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension-point id="parserGenerators" name="Gymnast Parser Generators" schema="schema/parserGenerators.exsd"/>
+   <extension-point id="astGenerators" name="Gymnast AST Generators" schema="schema/astGenerators.exsd"/>
+
+</plugin>

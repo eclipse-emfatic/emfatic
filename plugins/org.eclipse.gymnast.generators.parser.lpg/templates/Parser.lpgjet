@@ -1,0 +1,220 @@
+<%@ jet package="org.eclipse.gymnast.generators.parser.lpg.templates"
+        imports="org.eclipse.gymnast.generator.core.generator.GeneratorContext"
+        class="ParserTemplate"
+        skeleton="Parser.skeleton" %>
+--
+-- <%= _context.getGeneratedByText() %>
+--
+
+%options escape=$
+%options var=nt
+%options la=2 
+%options fp=<%= _context.getASTName() %>Parser
+%options prefix=TK_
+%options table=java
+%options em
+%options scopes
+%options noserialize
+%options template=dtParserTemplateB.g
+%options package=<%= _context.getParserPackageName() %>
+%options import_terminals=<%= _context.getASTName() %>Lexer.g
+
+$Define
+    --
+    -- Definition of macros used in the parser template
+    --
+    $package_declaration /.package $package;./
+    $import_classes 
+    /.import java.util.ArrayList;
+    import legAst.*;
+    ./
+    $action_class /.$file_prefix./
+    $prs_stream_class /.PrsStream./
+    $ast_class /.Ast./
+$End
+
+$Terminals
+    SEMICOLON         ::= ;
+    ASSIGN            ::= =
+    LEFT_BRACKET      ::= [
+    RIGHT_BRACKET     ::= ]
+    PLUS              ::= +
+    MINUS             ::= -
+    DIVIDE            ::= /
+    STAR              ::= *
+    LEFT_PARENTHESIS  ::= (
+    RIGHT_PARENTHESIS ::= )
+$End
+
+$Identifier
+    IDENTIFIER
+$End
+
+$Keywords
+    IF THEN ELSE END WHILE DO BREAK
+$End
+
+$Eof
+   EOF_SYMBOL
+$End
+
+$Error
+    ERROR_SYMBOL
+$End
+
+$Eol
+   SEMICOLON
+$End
+
+$Start
+    start
+$End
+
+$Names
+    array_declaration ::= 'array declaration'
+    term ::= subexpression
+    factor ::= subexpression
+$End
+
+$RULES
+    start ::= initialize block
+        /.$BeginJava
+                    $setResult(block);
+          $EndJava
+        ./
+
+    initialize ::= $empty
+        /.$BeginJava
+                    System.out.println("****Begin Parser: ");
+                    System.out.flush();
+                    $setResult(null);
+          $EndJava
+        ./
+
+    block ::= $empty
+        /.$BeginJava
+                    $setResult(new AstBlock($getLeftSpan(), $getRightSpan()));
+          $EndJava
+        ./
+
+    block ::= block statement
+        /.$BeginJava
+                    block.addStatement(statement);
+          $EndJava
+        ./
+
+    statement ::= variable = expression ;
+        /.$BeginJava
+                    $setResult(new AstAssignmentStatement($getLeftSpan(), $getRightSpan(), variable, expression));
+          $EndJava
+        ./
+
+    statement ::= IF expression THEN block$trueBlock ELSE block$falseBlock END IF ;
+        /.$BeginJava
+                    $setResult(new AstIfStatement($getLeftSpan(), $getRightSpan(), expression, trueBlock, falseBlock));
+          $EndJava
+        ./
+
+    statement ::= WHILE expression DO block END WHILE ;
+        /.$BeginJava
+                    $setResult(new AstWhileStatement($getLeftSpan(), $getRightSpan(), expression, block));
+          $EndJava
+        ./
+    statement ::= BREAK ;
+        /.$BeginJava
+                    $setResult(new AstBreakStatement($getLeftSpan(), $getRightSpan()));
+          $EndJava
+        ./
+
+    statement ::= array_declaration ;
+        /.$NoAction./
+
+    array_declaration ::= identifier [$LEFT_BRACKET ]
+        /.$BeginJava
+                    $setResult(new AstArrayDeclarationStatement($getLeftSpan(),
+                                                                $getRightSpan(),
+                                                                identifier,
+                                                                new AstDimension($getLeftSpan($LEFT_BRACKET), $getRightSpan())));
+
+          $EndJava
+        ./
+
+    array_declaration ::= array_declaration [$LEFT_BRACKET ]
+        /.$BeginJava
+                    array_declaration.addDimension(new AstDimension($getLeftSpan($LEFT_BRACKET), $getRightSpan()));
+          $EndJava
+        ./
+
+    expression -> term
+
+    expression ::= expression +$PLUS term
+        /.$BeginJava
+                    $setResult(new AstPlusExpression($getLeftSpan(), $getRightSpan(), expression, PLUS, term));
+          $EndJava
+        ./
+
+    expression ::= expression -$MINUS term
+        /.$BeginJava
+                    $setResult(new AstMinusExpression($getLeftSpan(), $getRightSpan(), expression, MINUS, term));
+          $EndJava
+        ./
+
+    term -> factor
+
+    term ::= term /$DIVIDE factor
+        /.$BeginJava
+                    $setResult(new AstDivideExpression($getLeftSpan(), $getRightSpan(), term, DIVIDE, factor));
+          $EndJava
+        ./
+
+    term ::= term *$STAR factor
+        /.$BeginJava
+                    $setResult(new AstMultiplyExpression($getLeftSpan(), $getRightSpan(), term, STAR, factor));
+          $EndJava
+        ./
+
+    factor -> variable
+
+    factor ::= CONSTANT$CONSTANT
+        /.$BeginJava
+                    $setResult(new AstConstantExpression($getLeftSpan(), $getRightSpan(), CONSTANT));
+          $EndJava
+        ./
+
+    factor ::= ( expression )
+        /.$BeginJava
+                    $setResult(new AstParenthesizedExpression($getLeftSpan(), $getRightSpan(), expression));
+          $EndJava
+        ./
+
+    variable ::= identifier
+        /.$BeginJava
+                    $setResult(new AstVariableExpression($getLeftSpan(), $getRightSpan(), identifier));
+          $EndJava
+        ./
+
+    variable ::= variable [$LEFT_BRACKET expression ]
+        /.$BeginJava
+                    variable.addSubscript(new AstSubscript($getLeftSpan($LEFT_BRACKET), $getRightSpan(), expression));
+          $EndJava
+        ./
+
+     identifier ::= IDENTIFIER$id
+        /.$BeginJava
+                    $setResult(id);
+          $EndJava
+        ./
+
+$End
+
+$Types
+    Object ::= initialize
+    IToken ::= identifier
+    AstStmt ::= statement
+    AstBlock ::= start | block
+    AstVariableExpression ::= variable
+    AstArrayDeclarationStatement ::= array_declaration
+    AstExpr ::= expression
+              | term
+              | factor
+$End

@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright (c) 2006 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+
+package org.eclipse.gymnast.generator.core.registry;
+
+public class ParserGeneratorDescriptor {
+
+	private final String _id;
+	private final String _description;
+	private final ParserGenerator _parserGenerator;
+	
+	ParserGeneratorDescriptor(String id, String description, ParserGenerator parserGenerator) {
+		_id = id;
+		_description = description;
+		_parserGenerator = parserGenerator;
+	}
+
+	public String getId() {
+		return _id;
+	}
+	
+	public String getDescription() {
+		return _description;
+	}
+	
+	public ParserGenerator getParserGenerator() {
+		return _parserGenerator;
+	}
+}

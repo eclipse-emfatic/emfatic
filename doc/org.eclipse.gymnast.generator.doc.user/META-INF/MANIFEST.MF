@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Gymnast Generator Online Documentation (Incubation)
+Bundle-SymbolicName: org.eclipse.gymnast.generator.doc.user; singleton:=true
+Bundle-Version: 0.3.0.qualifier
+Bundle-Vendor: Eclipse.org

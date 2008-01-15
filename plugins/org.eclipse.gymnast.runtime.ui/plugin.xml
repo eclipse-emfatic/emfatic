@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+     <extension
+         id="org.eclipse.gymnast.runtime.ui.parseTools"
+         name="%ParseTools.categoryName"
+         point="org.eclipse.ui.views">
+      <category
+            name="%ParseTools.categoryName"
+            id="org.eclipse.gymnast.runtime.ui.parseToolsCategory">
+      </category>
+      <view
+            name="%ParseTreeView.name"
+            icon="icons/obj16/parseTree.gif"
+            category="org.eclipse.gymnast.runtime.ui.parseToolsCategory"
+            class="org.eclipse.gymnast.runtime.ui.views.parsetree.ParseTreeView"
+            id="org.eclipse.gymnast.runtime.ui.views.parsetree">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            targetID="#TextEditorContext"
+            id="org.eclipse.gymnast.runtime.ui.actions.TextEditorContext">
+         <action
+               label="%FindInParseTreeView.label"
+               class="org.eclipse.gymnast.runtime.ui.actions.FindInParseTreeView"
+               menubarPath="additions"
+               enablesFor="!"
+               id="org.eclipse.gymnast.runtime.ui.actions.FindInParseTreeView">
+         </action>
+      </viewerContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Gymnast"
+            class="org.eclipse.gymnast.runtime.ui.preferences.LDTMainPreferencePage"
+            id="org.eclipse.gymnast.runtime.ui.preferences.GymnastMainPreferencePage">
+      </page>
+   </extension>
+
+</plugin>

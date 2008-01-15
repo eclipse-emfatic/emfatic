@@ -1,0 +1,12 @@
+public class CLASS {
+
+  private GeneratorContext _context;
+
+  public void init(GeneratorContext context) {
+    _context = context;
+  }
+
+  public String generate() {
+    return "";
+  }
+}

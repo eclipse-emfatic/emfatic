@@ -1,0 +1,17 @@
+
+
+TOKEN : { <SEMI: ";" > }
+
+TOKEN : { <INT_LITERAL: (<DIGIT>)+ > }
+TOKEN : { <#DIGIT: ["0"-"9"] > }
+
+SKIP :
+{
+  " "
+| "\t"
+| "\f"
+| "\r"
+| "\n"
+}
+
+SKIP : { <SINGLE_LINE_COMMENT: "//" (~["\r","\n"])* ["\r","\n"] > }

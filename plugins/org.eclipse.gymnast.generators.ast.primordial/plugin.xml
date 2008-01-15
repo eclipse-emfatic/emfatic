@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.gymnast.generator.core.astGenerators">
+      <astGenerator
+            class="org.eclipse.gymnast.generators.ast.primordial.PrimordialASTGenerator"
+            id="primordial"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors.templates">
+      <include
+            file="templates/javaGen.xml">
+      </include>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Code Templates"
+            category="org.eclipse.gymnast.runtime.ui.preferences.GymnastMainPreferencePage"
+            class="org.eclipse.gymnast.generators.ast.primordial.ui.GymnastTemplatePreferencePage"
+            id="org.eclipse.gymnast.generators.ast.primordial.ui.GymnastTemplatePreferencePage">
+      </page>
+   </extension>
+
+</plugin>

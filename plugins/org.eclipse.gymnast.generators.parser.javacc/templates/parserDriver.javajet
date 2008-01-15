@@ -1,0 +1,63 @@
+<%@ jet package="org.eclipse.gymnast.generators.parser.javacc.templates"
+        imports="org.eclipse.gymnast.generator.core.generator.GeneratorContext"
+        class="ParserDriverTemplate"
+        skeleton="parserDriver.skeleton" %>
+/**
+ * <%= _context.getGeneratedByText() %>
+ */
+
+package <%= _context.getParserPackageName() %>;
+
+import java.io.Reader;
+import <%= _context.getASTPackageName() %>.*;
+import <%= _context.getLDT_ParserPackageName() %>.*;
+
+public class <%= _context.getASTName() %>ParserDriver implements IParser {
+
+    public ParseContext parse(Reader input) {
+    	
+    	ExtSimpleCharStream stream = new ExtSimpleCharStream(input);
+    	Ext<%= _context.getASTName() %>ParserTokenManager tokenManager = new Ext<%= _context.getASTName() %>ParserTokenManager(stream);
+    	<%= _context.getASTName() %>Parser parser = new <%= _context.getASTName() %>Parser(tokenManager);
+    	ParseContext parseContext = new ParseContext();
+    	parseCompUnit(parser, parseContext);
+    	
+    	if (parseContext.getMessageCount() == 0) {
+			System.out.println("Parse OK!");
+		}
+		else {
+			ParseMessage[] msgs = parseContext.getMessages();
+			for (int i = 0; i < msgs.length; i++) {
+				System.err.println(msgs[i].getMessage());
+			}
+		}
+		
+		return parseContext;
+    }
+    
+    private void parseCompUnit(<%= _context.getASTName() %>Parser parser, ParseContext parseContext) {
+    	try {
+			<%= _context.getEntryRuleClassName() %> compUnit = parser.<%= _context.getEntryRuleName() %>();
+			parseContext.setParseRoot(compUnit);
+		} catch (ParseException ex) {
+			ParseError parseError;
+			Token token = ex.currentToken;
+			if (token instanceof ExtToken) {
+				ExtToken extToken = (ExtToken) token;
+				int offset = extToken.tokenOffset;
+				String tokenText = token.image;
+				int length = (tokenText == null) ? 0 : tokenText.length();
+				parseError = new ParseError(ex.getMessage(), offset, length);
+			}
+			else {
+				parseError = new ParseError(ex.getMessage(), 1);
+			}
+			parseContext.addParseMessage(parseError);
+		}
+		catch (TokenMgrError ex) {
+			ParseError parseError = new ParseError(ex.getMessage(), 1);
+			parseContext.addParseMessage(parseError);
+		}
+    }
+
+}

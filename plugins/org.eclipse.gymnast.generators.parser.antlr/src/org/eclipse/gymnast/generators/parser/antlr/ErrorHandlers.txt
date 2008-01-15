@@ -1,0 +1,24 @@
+
+	private ParseContext _parseContext;
+	public void setParseContext(ParseContext parseContext) {
+		_parseContext = parseContext;
+	}
+	
+    public void reportError(RecognitionException ex) {
+        if (_parseContext != null) {
+        	_parseContext.addParseMessage(createParseError(ex));
+        }
+    }
+
+    public void reportError(String s) {
+        if (_parseContext != null) {
+        	_parseContext.addParseMessage(new ParseError(s, -1));
+        }
+    }
+
+    public void reportWarning(String s) {
+    	if (_parseContext != null) {
+        	_parseContext.addParseMessage(new ParseWarning(s, -1));
+        }
+    }
+

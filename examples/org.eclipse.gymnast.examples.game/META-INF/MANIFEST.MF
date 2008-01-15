@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Gymnast Game Example Language (Incubation)
+Bundle-SymbolicName: org.eclipse.gymnast.examples.game; singleton:=true
+Bundle-Version: 0.3.0.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: org.eclipse.gymnast.examples.game.GamePlugin
+Bundle-Localization: plugin
+Export-Package: org.eclipse.gymnast.examples.game,
+ org.eclipse.gymnast.examples.game.lang.gen.ast,
+ org.eclipse.gymnast.examples.game.lang.gen.parser,
+ org.eclipse.gymnast.examples.game.ui
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui,
+ org.eclipse.jface.text,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.workbench.texteditor,
+ org.antlr,
+ org.eclipse.gymnast.runtime.core,
+ org.eclipse.gymnast.runtime.ui
+Eclipse-LazyStart: true
+Bundle-Vendor: Eclipse.org

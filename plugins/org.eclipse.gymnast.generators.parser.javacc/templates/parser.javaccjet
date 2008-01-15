@@ -1,0 +1,26 @@
+<%@ jet package="org.eclipse.gymnast.generators.parser.javacc.templates"
+        imports="org.eclipse.gymnast.generator.core.generator.GeneratorContext"
+        class="JavaCCParserTemplate"
+        skeleton="parser.skeleton" %>
+/**
+ * <%= _context.getGeneratedByText() %>
+ */
+
+PARSER_BEGIN(<%= _context.getASTName() %>Parser)
+package <%= _context.getParserPackageName() %>;
+
+import <%= _context.getASTPackageName() %>.*;
+import <%= _context.getLDT_ASTNodePackageName() %>.*;
+
+public class <%= _context.getASTName() %>Parser {
+
+  public TokenInfo createTokenInfo(Token tok) {
+    if (!(tok instanceof ExtToken)) return null;
+    
+    ExtToken extToken = (ExtToken) tok;
+    return new TokenInfo(tok.image, extToken.tokenOffset, tok.kind);
+  }
+
+}
+PARSER_END(<%= _context.getASTName() %>Parser)
+
