@@ -25,7 +25,6 @@ import org.eclipse.ui.IWorkbenchPart;
 
 
 /**
- * 
  * @author cjdaly@us.ibm.com
  */
 public class GenerateEcore implements IObjectActionDelegate {
@@ -43,7 +42,7 @@ public class GenerateEcore implements IObjectActionDelegate {
 			IStructuredSelection sel = (IStructuredSelection)selection;
 			Object selElem = sel.getFirstElement();
 			if (selElem instanceof IFile) {
-				_file = (IFile)selElem;
+				_file = (IFile)selElem; 
 			}
 		}
 	}
