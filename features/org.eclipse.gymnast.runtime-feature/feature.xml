@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.gymnast.runtime_feature"
+      id="org.eclipse.gymnast.runtime"
       label="Gymnast Runtime (Incubation)"
       version="0.3.0.qualifier"
       provider-name="Eclipse.org">
