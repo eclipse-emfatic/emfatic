@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.eclipse.gymnast.generators.ecore.ui
+Bundle-SymbolicName: org.eclipse.gymnast.generators.ecore.ui;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.eclipse.gymnast.generators.ecore.ui.Activator
+Bundle-Vendor: Miguel Garcia, http://www.sts.tu-harburg.de/~mi.garcia/
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.gymnast.generators.ecore,
+ org.eclipse.gymnast.generator.core,
+ org.eclipse.ui.ide,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.codegen.ecore
+Eclipse-LazyStart: true
+Export-Package: org.eclipse.gymnast.generators.ecore.ui.actions

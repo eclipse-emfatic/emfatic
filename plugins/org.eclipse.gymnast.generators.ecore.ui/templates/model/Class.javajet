@@ -1,0 +1,5 @@
+<%@ jet package="org.eclipse.emf.ocl.examples.codegen.templates.model" imports="java.util.* org.eclipse.emf.codegen.ecore.genmodel.* org.eclipse.emf.ecore.*" class="Class" version="$Id: Class.javajet,v 1.1 2008/05/07 16:53:00 mgarcia Exp $" %>
+<% final String ANNOTATION_URI_DERIVE = "http://www.eclipse.org/ocl/1.1.0/OCL/derive"; %>
+<% final String ANNOTATION_URI_INSTANCE_FIELD = "http://www.eclipse.org/ocl/1.1.0/OCL/instanceField"; %>
+<% final String ANNOTATION_URI_OPERATION = "http://www.eclipse.org/ocl/1.1.0/OCL/operation"; %>
+<%@ include file="Class.javajet"%>

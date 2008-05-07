@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="org.eclipse.gymnast.generators.ecore.ui.actions.GenerateEcore"
+            nameFilter="*.ast"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="org.eclipse.gymnast.generators.ecore.ui.actions.GenEcoreFromGymnastGrammar"
+               icon="icons/obj16/gymnast.gif"
+               id="org.eclipse.gymnast.generators.ecore.ui.GenEcoreFromGymnastGrammar"
+               label="Generate .ecore"
+               menubarPath="additions">
+         </action>
+         <action
+               class="org.eclipse.gymnast.generators.ecore.ui.actions.CheckWellformedness"
+               icon="icons/obj16/gymnast.gif"
+               id="org.eclipse.gymnast.generators.ecore.ui.actions.CheckWellformedness"
+               label="Check well-formedness"
+               menubarPath="additions">
+         </action>
+         <action
+               class="org.eclipse.gymnast.generators.ecore.ui.actions.GenJavaCCLexer"
+               icon="icons/obj16/gymnast.gif"
+               id="org.eclipse.gymnast.generators.ecore.ui.actions.GenJavaCCLexer"
+               label="Generate JavaCC lexer file"
+               menubarPath="additions">
+         </action>
+         <action
+               class="org.eclipse.gymnast.generators.ecore.ui.actions.GenAntlrv2Lexer"
+               icon="icons/obj16/gymnast.gif"
+               id="org.eclipse.gymnast.generators.ecore.ui.actions.GenAntlrv2Lexer"
+               label="Generate Antlrv2 lexer file"
+               menubarPath="additions">
+         </action>
+         <action
+               class="org.eclipse.gymnast.generators.ecore.ui.actions.GenerateGenModel"
+               icon="icons/obj16/gymnast.gif"
+               id="org.eclipse.gymnast.generators.ecore.ui.GenerateGenModel"
+               label="Generate .genmodel">
+         </action>
+         <action
+               class="org.eclipse.gymnast.generators.ecore.ui.actions.GenerateGenModel"
+               icon="icons/obj16/gymnast.gif"
+               id="org.eclipse.gymnast.generators.ecore.ui.GenGenModelAndJava"
+               label="Generate .genmodel and Java">
+         </action>
+      </objectContribution>
+   </extension>
+
+
+</plugin>

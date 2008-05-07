@@ -1,0 +1,106 @@
+<%@ jet package="translated" class="InterfaceExtent" %>
+
+// (C) Copyright Darren Willis, David James Pearce and James Noble 2005. 
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
+// This software is provided "as is" without express or implied 
+// warranty, and with no claim as to its suitability for any purpose.
+//
+// Email: david.pearce@mcs.vuw.ac.nz
+
+package jql.tracker;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+public class InterfaceExtent implements Collection {
+	private String name;
+	// Holds links to stores for all subtypes of this type
+	public ArrayList<InterfaceExtent> subordinateStores = new ArrayList<InterfaceExtent>();
+	
+	public String getName(){
+		return name;
+	}
+	
+	public InterfaceExtent(String name){
+		this.name=name;
+	}
+	
+	public InterfaceExtent(){
+		this.name="Unnamed";
+	}
+	
+	public ArrayList<Object> getAll(){
+		ArrayList<Object> refs = new ArrayList<Object>();
+		for(InterfaceExtent c : subordinateStores){
+			refs.addAll(c.getAll());
+		}
+		return refs;
+	}
+	
+	public boolean add(Object o){return false;}
+	
+	public void removeSub(ArrayList<InterfaceExtent> iList){
+		subordinateStores.remove(iList);
+	}
+	
+	public void link(InterfaceExtent sub){
+		if(!subordinateStores.contains(sub)){
+			subordinateStores.add(sub);
+		}
+	}
+	
+	public int size(){
+		int size=0;
+		for(InterfaceExtent s : subordinateStores){
+			size+=s.size();
+		}
+		return size;
+	}
+	
+	public Iterator iterator(){
+		return new InterfaceIterator(this);
+	}
+	
+	public boolean contains(Object f){
+		for(InterfaceExtent i : subordinateStores){
+			if(i.contains(f))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isEmpty(){
+		for(InterfaceExtent i : subordinateStores){
+			if(!i.isEmpty())
+				return false;
+		}
+		return true;
+	}
+	
+	public boolean containsAll(Collection c){
+		for(Object o : c){
+			boolean hasThisOne = false;
+			for(InterfaceExtent i : subordinateStores){
+				if(i.contains(o)){
+					hasThisOne = true;
+					break;
+				}
+			}
+			if(hasThisOne == false)
+				return false;
+		}
+		return true;
+	}
+	
+	/* I think this stuff here constitutes an anti-pattern, doesn't it? */
+	public void clear(){}
+	public Object[] toArray(){return null;}
+	public Object[] toArray(Object[] c){return null;}
+	
+	public boolean removeAll(Collection c){return false;}
+	public boolean remove(Object f){return false;}
+	public boolean retainAll(Collection c){return false;}
+	public boolean addAll(Collection c){return false;}
+}
