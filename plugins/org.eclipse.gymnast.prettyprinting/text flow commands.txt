@@ -1,0 +1,39 @@
+-------------------------------------------------------
+
+b(str)
+
+blank(w,h)
+
+h(...) | h(hs, ...)
+
+v(...) | v(vs, ...) | v(vs, is, ...)
+
+interleave(lsA, lsB) | interleaveWithSepConst(const, ls)
+
+-------------------------------------------------------
+
+pack[_x_]h[_w_pad]             --- if _x_ is missing then it must be the last spec on the attrList
+
+pack[_y_]v[_h_pad][_i_Indent]  --- if _x_ is missing then it must be the last spec on the attrList
+
+blank[_n_] (depending on whether current context is v or h, n is interpreted as h=n or w=n)
+
+  for lists cannot use text-flow specs other than these: either: 
+allInOneRow or perRow_x_ 
+  optionally (assuming there is a separator): 
+beforeSep_x_ afterSep_x_ 
+  (WFR: always, height of the item should be 1, otherwise the pretty-printed doc won't be parseable)
+
+
+
+if the seqrule has only one item, then packHoriz or packVert makes no difference 
+same goes for altRules
+
+For lists: beforeSep[n]  afterSep[n] *may* be specified, but runH or runV should be enough (if both missing, assume runH)
+
+The pad spec for a run (H or V) of length 1 has no effect, as that pad is *between* boxes in the run. 
+
+No pad spec, assume 0. The user can always add blanks (between runs) with blank[_wOrh_]
+
+If boxes are still available and the length of the last run in an [] list have been exhausted, keep using the same direction (H or V) with pad 0. 
+
