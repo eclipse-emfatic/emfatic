@@ -1,6 +1,4 @@
 
-// remember to add sthg like: class GymnastLexer extends Lexer; 
-
 options
 {
 	testLiterals=false;
@@ -36,6 +34,7 @@ AMP : '&';
 LT  : '<';
 GT  : '>'; 
 MINUS  : '-';
+SLASH  : '/';
 
 MINUS_GT : MINUS GT; 
 DOT_DOT  : DOT DOT; 

@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: org.eclipse.gymnast.generators.ecore.ui
+Bundle-Name: org.eclipse.gymnast.generators.ecore.ui (Incubation)
 Bundle-SymbolicName: org.eclipse.gymnast.generators.ecore.ui;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 0.9.0
 Bundle-Activator: org.eclipse.gymnast.generators.ecore.ui.Activator
 Bundle-Vendor: Miguel Garcia, http://www.sts.tu-harburg.de/~mi.garcia/
 Require-Bundle: org.eclipse.ui,

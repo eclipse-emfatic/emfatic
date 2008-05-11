@@ -13,12 +13,14 @@ public class GenAntlrv2Lexer extends GenLexer {
 	public void run(IAction action) {
 		if ((_file != null)) {
 			RootCS wfc = RootCS.getWellFormednessChecker(_file);
-			String outFilePath = getLexerFilePath(_file, "g", wfc.languageName);
-			Activator d = org.eclipse.gymnast.generators.ecore.ui.Activator.getDefault();
-			String fileText = "";
-			fileText += newLine + "class " + getLanguageName(_file) + "Lexer extends Lexer;" + newLine ;
-			fileText += d.getLexerAntlrv2();
-			d.writeStringToFile(outFilePath, fileText);
+			if (wfc != null) {
+				String outFilePath = getLexerFilePath(_file, "g", wfc.languageName);
+				Activator d = org.eclipse.gymnast.generators.ecore.ui.Activator.getDefault();
+				String fileText = "";
+				fileText += newLine + "class " + getLanguageName(_file) + "Lexer extends Lexer;" + newLine ;
+				fileText += d.getLexerAntlrv2();
+				d.writeStringToFile(outFilePath, fileText);
+			}
 		}
 	}
 }
