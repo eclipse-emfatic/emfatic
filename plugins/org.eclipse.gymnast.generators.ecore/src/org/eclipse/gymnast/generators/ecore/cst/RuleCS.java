@@ -40,5 +40,7 @@ public abstract class RuleCS {
 	public abstract Rule getRule();
 
 	public abstract void addParseMessages(ParseContext parseContext);
+	
+	public abstract boolean canBeRegardedAsBoolean();
 
 }

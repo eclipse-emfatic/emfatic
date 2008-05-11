@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: org.eclipse.gymnast.generators.ecore
+Bundle-Name: org.eclipse.gymnast.generators.ecore (Incubation)
 Bundle-SymbolicName: org.eclipse.gymnast.generators.ecore;singleton:=true
 Bundle-Version: 0.9.0
 Bundle-Activator: org.eclipse.gymnast.generators.ecore.Activator

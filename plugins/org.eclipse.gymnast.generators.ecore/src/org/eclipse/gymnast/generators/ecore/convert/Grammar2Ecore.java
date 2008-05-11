@@ -51,7 +51,7 @@ public class Grammar2Ecore {
 
 	private void createEnumsForTokenRulesWithFixedKeywords(EClass ecorizer) {
 		for (TokenRuleCS trCS : c.tokenRules) {
-			if (trCS.getKindOfAlts() == TokenRuleAltsKind.FIXED_KEYWORDS) {
+			if (trCS.getKindOfAlts() == TokenRuleAltsKind.FIXED_KEYWORDS && !trCS.canBeRegardedAsBoolean()) {
 				List<String> enumLits = trCS.explodeTerminalAlternatives();
 				enumLits = unquote(enumLits);
 				EEnum enu = MyEcoreUtil.newEnum(eP, trCS.name, enumLits);
@@ -82,7 +82,7 @@ public class Grammar2Ecore {
 
 	private void createEnumsForAltRulesWithFixedKeywords(EClass ecorizer) {
 		for (AltRuleCS arCS : c.altRules) {
-			if (arCS.getKindOfAlts() == AltRuleAltsKind.FIXED_KEYWORDS) {
+			if (arCS.getKindOfAlts() == AltRuleAltsKind.FIXED_KEYWORDS && !arCS.canBeRegardedAsBoolean()) {
 				List<String> enumLits = arCS.explodeTerminalAlternatives();
 				enumLits = unquote(enumLits);
 				EEnum enu = MyEcoreUtil.newEnum(eP, arCS.name, enumLits);

@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.gymnast.generator.core.ast.Rule;
 import org.eclipse.gymnast.generator.core.ast.TokenRule;
 import org.eclipse.gymnast.generators.ecore.errors.Grammar2EcoreInvalidInput.EmptyTokenRule;
+import org.eclipse.gymnast.generators.ecore.errors.Grammar2EcoreInvalidInput.EmptyTokenRule.GeneralMessage;
 import org.eclipse.gymnast.generators.ecore.errors.Grammar2EcoreInvalidInput.EmptyTokenRule.MalformedTokenRule;
 import org.eclipse.gymnast.generators.ecore.errors.Grammar2EcoreInvalidInput.EmptyTokenRule.RuleNameShadowsBuiltInToken;
 import org.eclipse.gymnast.runtime.core.parser.ParseContext;
@@ -17,7 +18,8 @@ public class TokenRuleCS extends RuleCS {
 
 	public TokenRule tr;
 
-	public TokenRuleCS(String name, List<String> alts2, List<String> attrs2, RootCS c, TokenRule tr) {
+	public TokenRuleCS(String name, List<String> alts2, List<String> attrs2,
+			RootCS c, TokenRule tr) {
 		super(c);
 		this.name = name;
 		this.alts = alts2;
@@ -51,7 +53,8 @@ public class TokenRuleCS extends RuleCS {
 	 * @param alreadyExploded
 	 * @return
 	 */
-	private List<String> explTermAlts(TokenRuleCS trCS, Set<String> alreadyExploded) {
+	private List<String> explTermAlts(TokenRuleCS trCS,
+			Set<String> alreadyExploded) {
 		assert innerGetKindOfAlts(trCS) == TokenRuleAltsKind.FIXED_KEYWORDS;
 		List<String> res = new ArrayList<String>();
 		for (String alt : trCS.alts) {
@@ -85,15 +88,31 @@ public class TokenRuleCS extends RuleCS {
 			 */
 			return TokenRuleAltsKind.MALFORMED;
 		}
+		// duplicate alts should be rejected
+		Set<String> altsAsSet = new HashSet<String>(trCS.alts);
+		if (altsAsSet.size() != trCS.alts.size()) {
+			return TokenRuleAltsKind.MALFORMED;
+		}
+		/*
+		 * a TokenRule that is to become an EBoolean should have just two
+		 * alternatives
+		 */
+		if (trCS.attrs.contains(RootCS.ATTRIBUTE_REGARD_AS_BOOLEAN)
+				&& !canBeRegardedAsBoolean()) {
+			return TokenRuleAltsKind.MALFORMED;
+		}
+
 		boolean areThereInts = false;
 		boolean areThereArbitraryIDs = false;
 		boolean areThereFixedKeywords = false;
 		for (String alt : trCS.alts) {
-			if (alt.equals("ID") || alt.equals("CHAR_LITERAL") || alt.equals("STRING_LITERAL")) {
+			if (alt.equals("ID") || alt.equals("CHAR_LITERAL")
+					|| alt.equals("STRING_LITERAL")) {
 				areThereArbitraryIDs = true;
 			} else if (c.isIntegerLiteral(alt) || alt.equals("INT_LITERAL")) {
 				areThereInts = true;
-			} else if ((c.isSurroundedByQuotes(alt) && !c.isIntegerLiteral(alt)) || c.isBuiltInToken(alt)) {
+			} else if ((c.isSurroundedByQuotes(alt) && !c.isIntegerLiteral(alt))
+					|| c.isBuiltInToken(alt)) {
 				areThereFixedKeywords = true;
 				/*
 				 * the default case, if all alts are like this will lead to
@@ -113,8 +132,10 @@ public class TokenRuleCS extends RuleCS {
 				case ID_OR_MIXEDSTRINT:
 					areThereArbitraryIDs = true;
 					areThereInts = true;
-					// don't return just yet, let the other alts be checked for
-					// MALFORMED
+					/*
+					 * don't return just yet, let the other alts be checked for
+					 * MALFORMED
+					 */
 					break;
 
 				case INTS:
@@ -145,7 +166,26 @@ public class TokenRuleCS extends RuleCS {
 
 	public void addParseMessages(ParseContext parseContext) {
 		if (c.isBuiltInToken(name)) {
-			RuleNameShadowsBuiltInToken parseMessage = new RuleNameShadowsBuiltInToken(this);
+			RuleNameShadowsBuiltInToken parseMessage = new RuleNameShadowsBuiltInToken(
+					this);
+			parseContext.addParseMessage(parseMessage);
+		}
+		// duplicate alts
+		Set<String> altsAsSet = new HashSet<String>(alts);
+		if (altsAsSet.size() != alts.size()) {
+			GeneralMessage parseMessage = new GeneralMessage(
+					"Duplicate alternatives", name, tr);
+			parseContext.addParseMessage(parseMessage);
+		}
+		/*
+		 * a TokenRule that is to become an EBoolean should have just two
+		 * alternatives
+		 */
+		if (attrs.contains(RootCS.ATTRIBUTE_REGARD_AS_BOOLEAN)
+				&& !canBeRegardedAsBoolean()) {
+			GeneralMessage parseMessage = new GeneralMessage(
+					"Marked [boolean] but does not have just two alternatives",
+					name, tr);
 			parseContext.addParseMessage(parseMessage);
 		}
 		if (getKindOfAlts() == TokenRuleAltsKind.MALFORMED) {
@@ -161,6 +201,14 @@ public class TokenRuleCS extends RuleCS {
 	public boolean isEmpty() {
 		boolean res = alts.size() == 0;
 		return res;
+	}
+
+	public boolean canBeRegardedAsBoolean() {
+		if (attrs.contains(RootCS.ATTRIBUTE_REGARD_AS_BOOLEAN)
+				&& alts.size() == 2 && !alts.get(0).equals(alts.get(1))) {
+			return true;
+		}
+		return false;
 	}
 
 }

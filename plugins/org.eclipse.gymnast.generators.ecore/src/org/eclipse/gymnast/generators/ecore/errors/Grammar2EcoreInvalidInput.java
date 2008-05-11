@@ -1,5 +1,6 @@
 package org.eclipse.gymnast.generators.ecore.errors;
 
+import org.eclipse.gymnast.generator.core.ast.Rule;
 import org.eclipse.gymnast.generators.ecore.cst.AltRuleCS;
 import org.eclipse.gymnast.generators.ecore.cst.ListRuleCS;
 import org.eclipse.gymnast.generators.ecore.cst.RuleCS;
@@ -88,7 +89,8 @@ public class Grammar2EcoreInvalidInput extends ParseError {
 						+ "(b) one or more constituent alternative of list kind, "
 						+ "(c) an alt rule, when its constituents are recursively exploded, should contain two or more alternatives, "
 						+ "(d) mixed tokens and rules (seq, alt) among the alternatives, "
-						+ "(e) its name shadows that of a built-in token.";
+						+ "(e) its name shadows that of a built-in token, "  
+						+ "(f) quoted keywords are allowed in token rules but not in alt rules.";
 				int rangeStart = lrCS.getRule().getRangeStart();
 				int rangeLength = lrCS.getRule().getRangeLength();
 				init(message, rangeStart, rangeLength);
@@ -133,6 +135,14 @@ public class Grammar2EcoreInvalidInput extends ParseError {
 				String message = msg;
 				int rangeStart = 0;
 				int rangeLength = 1;
+				init(message, rangeStart, rangeLength);
+			}
+			
+			public GeneralMessage(String msg, String ruleName, Rule r) {
+				String nameText = "";
+				String message = msg + " in rule " + ruleName;
+				int rangeStart = r.getRangeStart();
+				int rangeLength = r.getRangeLength();
 				init(message, rangeStart, rangeLength);
 			}
 		}

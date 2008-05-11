@@ -129,7 +129,8 @@ public class EcorizeOperation {
 			methodBody += newLine + oneSwitch(srCS, param);
 		}
 
-		methodBody += newLine + "return null;"; // FIXME
+		methodBody += newLine + "assert false;"; 
+		methodBody += newLine + "return null;"; 
 
 		// ------ EAnnotation ----------------------------------------------
 		MyEcoreUtil.newAnnotation(eOp, "http://www.eclipse.org/emf/2002/GenModel", "body", methodBody);

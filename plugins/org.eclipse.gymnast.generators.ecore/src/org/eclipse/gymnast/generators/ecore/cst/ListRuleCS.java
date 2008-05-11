@@ -22,8 +22,9 @@ public class ListRuleCS extends RuleCS {
 
 	public ListRule lr;
 
-	public ListRuleCS(String name, String e1, String separator, String opt_e2, int lowerBound, String opt_FieldName1,
-			String opt_FieldName2, RootCS c, ListRule lr) {
+	public ListRuleCS(String name, String e1, String separator, String opt_e2,
+			int lowerBound, String opt_FieldName1, String opt_FieldName2,
+			RootCS c, ListRule lr) {
 		super(c);
 		this.name = name;
 		this.e1 = e1;
@@ -165,14 +166,18 @@ public class ListRuleCS extends RuleCS {
 
 	@Override
 	public String toString() {
-		String out_e1 = opt_FieldName1.equals("") ? e1 : opt_FieldName1 + "=" + e1;
-		String out_e2 = opt_FieldName2.equals("") ? opt_e2 : opt_FieldName2 + "=" + opt_e2;
-		System.out.println("list " + name + " : " + out_e1 + " " + separator + " " + out_e2 + " " + lowerBound);
+		String out_e1 = opt_FieldName1.equals("") ? e1 : opt_FieldName1 + "="
+				+ e1;
+		String out_e2 = opt_FieldName2.equals("") ? opt_e2 : opt_FieldName2
+				+ "=" + opt_e2;
+		System.out.println("list " + name + " : " + out_e1 + " " + separator
+				+ " " + out_e2 + " " + lowerBound);
 		return name;
 	}
 
 	public boolean hasConstantSeparator() {
-		if (separator.equals("") || c.isBuiltInToken(separator) || c.isSurroundedByQuotes(separator)) {
+		if (separator.equals("") || c.isBuiltInToken(separator)
+				|| c.isSurroundedByQuotes(separator)) {
 			return true;
 		}
 		return false;
@@ -194,6 +199,11 @@ public class ListRuleCS extends RuleCS {
 		// TODO make finer distionction reflecting those in isMalformed()
 		MalformedListRule parseMessage = new MalformedListRule(this);
 		parseContext.addParseMessage(parseMessage);
+	}
+
+	@Override
+	public final boolean canBeRegardedAsBoolean() {
+		return false;
 	}
 
 }

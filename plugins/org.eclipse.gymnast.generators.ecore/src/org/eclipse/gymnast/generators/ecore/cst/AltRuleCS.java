@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.gymnast.generator.core.ast.AltRule;
 import org.eclipse.gymnast.generator.core.ast.Rule;
+import org.eclipse.gymnast.generators.ecore.errors.Grammar2EcoreInvalidInput.EmptyTokenRule.GeneralMessage;
 import org.eclipse.gymnast.generators.ecore.errors.Grammar2EcoreInvalidInput.EmptyTokenRule.MalformedAltRule;
 import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 
@@ -20,9 +21,8 @@ public class AltRuleCS extends RuleCS {
 
 	public List<SeqExprCS> preSeq = new ArrayList<SeqExprCS>();
 	public List<SeqExprCS> postSeq = new ArrayList<SeqExprCS>();
-	
+
 	public AltRule ar;
-	
 
 	/**
 	 * Invariant:
@@ -48,7 +48,8 @@ public class AltRuleCS extends RuleCS {
 
 	public EOperation ecorizeEOp = null;
 
-	public AltRuleCS(String name, List<String> alts, List<String> attrs, RootCS c, AltRule ar) {
+	public AltRuleCS(String name, List<String> alts, List<String> attrs,
+			RootCS c, AltRule ar) {
 		super(c);
 		this.name = name;
 		this.alts = alts;
@@ -66,6 +67,7 @@ public class AltRuleCS extends RuleCS {
 	 * contain two or more alternatives.<br>
 	 * (d) mixed tokens and rules (seq, alt) among the alternatives.<br>
 	 * (e) whose name shadows that of a built-in token <br>
+	 * (f) quoted keywords are allowed in token rules but not in alt rules <br>
 	 * 
 	 */
 	public boolean isMalformed() {
@@ -73,7 +75,7 @@ public class AltRuleCS extends RuleCS {
 		if (c.isBuiltInToken(name)) {
 			return true;
 		}
-		
+
 		if (getKindOfAlts() == AltRuleAltsKind.MALFORMED) {
 			return true;
 		}
@@ -90,7 +92,9 @@ public class AltRuleCS extends RuleCS {
 				}
 				for (String alt : arCS.alts) {
 					SeqRuleCS srCS = c.findSeqRuleCSByName(alt);
-					if (srCS == null || seqRulesOnWhichAnAltRuleDistributesPreOrPostSeq.contains(srCS)) {
+					if (srCS == null
+							|| seqRulesOnWhichAnAltRuleDistributesPreOrPostSeq
+									.contains(srCS)) {
 						return true;
 					}
 					seqRulesOnWhichAnAltRuleDistributesPreOrPostSeq.add(srCS);
@@ -124,7 +128,8 @@ public class AltRuleCS extends RuleCS {
 				alreadyExploded.add(name);
 				AltRuleCS innerAltRuleCS = c.findAltRuleCSByName(name);
 				if (innerAltRuleCS != null) {
-					List<String> toAdd = explTermAlts(innerAltRuleCS, alreadyExploded);
+					List<String> toAdd = explTermAlts(innerAltRuleCS,
+							alreadyExploded);
 					for (String s : toAdd) {
 						if (!res.contains(s)) {
 							res.add(s);
@@ -137,7 +142,8 @@ public class AltRuleCS extends RuleCS {
 				}
 				TokenRuleCS innerTokenRuleCS = c.findTokenRuleCSByName(name);
 				if (innerTokenRuleCS != null) {
-					List<String> toAdd = innerTokenRuleCS.explodeTerminalAlternatives();
+					List<String> toAdd = innerTokenRuleCS
+							.explodeTerminalAlternatives();
 					for (String s : toAdd) {
 						if (!res.contains(s)) {
 							res.add(s);
@@ -154,17 +160,38 @@ public class AltRuleCS extends RuleCS {
 		if (recursiveAlts.size() < 2) {
 			return AltRuleAltsKind.MALFORMED;
 		}
+		// duplicate alts should be rejected
+		Set<String> recursiveAltsAsSet = new HashSet<String>(recursiveAlts);
+		if (recursiveAlts.size() != recursiveAltsAsSet.size()) {
+			return AltRuleAltsKind.MALFORMED;
+		}
+		/*
+		 * a TokenRule that is to become an EBoolean should have just two
+		 * alternatives
+		 */
+		if (attrs.contains(RootCS.ATTRIBUTE_REGARD_AS_BOOLEAN)
+				&& !canBeRegardedAsBoolean()) {
+			return AltRuleAltsKind.MALFORMED;
+		}
+
 		boolean areThereInts = false;
 		boolean areThereArbitraryIDs = false;
 		boolean areThereFixedKeywords = false;
 		boolean areThereSeqRules = false;
 		for (String alt : recursiveAlts) {
 
-			if (alt.equals("ID") || alt.equals("CHAR_LITERAL") || alt.equals("STRING_LITERAL")) {
+			if (RootCS.isSurroundedByQuotes(alt)) {
+				return AltRuleAltsKind.MALFORMED;
+			}
+
+			if (alt.equals("ID") || alt.equals("CHAR_LITERAL")
+					|| alt.equals("STRING_LITERAL")) {
 				areThereArbitraryIDs = true;
 			} else if (c.isIntegerLiteral(alt) || alt.equals("INT_LITERAL")) {
 				areThereInts = true;
-			} else if ((c.isSurroundedByQuotes(alt) && !c.isIntegerLiteral(alt)) || c.isBuiltInToken(alt)) {
+			} else if ((RootCS.isSurroundedByQuotes(alt) && !c
+					.isIntegerLiteral(alt))
+					|| c.isBuiltInToken(alt)) {
 				areThereFixedKeywords = true;
 			} else {
 				TokenRuleCS refedTR = c.findTokenRuleCSByName(alt);
@@ -195,7 +222,8 @@ public class AltRuleCS extends RuleCS {
 			}
 
 		}
-		boolean someNonSeqRule = areThereArbitraryIDs || areThereFixedKeywords || areThereInts;
+		boolean someNonSeqRule = areThereArbitraryIDs || areThereFixedKeywords
+				|| areThereInts;
 		if (someNonSeqRule && areThereSeqRules) {
 			return AltRuleAltsKind.MALFORMED;
 		}
@@ -277,7 +305,8 @@ public class AltRuleCS extends RuleCS {
 			int position = 0;
 			List<SeqExprCS> newseqexprs = new ArrayList<SeqExprCS>();
 			for (SeqExprCS ps : preSeq) {
-				SeqExprCS clone = new SeqExprCS(ps.isOptional, ps.optFieldName, ps.value, position, c);
+				SeqExprCS clone = new SeqExprCS(ps.isOptional, ps.optFieldName,
+						ps.value, position, c);
 				clone.srCS = srCS;
 				newseqexprs.add(clone);
 				position++;
@@ -288,7 +317,8 @@ public class AltRuleCS extends RuleCS {
 			}
 			position = srCS.seqexprs.size();
 			for (SeqExprCS ps : postSeq) {
-				SeqExprCS clone = new SeqExprCS(ps.isOptional, ps.optFieldName, ps.value, position, c);
+				SeqExprCS clone = new SeqExprCS(ps.isOptional, ps.optFieldName,
+						ps.value, position, c);
 				clone.srCS = srCS;
 				newseqexprs.add(clone);
 				position++;
@@ -305,8 +335,45 @@ public class AltRuleCS extends RuleCS {
 	}
 
 	public void addParseMessages(ParseContext parseContext) {
-		// TODO make finer distionction reflecting those in isMalformed()
+		// duplicate alts
+		List<String> recursiveAlts = explodeTerminalAlternatives();
+		Set<String> recursiveAltsAsSet = new HashSet<String>(recursiveAlts);
+		if (recursiveAlts.size() != recursiveAltsAsSet.size()) {
+			GeneralMessage parseMessage = new GeneralMessage(
+					"Duplicate alternatives", name, ar);
+			parseContext.addParseMessage(parseMessage);
+		}
+		/*
+		 * a TokenRule that is to become an EBoolean should have just two
+		 * alternatives
+		 */
+		if (attrs.contains(RootCS.ATTRIBUTE_REGARD_AS_BOOLEAN)
+				&& !canBeRegardedAsBoolean()) {
+			GeneralMessage parseMessage = new GeneralMessage(
+					"Marked [boolean] but does not have just two alternatives",
+					name, ar);
+			parseContext.addParseMessage(parseMessage);
+		}
+		// TODO make finer distinction reflecting those in isMalformed()
 		MalformedAltRule parseMessage = new MalformedAltRule(this);
 		parseContext.addParseMessage(parseMessage);
+	}
+
+	/**
+	 * only a token rule (fulfilling certain requirements, see TokenRuleCS) can
+	 * be mapped to an EBoolean
+	 */
+	public boolean canBeRegardedAsBoolean() {
+		return false;
+	}
+
+	public String getFirstAlternative() {
+		List<String> recursiveAlts = explodeTerminalAlternatives();
+		return recursiveAlts.get(0);
+	}
+
+	public String getSecondAlternative() {
+		List<String> recursiveAlts = explodeTerminalAlternatives();
+		return recursiveAlts.get(1);
 	}
 }

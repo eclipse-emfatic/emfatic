@@ -10,8 +10,6 @@ import static org.eclipse.gymnast.generators.ecore.convert.ShorthandJava.jStrWit
 
 import java.util.List;
 
-import javax.swing.BoxLayout;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -28,6 +26,7 @@ import org.eclipse.gymnast.generators.ecore.cst.RuleCS;
 import org.eclipse.gymnast.generators.ecore.cst.SeqExprCS;
 import org.eclipse.gymnast.generators.ecore.cst.SeqExprKind;
 import org.eclipse.gymnast.generators.ecore.cst.SeqRuleCS;
+import org.eclipse.gymnast.generators.ecore.cst.TokenRuleCS;
 
 public class GenUnparseInhaleAndMMForSeqRules {
 
@@ -38,7 +37,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 
 	public static final String jPPPackage = "org.eclipse.gymnast.prettyprinting";
 	public static final String jPPBox = jPPPackage + ".Box";
-	public static final String jPPPrettyPrintable = jPPPackage + ".PrettyPrintable";
+	public static final String jPPPrettyPrintable = jPPPackage
+			+ ".PrettyPrintable";
 	public static final String jPPSL = jPPPackage + ".SL";
 	public static final String jPPBoxLanguage = jPPPackage + ".BoxLanguage";
 	public static final String jPPBoxStack = jPPPackage + ".BoxStack";
@@ -54,7 +54,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 	private String ppStackStmts = "";
 	private String jPPCommand = jPPPackage + ".PPCommand";
 
-	public GenUnparseInhaleAndMMForSeqRules(EClass ecorizer2, RootCS c2, Grammar2Ecore g2e) {
+	public GenUnparseInhaleAndMMForSeqRules(EClass ecorizer2, RootCS c2,
+			Grammar2Ecore g2e) {
 
 		this.ecorizer = ecorizer2;
 		this.c = c2;
@@ -65,6 +66,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		}
 
 		for (SeqRuleCS srCS : c.seqRules) {
+
+			assert (srCS.eClass != null);
 
 			/*
 			 * here names can be chosen for (ecorize, unparse) java methods so
@@ -86,16 +89,18 @@ public class GenUnparseInhaleAndMMForSeqRules {
 			 * references taking them from the AST node returned by the parser.
 			 */
 			ecorizeMethodBody = srCS.getAsJavaComment();
-			ecorizeMethodBody += newLine + srCS.eClass.getName() + " " + ecorizeResultName + " = "
-					+ c.languageFactoryImpl(srCS) + ".eINSTANCE.create" + srCS.eClass.getName() + "();";
+			ecorizeMethodBody += newLine + srCS.eClass.getName() + " "
+					+ ecorizeResultName + " = " + c.languageFactoryImpl(srCS)
+					+ ".eINSTANCE.create" + srCS.eClass.getName() + "();";
 
-			unparseMethodBody = "/* " + srCS.toString() + " */";
-			unparseMethodBody += newLine + "StringBuffer " + unparseBufferName + " = new StringBuffer();";
+			unparseMethodBody = srCS.getAsJavaComment();
+			unparseMethodBody += newLine + "StringBuffer " + unparseBufferName
+					+ " = new StringBuffer();";
 
 			ppStackStmts = srCS.getAsJavaComment();
-			ppStackStmts += newLine + String.format(" %1s %2s = new %3s();", jPPBoxStack, ppStackName, jPPBoxStack);
-
-			assert (srCS.eClass != null);
+			ppStackStmts += newLine
+					+ String.format(" %1s %2s = new %3s();", jPPBoxStack,
+							ppStackName, jPPBoxStack);
 
 			List<SeqExprCS> items = srCS.seqexprs;
 			for (SeqExprCS item : items) {
@@ -104,7 +109,7 @@ public class GenUnparseInhaleAndMMForSeqRules {
 
 				switch (k) {
 				case CONSTANT_CONTENT:
-					// a) isBuiltInToken, isSurroundedByQuotes. Maybe optional
+					// a) isBuiltInToken, isSurroundedByQuotes. May be optional
 					caseConstantContent(item);
 					break;
 
@@ -134,26 +139,32 @@ public class GenUnparseInhaleAndMMForSeqRules {
 
 			if (g2e.genUnparser) {
 				if (g2e.genPrettyPrinter) {
-					unparseMethodBody = newLine + "return prettyPrint().toString();";
+					unparseMethodBody = newLine
+							+ "return prettyPrint().toString();";
 				} else {
-					unparseMethodBody += newLine + "return " + unparseBufferName + ".toString();";
+					unparseMethodBody += newLine + "return "
+							+ unparseBufferName + ".toString();";
 				}
-				Grammar2Ecore.newUnparseOperation(srCS.eClass, unparseMethodBody);
+				Grammar2Ecore.newUnparseOperation(srCS.eClass,
+						unparseMethodBody);
 			}
 
 			if (g2e.genEcorizer) {
-				ecorizeMethodBody += newLine + "return " + ecorizeResultName + ";";
-				Grammar2Ecore.newMethodBodyAnnotation(srCS.ecorizeEOp, ecorizeMethodBody);
+				ecorizeMethodBody += newLine + "return " + ecorizeResultName
+						+ ";";
+				Grammar2Ecore.newMethodBodyAnnotation(srCS.ecorizeEOp,
+						ecorizeMethodBody);
 			}
 
 			if (g2e.genPrettyPrinter) {
 				String ppMethodBody = ppStackStmts;
-				// ppMethodBody += newLine + "return " + ppStackName + ".h( 1, "
-				// + ppStackName + ".stack.size());";
 				ppMethodBody += newLine
-						+ String.format("return %1s.packHorizUpToWidth(35, 1, %2s.stack.size());", ppStackName,
-								ppStackName);
-				srCS.prettyPrintEOp = Grammar2Ecore.newPrettyPrintOperation(srCS.eClass, ppMethodBody);
+						+ String
+								.format(
+										"return %1s.packHorizUpToWidth(35, 1, %2s.stack.size());",
+										ppStackName, ppStackName);
+				srCS.prettyPrintEOp = Grammar2Ecore.newPrettyPrintOperation(
+						srCS.eClass, ppMethodBody);
 			}
 
 		}
@@ -162,12 +173,13 @@ public class GenUnparseInhaleAndMMForSeqRules {
 	private void createEcorizersForSeqRulesAndAltWithSeqOnlyRules() {
 		for (SeqRuleCS srCS : c.seqRules) {
 			/*
-			 * The create of "ecorize" operations (to perform Gymnast AST Node ->
-			 * Ecore-based one) takes place now so as to populate for each
+			 * The create of "ecorize" operations (to perform Gymnast AST Node
+			 * -> Ecore-based one) takes place now so as to populate for each
 			 * SeqRuleCS its field ecorizeEOp. The method body itself will be
 			 * computed afterwards.
 			 */
-			srCS.ecorizeEOp = Grammar2Ecore.newEcorizeOperation(ecorizer, srCS, srCS.eClass);
+			srCS.ecorizeEOp = Grammar2Ecore.newEcorizeOperation(ecorizer, srCS,
+					srCS.eClass);
 		}
 
 		/*
@@ -177,8 +189,10 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		for (AltRuleCS arCS : c.altRules) {
 			if (arCS.getKindOfAlts() == AltRuleAltsKind.CONTAINSSEQ) {
 				assert arCS.eClass != null;
-				arCS.ecorizeEOp = Grammar2Ecore.newEcorizeOperation(ecorizer, arCS, arCS.eClass);
-				Grammar2Ecore.newGrammarRuleAnnotation(arCS.ecorizeEOp, "AltRule", arCS.toString());
+				arCS.ecorizeEOp = Grammar2Ecore.newEcorizeOperation(ecorizer,
+						arCS, arCS.eClass);
+				Grammar2Ecore.newGrammarRuleAnnotation(arCS.ecorizeEOp,
+						"AltRule", arCS.toString());
 				/*
 				 * Adding the Java method body to arCS.ecorizeEOp is done as
 				 * part of creating the ecorize "big switch", during the
@@ -194,7 +208,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 	 */
 	private void caseSFStrOrInt(final SeqExprCS item, final SeqExprKind k) {
 
-		assert ((k == SeqExprKind.KEEP_AS_INT) || (k == SeqExprKind.KEEP_AS_STR) || (k == SeqExprKind.KEEP_AS_CHR));
+		assert ((k == SeqExprKind.KEEP_AS_INT)
+				|| (k == SeqExprKind.KEEP_AS_STR) || (k == SeqExprKind.KEEP_AS_CHR));
 
 		// --------- (1) MM -------------------------------------------
 
@@ -216,9 +231,11 @@ public class GenUnparseInhaleAndMMForSeqRules {
 
 		// --------- (2) stms for inhale (ecorize) ---------------------
 
-		String jOptionalCheck = ecorizeArgName + jDOT + item.gymnastGeneratedGetter() + " != null";
+		String jOptionalCheck = ecorizeArgName + jDOT
+				+ item.gymnastGeneratedGetter() + " != null";
 
-		String rhs = ecorizeArgName + "." + item.gymnastGeneratedGetter() + ".getText()";
+		String rhs = ecorizeArgName + "." + item.gymnastGeneratedGetter()
+				+ ".getText()";
 		if (k == SeqExprKind.KEEP_AS_CHR) {
 			rhs = rhs + ".charAt(0)";
 		}
@@ -226,14 +243,16 @@ public class GenUnparseInhaleAndMMForSeqRules {
 			rhs = "Long.valueOf(" + rhs + ")";
 		}
 
-		String jSetterInvocation = ecorizeResultName + jDOT + jSetter(val) + "(" + rhs + ") ; ";
+		String jSetterInvocation = ecorizeResultName + jDOT + jSetter(val)
+				+ "(" + rhs + ") ; ";
 		String jStmtUnset = null;
 		boolean unsetIfNotInInput = item.isOptional;
 		if (item.isOptional) {
 			jStmtUnset = ecorizeResultName + jDOT + jUnsetter(val) + "; ";
 		}
-		ecorizeMethodBody = wrapWithCheckIfOptional(ecorizeMethodBody, item, jOptionalCheck, jSetterInvocation,
-				unsetIfNotInInput, jStmtUnset);
+		ecorizeMethodBody = wrapWithCheckIfOptional(ecorizeMethodBody, item,
+				jOptionalCheck, jSetterInvocation, unsetIfNotInInput,
+				jStmtUnset);
 
 		// --------- (3) stms for unparse ------------------------------
 
@@ -241,8 +260,10 @@ public class GenUnparseInhaleAndMMForSeqRules {
 			jOptionalCheck = jIsSet(val);
 		}
 
-		String jAppendStmt = unparseBufferName + ".append(" + jGetter(val) + jPLUS + jStrBLANK + jRPAREN + jSEMI;
-		unparseMethodBody = wrapWithCheckIfOptional(unparseMethodBody, item, jOptionalCheck, jAppendStmt, false, null);
+		String jAppendStmt = unparseBufferName + ".append(" + jGetter(val)
+				+ jPLUS + jStrBLANK + jRPAREN + jSEMI;
+		unparseMethodBody = wrapWithCheckIfOptional(unparseMethodBody, item,
+				jOptionalCheck, jAppendStmt, false, null);
 
 		// --------- (4) stms for unparse ------------------------------
 
@@ -253,8 +274,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		jAppendStmt = ppStackName + ".add(" + jGetter(val) + jRPAREN + jSEMI;
 		unsetIfNotInInput = true;
 		jStmtUnset = ppStackName + ".add( null );";
-		ppStackStmts = wrapWithCheckIfOptional(ppStackStmts, item, jOptionalCheck, jAppendStmt, unsetIfNotInInput,
-				jStmtUnset);
+		ppStackStmts = wrapWithCheckIfOptional(ppStackStmts, item,
+				jOptionalCheck, jAppendStmt, unsetIfNotInInput, jStmtUnset);
 	}
 
 	private String jIsSet(EStructuralFeature eSF) {
@@ -303,8 +324,9 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		return res;
 	}
 
-	private String wrapWithCheckIfOptional(String methodBody, SeqExprCS item, String jOptionalCheck, String jStmt,
-			boolean unsetIfNotInInput, String jStmtUnset) {
+	private String wrapWithCheckIfOptional(String methodBody, SeqExprCS item,
+			String jOptionalCheck, String jStmt, boolean unsetIfNotInInput,
+			String jStmtUnset) {
 		assert unsetIfNotInInput ? !jStmtUnset.equals("") : true;
 		if (item.isOptional) {
 			methodBody += newLine + "if (" + jOptionalCheck + ") {";
@@ -339,7 +361,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		 */
 
 		ListRuleCS lrCS = c.findListRuleCSByName(item.value);
-		String suggestedName = item.optFieldName.equals("") ? lrCS.getPreferredItemName() : item.optFieldName;
+		String suggestedName = item.optFieldName.equals("") ? lrCS
+				.getPreferredItemName() : item.optFieldName;
 		EClassifier refedEType = c.getETypeForRuleName(lrCS.e1);
 
 		EStructuralFeature val = null;
@@ -349,12 +372,13 @@ public class GenUnparseInhaleAndMMForSeqRules {
 
 		EClass eC = item.srCS.eClass;
 		if (refedEType != null) {
-			val = addStructuralFeatureForRuleInvocation(suggestedName, lrCS.lowerBound == 0, refedEType,
-					item.srCS.eClass);
+			val = addStructuralFeatureForRuleInvocation(suggestedName,
+					lrCS.lowerBound == 0, refedEType, item.srCS.eClass);
 		} else {
 			EDataType t = null;
 			k = lrCS.getKindOfItem();
-			if (k == SeqExprKind.KEEP_AS_STR || k == SeqExprKind.CONSTANT_CONTENT) {
+			if (k == SeqExprKind.KEEP_AS_STR
+					|| k == SeqExprKind.CONSTANT_CONTENT) {
 				t = EcorePackage.eINSTANCE.getEString();
 				iteratorItemType = "String";
 			} else if (k == SeqExprKind.KEEP_AS_CHR) {
@@ -364,7 +388,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 				t = EcorePackage.eINSTANCE.getELong();
 				iteratorItemType = "Long";
 			}
-			val = MyEcoreUtil.newAttribute(turnIntoPlural(item.suggestedName()), eC, t);
+			val = MyEcoreUtil.newAttribute(
+					turnIntoPlural(item.suggestedName()), eC, t);
 			val.setLowerBound(item.isOptional ? 0 : 1);
 		}
 		val.setUpperBound(-1);
@@ -373,10 +398,12 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		item.eSFListForRefedItems = val;
 
 		boolean bSeparatorsHaveNodes = !lrCS.separator.equals("");
-		boolean bRecordSeparators = bSeparatorsHaveNodes && !lrCS.hasConstantSeparator();
+		boolean bRecordSeparators = bSeparatorsHaveNodes
+				&& !lrCS.hasConstantSeparator();
 		if (bRecordSeparators) {
-			EStructuralFeature valSeparators = MyEcoreUtil.newAttribute(item.suggestedName() + "Separators", eC,
-					EcorePackage.eINSTANCE.getEString());
+			EStructuralFeature valSeparators = MyEcoreUtil.newAttribute(item
+					.suggestedName()
+					+ "Separators", eC, EcorePackage.eINSTANCE.getEString());
 			valSeparators.setLowerBound(item.isOptional ? 0 : 1);
 			valSeparators.setUpperBound(-1);
 			valSeparators.setUnique(false);
@@ -395,13 +422,18 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		 * proper and separators.
 		 */
 		String jIsSeparatorLocalVarName = "isSeparator" + val.getName();
-		ecorizeMethodBody += newLine + String.format("if ( %1s != null) {", ecorizeArgName + "." + gymnastGetter);
+		ecorizeMethodBody += newLine
+				+ String.format("if ( %1s != null) {", ecorizeArgName + "."
+						+ gymnastGetter);
 
 		if (bSeparatorsHaveNodes) {
-			ecorizeMethodBody += newLine + String.format("boolean %1s = false;", jIsSeparatorLocalVarName);
+			ecorizeMethodBody += newLine
+					+ String.format("boolean %1s = false;",
+							jIsSeparatorLocalVarName);
 		}
 
-		ecorizeMethodBody += newLine + "for (org.eclipse.gymnast.runtime.core.ast.ASTNode itemOrSeparator : "
+		ecorizeMethodBody += newLine
+				+ "for (org.eclipse.gymnast.runtime.core.ast.ASTNode itemOrSeparator : "
 				+ ecorizeArgName + "." + gymnastGetter + ".getChildren() ) {";
 
 		String rhs = null;
@@ -413,25 +445,33 @@ public class GenUnparseInhaleAndMMForSeqRules {
 			}
 		} else {
 			// downcasts included
-			String jFQNAST = c.getOption_astPackageName() + "." + c.getOption_astBaseClassName();
+			String jFQNAST = c.getOption_astPackageName() + "."
+					+ c.getOption_astBaseClassName();
 			rhs = "ecorize( (" + jFQNAST + ") itemOrSeparator)";
-			rhs = "( " + item.eSFListForRefedItems.getEType().getName() + " )" + rhs;
+			rhs = "( " + item.eSFListForRefedItems.getEType().getName() + " )"
+					+ rhs;
 		}
 
 		if (bSeparatorsHaveNodes) {
-			ecorizeMethodBody += newLine + "   if (!" + jIsSeparatorLocalVarName + ") { ";
+			ecorizeMethodBody += newLine + "   if (!"
+					+ jIsSeparatorLocalVarName + ") { ";
 		}
-		ecorizeMethodBody += ecorizeResultName + "." + jGetter(item.eSFListForRefedItems) + ".add(" + rhs + "); ";
+		ecorizeMethodBody += ecorizeResultName + "."
+				+ jGetter(item.eSFListForRefedItems) + ".add(" + rhs + "); ";
 		if (bSeparatorsHaveNodes) {
 			ecorizeMethodBody += newLine + "} /* close if separator */";
 		}
 		if (bRecordSeparators) {
 			ecorizeMethodBody += newLine
-					+ String.format("else { %1s.%2s.add( itemOrSeparator.getText() ); }", ecorizeResultName,
-							jGetter(item.eSFListForSeparators));
+					+ String
+							.format(
+									"else { %1s.%2s.add( itemOrSeparator.getText() ); }",
+									ecorizeResultName,
+									jGetter(item.eSFListForSeparators));
 		}
 		if (bSeparatorsHaveNodes) {
-			ecorizeMethodBody += newLine + jIsSeparatorLocalVarName + " = !" + jIsSeparatorLocalVarName + ";";
+			ecorizeMethodBody += newLine + jIsSeparatorLocalVarName + " = !"
+					+ jIsSeparatorLocalVarName + ";";
 		}
 		ecorizeMethodBody += newLine + "} /* close for */";
 		ecorizeMethodBody += newLine + "} /* close if */";
@@ -451,25 +491,31 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		if (!itemCanBeSerialized) {
 			iteratorItemType = item.eSFListForRefedItems.getEType().getName();
 		}
-		unparseMethodBody += newLine + "java.util.Iterator<" + iteratorItemType + "> " + iterName + " = "
-				+ jGetter(item.eSFListForRefedItems) + ".iterator();";
+		unparseMethodBody += newLine + "java.util.Iterator<" + iteratorItemType
+				+ "> " + iterName + " = " + jGetter(item.eSFListForRefedItems)
+				+ ".iterator();";
 		if (bRecordSeparators) {
-			unparseMethodBody += newLine + "java.util.Iterator<String> " + iterNameSeparators + " = "
+			unparseMethodBody += newLine + "java.util.Iterator<String> "
+					+ iterNameSeparators + " = "
 					+ jGetter(item.eSFListForSeparators) + ".iterator();";
 		}
 
 		unparseMethodBody += newLine + "while (" + iterName + ".hasNext() ) { ";
-		unparseMethodBody += newLine + unparseBufferName + ".append(" + rhs + ");";
+		unparseMethodBody += newLine + unparseBufferName + ".append(" + rhs
+				+ ");";
 		String rhsIter = null;
 		if (bRecordSeparators) {
-			rhsIter = String.format(" ( %1s.hasNext() ? %2s.next() : %3s) ", iterNameSeparators, iterNameSeparators,
-					jStrBLANK);
+			rhsIter = String.format(" ( %1s.hasNext() ? %2s.next() : %3s) ",
+					iterNameSeparators, iterNameSeparators, jStrBLANK);
 
 		} else {
-			rhsIter = "\"" + lrCS.unparseConstantSeparator() + "\"" + jPLUS + jStrBLANK;
-			rhsIter = String.format(" ( %1s.hasNext() ? %2s : %3s) ", iterName, rhsIter, jStrBLANK);
+			rhsIter = "\"" + lrCS.unparseConstantSeparator() + "\"" + jPLUS
+					+ jStrBLANK;
+			rhsIter = String.format(" ( %1s.hasNext() ? %2s : %3s) ", iterName,
+					rhsIter, jStrBLANK);
 		}
-		unparseMethodBody += newLine + unparseBufferName + ".append(" + rhsIter + ");";
+		unparseMethodBody += newLine + unparseBufferName + ".append(" + rhsIter
+				+ ");";
 		unparseMethodBody += newLine + "} /* close while */";
 
 		// --------- (4) stms for prettyPrint ------------------------------
@@ -479,23 +525,30 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		String jAppendExpr = null;
 		if (bRecordSeparators) {
 			jGetterSeps = jGetter(item.eSFListForSeparators);
-			jAppendExpr = String.format(jPPBoxLanguage + ".interleaveH(%1s, %2s, 0, 0)", jGetterItems, jGetterSeps);
+			jAppendExpr = String
+					.format(jPPBoxLanguage + ".interleaveH(%1s, %2s, 0, 0)",
+							jGetterItems, jGetterSeps);
 		} else {
 			if (lrCS.unparseConstantSeparator().trim().equals("")) {
 				jAppendExpr = jGetterItems;
 			} else {
-				jGetterSeps = jStrWithQuoteEscaped + lrCS.unparseConstantSeparator() + jStrWithQuoteEscaped;
-				jAppendExpr = String.format(jPPBoxLanguage + ".interleaveHSepConstant(%1s, %2s, 0, 0)", jGetterSeps,
-						jGetterItems);
+				jGetterSeps = jStrWithQuoteEscaped
+						+ lrCS.unparseConstantSeparator()
+						+ jStrWithQuoteEscaped;
+				jAppendExpr = String.format(jPPBoxLanguage
+						+ ".interleaveHSepConstant(%1s, %2s, 0, 0)",
+						jGetterSeps, jGetterItems);
 			}
 		}
 
-		ppStackStmts += newLine + ppStackName + ".add(" + jAppendExpr + jRPAREN + jSEMI;
+		ppStackStmts += newLine + ppStackName + ".add(" + jAppendExpr + jRPAREN
+				+ jSEMI;
 
 	}
 
 	private String turnIntoPlural(String suggestedName) {
-		return suggestedName.endsWith("s") ? suggestedName : suggestedName + "s";
+		return suggestedName.endsWith("s") ? suggestedName : suggestedName
+				+ "s";
 	}
 
 	/**
@@ -520,13 +573,15 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		String suggestedName = item.suggestedName();
 		EClassifier refedEType = c.getETypeForRuleName(item.value);
 		assert refedEType != null;
-		item.eSF = addStructuralFeatureForRuleInvocation(suggestedName, item.isOptional, refedEType, item.srCS.eClass);
+		item.eSF = addStructuralFeatureForRuleInvocation(suggestedName,
+				item.isOptional, refedEType, item.srCS.eClass);
 
 		/*
 		 * An enum can be assigned null in Java, but EMF intercepts that (in the
 		 * setter for the EStructuralFeature) and assigns the default instead
 		 */
-		boolean optionalForEnumRequired = item.isOptional && item.eSF.getEType() instanceof EEnum;
+		boolean optionalForEnumRequired = item.isOptional
+				&& item.eSF.getEType() instanceof EEnum;
 		if (optionalForEnumRequired) {
 			item.eSF.setUnsettable(true);
 		}
@@ -538,21 +593,43 @@ public class GenUnparseInhaleAndMMForSeqRules {
 
 		RuleCS refed = item.getRefedRuleIfAny();
 		assert refed != null;
-		String jEcorizerForRefed = "ecorize" + RootCS.camelCase(refed.name);
-		rhs = jEcorizerForRefed + jLPAREN + rhs + jRPAREN;
+		String quotedFirstAlternative = "";
+		String quotedSecondAlternative = "";
+		if (refed.canBeRegardedAsBoolean()) {
+			if (refed instanceof AltRuleCS) {
+				AltRuleCS arCS = (AltRuleCS) refed;
+				quotedFirstAlternative = arCS.getFirstAlternative();
+				quotedSecondAlternative = arCS.getSecondAlternative();
+			}
+			if (refed instanceof TokenRuleCS) {
+				TokenRuleCS trCS = (TokenRuleCS) refed;
+				quotedFirstAlternative = trCS.alts.get(0);
+				quotedSecondAlternative = trCS.alts.get(1);
+			}
+			String jBooleanExpr = String.format(" %1s.getText().equals(%2s) ",
+					rhs, quotedFirstAlternative );
+			rhs = jLPAREN + jBooleanExpr + jRPAREN;
+		} else {
+			String jEcorizerForRefed = "ecorize" + RootCS.camelCase(refed.name);
+			rhs = jEcorizerForRefed + jLPAREN + rhs + jRPAREN;
+		}
 
-		String jSetterInvocation = ecorizeResultName + jDOT + jSetter(item.eSF) + "(" + rhs + ") ; ";
+		String jSetterInvocation = ecorizeResultName + jDOT + jSetter(item.eSF)
+				+ "(" + rhs + ") ; ";
 
 		String jSetToNull = null;
 		final boolean addAssignNullStmtIfNotInInput = item.isOptional;
 		if (optionalForEnumRequired) {
 			jSetToNull = " /* The EMF-generated setter intercepts null assignments and sets the enum to its default value. That's why the unsetting below is needed. */ ";
-			jSetToNull += newLine + ecorizeResultName + jDOT + jUnsetter(item.eSF) + "; ";
+			jSetToNull += newLine + ecorizeResultName + jDOT
+					+ jUnsetter(item.eSF) + "; ";
 		} else {
-			jSetToNull = ecorizeResultName + jDOT + jSetter(item.eSF) + "( null ) ; ";
+			jSetToNull = ecorizeResultName + jDOT + jSetter(item.eSF)
+					+ "( null ) ; ";
 		}
 
-		ecorizeMethodBody = wrapWithCheckIfOptional(ecorizeMethodBody, item, jOptionalCheck, jSetterInvocation,
+		ecorizeMethodBody = wrapWithCheckIfOptional(ecorizeMethodBody, item,
+				jOptionalCheck, jSetterInvocation,
 				addAssignNullStmtIfNotInInput, jSetToNull);
 
 		// --------- (3) stms for unparse ------------------------------
@@ -563,13 +640,17 @@ public class GenUnparseInhaleAndMMForSeqRules {
 			if (item.isOptional) {
 				jOptionalCheck = jIsSet(item.eSF);
 			}
+		} else if (refed.canBeRegardedAsBoolean()) {
+			jGetter = String.format("( %1s ? %2s : %3s )", jGetter(item.eSF) , quotedFirstAlternative , quotedSecondAlternative);
 		} else {
 			jGetter = jGetter(item.eSF) + ".unparse()";
 			jOptionalCheck = jGetter(item.eSF) + " != null ";
 		}
 
-		String jAppendStmt = unparseBufferName + ".append(" + jGetter + jPLUS + jStrBLANK + jRPAREN + jSEMI;
-		unparseMethodBody = wrapWithCheckIfOptional(unparseMethodBody, item, jOptionalCheck, jAppendStmt, false, null);
+		String jAppendStmt = unparseBufferName + ".append(" + jGetter + jPLUS
+				+ jStrBLANK + jRPAREN + jSEMI;
+		unparseMethodBody = wrapWithCheckIfOptional(unparseMethodBody, item,
+				jOptionalCheck, jAppendStmt, false, null);
 
 		// --------- (4) stms for prettyPrint ------------------------------
 
@@ -579,6 +660,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 			if (item.isOptional) {
 				jOptionalCheck = jIsSet(item.eSF);
 			}
+		} else if (refed.canBeRegardedAsBoolean()) {
+			jGetter = String.format("( %1s ? %2s : %3s )", jGetter(item.eSF) , quotedFirstAlternative , quotedSecondAlternative);
 		} else {
 			jGetter = jGetter(item.eSF) + ".prettyPrint()";
 			jOptionalCheck = jGetter(item.eSF) + " != null ";
@@ -587,8 +670,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		jAppendStmt = ppStackName + ".add(" + jGetter + jRPAREN + jSEMI;
 		boolean unsetIfNotInInput = true;
 		String jStmtUnset = ppStackName + ".add( null );";
-		ppStackStmts = wrapWithCheckIfOptional(ppStackStmts, item, jOptionalCheck, jAppendStmt, unsetIfNotInInput,
-				jStmtUnset);
+		ppStackStmts = wrapWithCheckIfOptional(ppStackStmts, item,
+				jOptionalCheck, jAppendStmt, unsetIfNotInInput, jStmtUnset);
 	}
 
 	/**
@@ -612,7 +695,7 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		EAttribute val = null;
 		if (item.isOptional) {
 			EDataType t = EcorePackage.eINSTANCE.getEBoolean();
-			String suggestedName = "textHas" + RootCS.camelCase(item.suggestedName());
+			String suggestedName = item.suggestedName();
 			val = MyEcoreUtil.newAttribute(suggestedName, item.srCS.eClass, t);
 			val.setLowerBound(1);
 			val.setUpperBound(1);
@@ -626,23 +709,31 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		// --------- (2) stms for inhale (ecorize) ---------------------
 
 		if (item.isOptional) {
-			String jOptionalCheck = ecorizeArgName + jDOT + item.gymnastGeneratedGetter() + " != null ";
-			String jSetterInvocation = ecorizeResultName + jDOT + jSetter(val) + "( true ) ; ";
+			String jOptionalCheck = ecorizeArgName + jDOT
+					+ item.gymnastGeneratedGetter() + " != null ";
+			String jSetterInvocation = ecorizeResultName + jDOT + jSetter(val)
+					+ "( true ) ; ";
 			final boolean addAssignNullStmtIfNotInInput = true;
-			String jSetToNull = ecorizeResultName + jDOT + jSetter(val) + "( false ) ; ";
-			ecorizeMethodBody = wrapWithCheckIfOptional(ecorizeMethodBody, item, jOptionalCheck, jSetterInvocation,
+			String jSetToNull = ecorizeResultName + jDOT + jSetter(val)
+					+ "( false ) ; ";
+			ecorizeMethodBody = wrapWithCheckIfOptional(ecorizeMethodBody,
+					item, jOptionalCheck, jSetterInvocation,
 					addAssignNullStmtIfNotInInput, jSetToNull);
 		} else {
-			ecorizeMethodBody += newLine + "/* input contains here a mandatory " + constantContent + " */";
+			ecorizeMethodBody += newLine
+					+ "/* input contains here a mandatory " + constantContent
+					+ " */";
 		}
 		// --------- (3) stms for unparse ------------------------------
 
-		String jArgToAppend = jStrWithQuoteEscaped + constantContent + jStrWithQuoteEscaped;
-		String jAppendStmt = unparseBufferName + ".append(" + jArgToAppend + jPLUS + jStrBLANK + jRPAREN + jSEMI;
+		String jArgToAppend = jStrWithQuoteEscaped + constantContent
+				+ jStrWithQuoteEscaped;
+		String jAppendStmt = unparseBufferName + ".append(" + jArgToAppend
+				+ jPLUS + jStrBLANK + jRPAREN + jSEMI;
 		if (item.isOptional) {
 			String jOptionalCheck = jGetter(val) + " != false ";
-			unparseMethodBody = wrapWithCheckIfOptional(unparseMethodBody, item, jOptionalCheck, jAppendStmt, false,
-					null);
+			unparseMethodBody = wrapWithCheckIfOptional(unparseMethodBody,
+					item, jOptionalCheck, jAppendStmt, false, null);
 		} else {
 			unparseMethodBody += jAppendStmt;
 		}
@@ -654,8 +745,8 @@ public class GenUnparseInhaleAndMMForSeqRules {
 			String jOptionalCheck = jGetter(val) + " != false ";
 			boolean unsetIfNotInInput = true;
 			String jStmtUnset = ppStackName + ".add( null );";
-			ppStackStmts = wrapWithCheckIfOptional(ppStackStmts, item, jOptionalCheck, jAppendStmt, unsetIfNotInInput,
-					jStmtUnset);
+			ppStackStmts = wrapWithCheckIfOptional(ppStackStmts, item,
+					jOptionalCheck, jAppendStmt, unsetIfNotInInput, jStmtUnset);
 		} else {
 			ppStackStmts += newLine + jAppendStmt;
 		}
@@ -667,19 +758,22 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		return jStmt;
 	}
 
-	private EStructuralFeature addStructuralFeatureForRuleInvocation(String suggestedName, boolean isOptional,
-			EClassifier refedEType, EClass owningClass) {
+	private EStructuralFeature addStructuralFeatureForRuleInvocation(
+			String suggestedName, boolean isOptional, EClassifier refedEType,
+			EClass owningClass) {
 		EStructuralFeature val = null;
 
 		/*
 		 * constituent is seq rule, or token or alt rule with fixed keywords
 		 */
 		if (refedEType instanceof EClass) {
-			EReference valAsRef = MyEcoreUtil.newReference(suggestedName, owningClass, (EClass) refedEType);
+			EReference valAsRef = MyEcoreUtil.newReference(suggestedName,
+					owningClass, (EClass) refedEType);
 			valAsRef.setContainment(true);
 			val = valAsRef;
 		} else {
-			val = MyEcoreUtil.newAttribute(suggestedName, owningClass, (EDataType) refedEType);
+			val = MyEcoreUtil.newAttribute(suggestedName, owningClass,
+					(EDataType) refedEType);
 		}
 		val.setLowerBound(isOptional ? 0 : 1);
 		val.setUpperBound(1);

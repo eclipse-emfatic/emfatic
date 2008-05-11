@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.gymnast.generators.ecore.errors.Grammar2EcoreParseWarning;
 import org.eclipse.gymnast.generators.ecore.errors.Grammar2EcoreInvalidInput.EmptyTokenRule.GeneralMessage;
 import org.eclipse.gymnast.generators.ecore.errors.Grammar2EcoreInvalidInput.EmptyTokenRule.MissingGrammarOption;
@@ -59,6 +60,7 @@ public class RootCS {
 		knownBuiltInTokens.put("LT", "<");
 		knownBuiltInTokens.put("GT", ">");
 		knownBuiltInTokens.put("PIPE", "|");
+		knownBuiltInTokens.put("SLASH", "/");
 	}
 
 	public String languageName;
@@ -146,7 +148,8 @@ public class RootCS {
 	 * (a) a consituent whose name can't be resolved (if resolved, its
 	 * well-formedness is checked together with all rules of its kind, so that's
 	 * not checked again in this method), <br>
-	 * (b) duplicate fields, among the specified field names (they are optional)<br>
+	 * (b) duplicate fields, among the specified field names (they are optional)
+	 * <br>
 	 * 
 	 * A SeqRule may contain optional lists, alternatives, sequences, and
 	 * tokens.
@@ -176,7 +179,8 @@ public class RootCS {
 	public Set<AltRuleCS> malFormedAltRules() {
 		Set<AltRuleCS> res = new HashSet<AltRuleCS>();
 		for (AltRuleCS aCS : altRules) {
-			if (aCS.isMalformed() || aCS.getKindOfAlts() == AltRuleAltsKind.MALFORMED) {
+			if (aCS.isMalformed()
+					|| aCS.getKindOfAlts() == AltRuleAltsKind.MALFORMED) {
 				res.add(aCS);
 			}
 		}
@@ -244,8 +248,9 @@ public class RootCS {
 	}
 
 	public boolean canBeConsideredToken(String name) {
-		if (isBuiltInToken(name) || name.equals("STRING_LITERAL") || name.equals("INT_LITERAL")
-				|| name.equals("CHAR_LITERAL") || name.equals("ID") || isSurroundedByQuotes(name)) {
+		if (isBuiltInToken(name) || name.equals("STRING_LITERAL")
+				|| name.equals("INT_LITERAL") || name.equals("CHAR_LITERAL")
+				|| name.equals("ID") || isSurroundedByQuotes(name)) {
 			return true;
 		}
 		return false;
@@ -298,7 +303,7 @@ public class RootCS {
 		res &= namingConventionsAreFollowed();
 		return res;
 	}
-	
+
 	private boolean namingConventionsAreFollowed() {
 		boolean res = namingConventionLanguageNameStartsLowercase();
 		return res;
@@ -312,26 +317,29 @@ public class RootCS {
 	public static RootCS getWellFormednessChecker(IFile astFile) {
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new InputStreamReader(astFile.getContents()));
+			reader = new BufferedReader(new InputStreamReader(astFile
+					.getContents()));
 			GymnastWalker<Object> gw = new GymnastWalker<Object>();
 			RootCS wellFormednessChecker = new RootCS();
-			GymnastCollector vCollect = new GymnastCollector(wellFormednessChecker);
+			GymnastCollector vCollect = new GymnastCollector(
+					wellFormednessChecker);
 			gw.walk(reader, vCollect);
 			boolean res = wellFormednessChecker.isWellFormed();
 			if (res) {
 				return wellFormednessChecker;
-			}  
+			}
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null; 
+		return null;
 	}
 
 	public void addErrorMsgsFromInputValidation(ParseContext parseContext) {
 		assert parseContext != null;
 		if (entryRules().size() == 0) {
-			parseContext.addParseMessage(new GeneralMessage("No seq rule has been declared as [entry]"));
+			parseContext.addParseMessage(new GeneralMessage(
+					"No seq rule has been declared as [entry]"));
 		}
 		if (entryRules().size() > 1) {
 			for (RuleCS ruleCS : entryRules()) {
@@ -360,8 +368,10 @@ public class RootCS {
 			parseContext.addParseMessage(parseMessage);
 		}
 		if (!namingConventionLanguageNameStartsLowercase()) {
-			GeneralMessage parseMessage = new GeneralMessage("The language name (" + languageName
-					+ ") should start with a lowercase given that it'll be used later as package name.");
+			GeneralMessage parseMessage = new GeneralMessage(
+					"The language name ("
+							+ languageName
+							+ ") should start with a lowercase given that it'll be used later as package name.");
 			parseContext.addParseMessage(parseMessage);
 		}
 		addWarningToDocumentDefaultOptions(parseContext);
@@ -375,12 +385,15 @@ public class RootCS {
 				 * in case no umbrella type is to be generated then no name for
 				 * it need be specified
 				 */
-				boolean skip = opt.toLowerCase().equals("umbrellatypename") && !getOption_addUmbrellaType();
+				boolean skip = opt.toLowerCase().equals("umbrellatypename")
+						&& !getOption_addUmbrellaType();
 				if (!skip) {
 					oneOrMoreMissing = true;
-					String msg = "An option supported by Grammar2Ecore is missing (" + opt + "). ";
+					String msg = "An option supported by Grammar2Ecore is missing ("
+							+ opt + "). ";
 					msg += "Although a default values has been provided, including it explicitly in the .ast serves as documentation. ";
-					ParseWarning parseMessage = new Grammar2EcoreParseWarning.GeneralWarning(msg, 0, 1);
+					ParseWarning parseMessage = new Grammar2EcoreParseWarning.GeneralWarning(
+							msg, 0, 1);
 					parseContext.addParseMessage(parseMessage);
 				}
 			}
@@ -389,9 +402,10 @@ public class RootCS {
 	}
 
 	public Set<String> allOptionsSupported() {
-		String[] allOptionsSupported = new String[] { "prettyPrinter", "unparser", "ecorizer", "umbrellaType",
-				"umbrellaTypeName" };
-		HashSet<String> res = new HashSet<String>(Arrays.asList(allOptionsSupported));
+		String[] allOptionsSupported = new String[] { "prettyPrinter",
+				"unparser", "ecorizer", "umbrellaType", "umbrellaTypeName" };
+		HashSet<String> res = new HashSet<String>(Arrays
+				.asList(allOptionsSupported));
 		return res;
 	}
 
@@ -410,11 +424,11 @@ public class RootCS {
 		if (!options.containsKey("parserPackageName")) {
 			res.add("parserPackageName");
 		}
-		
+
 		/*
 		 * genModelBasePackage should also be specified (for the Java classes
 		 * generated from Ecore). It is necessary when generating the Ecorizer
-		 * class, as part of the return type. 
+		 * class, as part of the return type.
 		 */
 		if (!options.containsKey("genModelBasePackage")) {
 			/*
@@ -425,7 +439,7 @@ public class RootCS {
 			 */
 			res.add("genModelBasePackage");
 		}
-		
+
 		if (!options.containsKey("genModelPrefix")) {
 			res.add("genModelPrefix");
 		}
@@ -524,7 +538,8 @@ public class RootCS {
 	 * @return
 	 */
 	public static String camelCase(String name) {
-		String res = org.eclipse.gymnast.generator.core.generator.Util.toUppercaseName(name);
+		String res = org.eclipse.gymnast.generator.core.generator.Util
+				.toUppercaseName(name);
 		return res;
 	}
 
@@ -532,7 +547,7 @@ public class RootCS {
 		String res = helperGetOption("genModelBasePackage");
 		return res;
 	}
-	
+
 	public String getOption_genModelPrefix() {
 		String res = helperGetOption("genModelPrefix");
 		if (res.equals("")) {
@@ -661,6 +676,10 @@ public class RootCS {
 				return trCS.enu;
 			}
 		}
+		RuleCS r = getRuleForNameIfAny(name);
+		if (r != null && r.canBeRegardedAsBoolean()) {
+			return EcorePackage.eINSTANCE.getEBoolean();
+		}
 		return null;
 	}
 
@@ -674,6 +693,10 @@ public class RootCS {
 			if (namesMatch(anotherAlt.name, name)) {
 				return anotherAlt.enu;
 			}
+		}
+		RuleCS r = getRuleForNameIfAny(name);
+		if (r != null && r.canBeRegardedAsBoolean()) {
+			return EcorePackage.eINSTANCE.getEBoolean();
 		}
 		return null;
 	}
@@ -773,9 +796,9 @@ public class RootCS {
 
 	public String languageFactoryImpl(SeqRuleCS srCS) {
 		// For example, EmfaticFactoryImpl
-		String res = getOption_genModelBasePackage() + "."; 
+		String res = getOption_genModelBasePackage() + ".";
 		res += srCS.eClass.getEPackage().getName() + ".impl.";
-	    res += getOption_genModelPrefix(); 
+		res += getOption_genModelPrefix();
 		res += "FactoryImpl";
 		return res;
 	}
@@ -783,5 +806,7 @@ public class RootCS {
 	public String getOption_parserPackageName() {
 		return helperGetOption("parserPackageName");
 	}
+
+	public static final String ATTRIBUTE_REGARD_AS_BOOLEAN = "boolean";
 
 }

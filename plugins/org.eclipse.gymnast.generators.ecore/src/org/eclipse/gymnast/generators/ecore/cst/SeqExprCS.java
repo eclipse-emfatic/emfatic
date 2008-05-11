@@ -24,15 +24,16 @@ public class SeqExprCS {
 	/**
 	 * Invariant (this.eSF != null) iff ((this.getKind() ==
 	 * REFERS_TO_RULE_WITH_EENUM || this.getKind() ==
-	 * REFERS_TO_RULE_WITH_ECLASS) && (@see
-	 * {@link GenUnparseInhaleAndMMForSeqRules() has run}))
+	 * REFERS_TO_RULE_WITH_ECLASS) && (@see {@link
+	 * GenUnparseInhaleAndMMForSeqRules() has run}))
 	 */
 	public EStructuralFeature eSF = null;
 	public EStructuralFeature eSFListForRefedItems;
 	public EStructuralFeature eSFListForSeparators;
 	public EAttribute eSFBooleanForOptionalConstant;
 
-	public SeqExprCS(boolean isOptional, String optFieldName, String value, int position, RootCS c) {
+	public SeqExprCS(boolean isOptional, String optFieldName, String value,
+			int position, RootCS c) {
 		this.isOptional = isOptional;
 		this.optFieldName = optFieldName;
 		this.value = value;
@@ -69,7 +70,7 @@ public class SeqExprCS {
 
 	/**
 	 * @return a readable name for a field, e.g. instead of INT_LITERAL returns
-	 *         intLit.
+	 * 	intLit.
 	 */
 	public String suggestedName() {
 		String res = optFieldName.equals("") ? value : optFieldName;
@@ -98,19 +99,24 @@ public class SeqExprCS {
 		if (refedEType instanceof EEnum) {
 			return SeqExprKind.REFERS_TO_RULE_WITH_EENUM;
 		}
-		if (value.equals("STRING_LITERAL") || value.equals("ID") || c.getAltOrTokenRulesWithStrings().contains(value)) {
+		if (value.equals("STRING_LITERAL") || value.equals("ID")
+				|| c.getAltOrTokenRulesWithStrings().contains(value)) {
 			return SeqExprKind.KEEP_AS_STR;
 		}
 		if (value.equals("CHAR_LITERAL")) {
 			return SeqExprKind.KEEP_AS_CHR;
 		}
-		if (value.equals("INT_LITERAL") || c.getAltOrTokenRulesWithIntsOnly().contains(value)) {
+		if (value.equals("INT_LITERAL")
+				|| c.getAltOrTokenRulesWithIntsOnly().contains(value)) {
 			return SeqExprKind.KEEP_AS_INT;
 		}
 		if (c.getNamesOfListRules().contains(value)) {
 			return SeqExprKind.REFERS_TO_LIST_RULE;
 		}
-
+		RuleCS r = c.getRuleForNameIfAny(value);
+		if (r != null && r.canBeRegardedAsBoolean()) {
+			return SeqExprKind.REFERS_TO_RULE_WITH_EENUM;
+		}
 		assert false;
 		throw new RuntimeException();
 	}
@@ -123,18 +129,19 @@ public class SeqExprCS {
 			 * suffixes like 1, 2, are necessary
 			 */
 			switch (k) {
-			
+
 			case CONSTANT_CONTENT:
 				String res = optFieldName.equals("") ? value : optFieldName;
 				String postfix = "";
 				if (RootCS.isSurroundedByQuotes(res)) {
 					res = RootCS.unquote(res);
 					postfix = "_KW";
+				} else {
+					res = res.toLowerCase();
 				}
-				res = res.toLowerCase();
 				res = "get" + Util.toUppercaseName(res) + postfix + "()";
 				return res;
-			
+
 			case KEEP_AS_CHR:
 				return "getChar_literal()";
 			case KEEP_AS_STR:

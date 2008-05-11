@@ -71,12 +71,14 @@ public class EcoreGeneratorFromGymnastGrammar {
 
 			ParseContext parseContext = new ParseContext();
 
+			wellFormednessChecker.addErrorMsgsFromInputValidation(parseContext);
+			
 			boolean bCheckAltToken = checkCoverageOfAltAndTokenRules(wellFormednessChecker, g2e);
-			if (!bCheckAltToken) {
+			if (!bCheckAltToken && parseContext.getErrorCount() == 0) {
 				parseContext.addParseMessage(new CoverageOfAltAndTokenRules());
 			}
 
-			wellFormednessChecker.addErrorMsgsFromInputValidation(parseContext);
+			
 			MarkerUtil.updateMarkers(astFile, parseContext);
 			if (!wellFormednessChecker.isWellFormed()) {
 				return;

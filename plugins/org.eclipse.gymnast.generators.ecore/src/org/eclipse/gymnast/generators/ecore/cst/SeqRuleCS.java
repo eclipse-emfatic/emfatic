@@ -116,4 +116,9 @@ public class SeqRuleCS extends RuleCS {
 		MalformedSeqRule parseMessage = new MalformedSeqRule(this);
 		parseContext.addParseMessage(parseMessage);
 	}
+
+	@Override
+	public final boolean canBeRegardedAsBoolean() {
+		return false;
+	}
 }
