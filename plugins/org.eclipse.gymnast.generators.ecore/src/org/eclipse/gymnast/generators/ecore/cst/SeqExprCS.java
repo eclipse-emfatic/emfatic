@@ -30,8 +30,7 @@ public class SeqExprCS {
 	public EStructuralFeature eSF = null;
 	public EStructuralFeature eSFListForRefedItems;
 	public EStructuralFeature eSFListForSeparators;
-	public EAttribute eSFBooleanForOptionalConstant;
-
+	
 	public SeqExprCS(boolean isOptional, String optFieldName, String value,
 			int position, RootCS c) {
 		this.isOptional = isOptional;

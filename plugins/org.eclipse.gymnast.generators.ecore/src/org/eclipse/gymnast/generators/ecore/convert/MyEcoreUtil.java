@@ -42,9 +42,9 @@ import org.eclipse.gymnast.generator.core.generator.Util;
 
 public class MyEcoreUtil {
 
-	public static boolean isWellFormed(EPackage rootPackage) {
+	public static boolean isWellFormed(EObject root) {
 		Diagnostician diagnostician = new Diagnostician();
-		final Diagnostic diagnostic = diagnostician.validate(rootPackage);
+		final Diagnostic diagnostic = diagnostician.validate(root);
 		boolean res = diagnostic.getSeverity() == Diagnostic.OK;
 		return res;
 	}
@@ -56,12 +56,13 @@ public class MyEcoreUtil {
 		return cloned;
 	}
 
-	public static GenModel generateGenModel(IPath genModelPath, EPackage ePackage, String basePackage, String prefix,
-			IProject proj) throws IOException {
+	public static GenModel generateGenModel(IPath genModelPath,
+			EPackage ePackage, String basePackage, String prefix, IProject proj)
+			throws IOException {
 		ResourceSet resourceSet = new ResourceSetImpl();
 		URI genModelURI = URI.createFileURI(genModelPath.toString());
-		Resource genModelResource = Resource.Factory.Registry.INSTANCE.getFactory(genModelURI).createResource(
-				genModelURI);
+		Resource genModelResource = Resource.Factory.Registry.INSTANCE
+				.getFactory(genModelURI).createResource(genModelURI);
 		GenModel genModel = GenModelFactory.eINSTANCE.createGenModel();
 		genModelResource.getContents().add(genModel);
 		resourceSet.getResources().add(genModelResource);
@@ -70,14 +71,16 @@ public class MyEcoreUtil {
 		genModel.initialize(Collections.singleton(ePackage));
 		genModel.setComplianceLevel(GenJDKLevel.JDK50_LITERAL);
 		GenPackage genPackage = (GenPackage) genModel.getGenPackages().get(0);
-		genModel.setModelName(genModelURI.trimFileExtension().lastSegment() + "GenModel");
+		genModel.setModelName(genModelURI.trimFileExtension().lastSegment()
+				+ "GenModel");
 		genPackage.setPrefix(prefix);
 		genPackage.setBasePackage(basePackage);
 		genModelResource.save(Collections.EMPTY_MAP);
 		return genModel;
 	}
 
-	public static EClass newClass(EPackage ownerPackage, String name, boolean isAbstract, EClass eSuper) {
+	public static EClass newClass(EPackage ownerPackage, String name,
+			boolean isAbstract, EClass eSuper) {
 		EClass c = EcoreFactory.eINSTANCE.createEClass();
 		c.setName(capitalized(name));
 		c.setAbstract(isAbstract);
@@ -96,7 +99,8 @@ public class MyEcoreUtil {
 		return res;
 	}
 
-	public static EPackage newPackage(EList<? super EPackage> contents, String name, String ns) {
+	public static EPackage newPackage(EList<? super EPackage> contents,
+			String name, String ns) {
 		EPackage ePackage = EcoreFactory.eINSTANCE.createEPackage();
 		ePackage.setName(name);
 		ePackage.setNsPrefix(ns);
@@ -125,8 +129,8 @@ public class MyEcoreUtil {
 		return newName;
 	}
 
-	public static EClass newContainerOf(EPackage ownerPackage, String name, EClass itemType, int lowerBound,
-			int upperBound) {
+	public static EClass newContainerOf(EPackage ownerPackage, String name,
+			EClass itemType, int lowerBound, int upperBound) {
 		EClass res = newClass(ownerPackage, name, false, null);
 		EReference eR = EcoreFactory.eINSTANCE.createEReference();
 		eR.setLowerBound(lowerBound);
@@ -143,9 +147,9 @@ public class MyEcoreUtil {
 	 * private static String firstLowercase(String name) { String res =
 	 * name.substring(0, 1).toLowerCase(); if (name.length() > 1) { res +=
 	 * name.substring(1); } return res; }
-	 * 
 	 */
-	public static EAttribute newAttribute(String name, EClass ownerClass, EClassifier type) {
+	public static EAttribute newAttribute(String name, EClass ownerClass,
+			EClassifier type) {
 		name = Util.toLowercaseName(name);
 		name = nonCollidingName(name, ownerClass);
 		EAttribute eA = EcoreFactory.eINSTANCE.createEAttribute();
@@ -155,7 +159,8 @@ public class MyEcoreUtil {
 		return eA;
 	}
 
-	public static EReference newReference(String name, EClass ownerClass, EClass type) {
+	public static EReference newReference(String name, EClass ownerClass,
+			EClass type) {
 		name = Util.toLowercaseName(name);
 		name = nonCollidingName(name, ownerClass);
 		EReference eR = EcoreFactory.eINSTANCE.createEReference();
@@ -173,11 +178,15 @@ public class MyEcoreUtil {
 		generator.setInput(genModel);
 
 		// Generator model code.
-		generator.generate(genModel, GenBaseGeneratorAdapter.MODEL_PROJECT_TYPE, new BasicMonitor.Printing(System.out));
+		generator.generate(genModel,
+				GenBaseGeneratorAdapter.MODEL_PROJECT_TYPE,
+				new BasicMonitor.Printing(System.out));
 	}
 
-	public static EEnum newEnum(EPackage ownerPackage, String suggestedName, List<String> values) {
-		String newName = nonCollidingName(capitalized(suggestedName), ownerPackage);
+	public static EEnum newEnum(EPackage ownerPackage, String suggestedName,
+			List<String> values) {
+		String newName = nonCollidingName(capitalized(suggestedName),
+				ownerPackage);
 		EEnum e = EcoreFactory.eINSTANCE.createEEnum();
 		e.setName(newName);
 		ownerPackage.getEClassifiers().add(e);
@@ -203,13 +212,32 @@ public class MyEcoreUtil {
 		return res;
 	}
 
+	public static List<EClass> getSubTypesOf(EClass eC) {
+		EPackage rootP = eC.getEPackage();
+		while (rootP.getESuperPackage() != null) {
+			rootP = rootP.getESuperPackage();
+		}
+		List<EClass> res = new ArrayList<EClass>();
+		getSubTypesOfInner(eC, rootP, res);
+		return res;
+	}
+
+	private static void getSubTypesOfInner(EClass eC, EPackage eP,
+			List<EClass> subTypesSoFar) {
+		subTypesSoFar.addAll(getSubTypesOfInPackage(eC, eP));
+		for (EPackage subP : eP.getESubpackages()) {
+			getSubTypesOfInner(eC, subP, subTypesSoFar);
+		}
+	}
+
 	/*
 	 * derived from GenModelPackage source annotation, which results in one
 	 * operation has at most one annotation body
 	 */
 	public static final String BODY_ANNOTATION_SOURCE = GenModelPackage.eNS_URI;
 
-	public static EAnnotation newAnnotation(EModelElement object, String source, String key, String value) {
+	public static EAnnotation newAnnotation(EModelElement object,
+			String source, String key, String value) {
 
 		EAnnotation eAnnotation = object.getEAnnotation(source);
 		if (eAnnotation != null && !eAnnotation.getDetails().isEmpty()) {
@@ -251,7 +279,8 @@ public class MyEcoreUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Resource serializeEcoreToFile(String fileLocation, EPackage rootPackage) throws IOException {
+	public static Resource serializeEcoreToFile(String fileLocation,
+			EPackage rootPackage) throws IOException {
 
 		// create resource set and resource
 		ResourceSet resourceSet = new ResourceSetImpl();
@@ -260,7 +289,8 @@ public class MyEcoreUtil {
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
 				.put("ecore", new EcoreResourceFactoryImpl());
 
-		Resource resource = resourceSet.createResource(URI.createFileURI(fileLocation));
+		Resource resource = resourceSet.createResource(URI
+				.createFileURI(fileLocation));
 		// add the root object to the resource
 		resource.getContents().add(rootPackage);
 		// serialize resource – you can specify also serialization
@@ -271,7 +301,8 @@ public class MyEcoreUtil {
 
 	}
 
-	public static EOperation newOperation(String suggestedName, EClass ownerClass, EClassifier returnType) {
+	public static EOperation newOperation(String suggestedName,
+			EClass ownerClass, EClassifier returnType) {
 		String newName = nonCollidingName(suggestedName, ownerClass);
 		EOperation op = EcoreFactory.eINSTANCE.createEOperation();
 		op.setName(Util.toLowercaseName(newName));

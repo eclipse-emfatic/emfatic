@@ -227,6 +227,7 @@ public class GenUnparseInhaleAndMMForSeqRules {
 		}
 		val = MyEcoreUtil.newAttribute(item.suggestedName(), eC, t);
 		val.setUnsettable(item.isOptional);
+		val.setLowerBound(item.isOptional ? 0 : 1);
 		val.setUpperBound(1);
 
 		// --------- (2) stms for inhale (ecorize) ---------------------
@@ -699,7 +700,7 @@ public class GenUnparseInhaleAndMMForSeqRules {
 			val = MyEcoreUtil.newAttribute(suggestedName, item.srCS.eClass, t);
 			val.setLowerBound(1);
 			val.setUpperBound(1);
-			item.eSFBooleanForOptionalConstant = val;
+			val.setUnsettable(true);
 		}
 
 		if (c.getOption_ecorizer()) {
