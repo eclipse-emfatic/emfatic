@@ -52,7 +52,7 @@ public abstract class Modder {
 		} else if (gSF.isReferenceType()) {
 			return chooseRefModderFor(gSF);
 		}
-
+		
 		assert false;
 		return null;
 	}

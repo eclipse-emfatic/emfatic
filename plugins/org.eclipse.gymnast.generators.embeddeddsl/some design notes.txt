@@ -1,0 +1,46 @@
+
+
+class ExprBuilder {
+  String langName;
+  BeingBuilt[*]  seqRules;
+}
+
+class BeingBuilt {
+  SeqRule sr (gives access to rule name, sr.eClass, Factory)
+  List<Modder> modders; 
+  boolean isProgressiveInterface;
+  // toAST() is derived
+}
+
+abstract class Modder { }
+
+class LiftedRef extends Modder { 
+  EReference eR; // its refed type has no subtypes
+  /* derive a get non-null, set one by one args */
+  // derive unset if unsettable
+}
+
+class NonLiftedRef extends Modder { 
+  /* in order not to interrupt the fluent interface, 
+     the arg is passed to a setter */
+  EReference eR; 
+  /* A heuristic: the refed type has an eSF of non-primitive kind, 
+     that would be clumsy (yet possible) to pass as constructor arg */
+}
+
+class ManySF extends Modder {
+  EStructuralFeature eSF;
+  // derive like "stateChartDecls(...)"
+  // derive like "addStateChartDecl()"
+}
+
+class StrIntCharSF extends Modder {
+  EAttribute eA;
+  // setter with arg
+  // derive unset if unsettable
+}
+
+BooleanModder (setter or yes/no methods)
+
+EnumModder (terminal2method or terminal2enumliteral)
+
