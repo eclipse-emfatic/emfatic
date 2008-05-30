@@ -9,9 +9,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.gymnast.generators.ecore,
- org.eclipse.gymnast.generator.core,
  org.eclipse.ui.ide,
- org.eclipse.emf.ecore,
- org.eclipse.emf.codegen.ecore
+ org.eclipse.emf.codegen.ecore,
+ org.eclipse.gymnast.generator.core;bundle-version="0.3.0"
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.gymnast.generators.ecore.ui.actions
