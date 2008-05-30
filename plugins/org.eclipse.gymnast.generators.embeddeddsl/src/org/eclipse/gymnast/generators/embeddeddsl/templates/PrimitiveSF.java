@@ -53,9 +53,11 @@ public class PrimitiveSF extends Modder {
 		if (eSF.getEType() instanceof EDataType) {
 			EDataType eDT = (EDataType) eSF.getEType();
 			String itn = eDT.getInstanceTypeName();
-			if (itn.equals("java.math.BigInteger") || itn.equals("java.math.BigDecimal")) {
-				// FIXME loss of precission without warnign
-				hasIntType = true; 
+			if (itn != null ) {
+				if (itn.equals("java.math.BigInteger") || itn.equals("java.math.BigDecimal")) {
+					// FIXME loss of precision without warning
+					hasIntType = true; 
+				}
 			}
 		}
 		return hasIntType;

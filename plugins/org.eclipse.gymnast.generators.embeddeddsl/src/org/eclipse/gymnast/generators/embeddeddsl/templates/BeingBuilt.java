@@ -132,12 +132,35 @@ public class BeingBuilt {
 		public String returnInterfaceName;
 		public List<Modder> modders = new ArrayList<Modder>();
 
-		public String toStringInterface() {
+		public boolean areAllModdersOptional() {
+			for (Modder m : modders) {
+				if (m.eSF.isMany()) {
+					return false;
+				}
+				if (m.eSF.isUnsettable() == false && m.eSF.getLowerBound() > 0) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public String toStringInterface(boolean amILastBatch) {
+
 			String res = "public interface " + interfaceName + " {";
 			for (Modder m : modders) {
 				res += newLine + m.signatureDecl();
 			}
-			res += newLine + "}";
+			if (areAllModdersOptional() && amILastBatch) {
+				/*
+				 * if all modders are optional, then toAST() will also be part
+				 * of this interface, therefore we don't right now close the
+				 * interface declaration by adding a right curly brace.
+				 */
+
+				res += newLine + "/* allModdersAreOptional */";
+			} else {
+				res += newLine + "}";
+			}
 			return res;
 		}
 	}
@@ -150,11 +173,18 @@ public class BeingBuilt {
 		if (batches.size() > 1) {
 			res += " implements ";
 			Iterator<Batch> iB = batches.iterator();
+			boolean commaRequired = false;
 			while (iB.hasNext()) {
 				BeingBuilt.Batch batch = (BeingBuilt.Batch) iB.next();
-				res += batch.interfaceName + ", ";
+				res += commaRequired ? ", " : "";
+				commaRequired = true;
+				res += batch.interfaceName;
 			}
-			res += batches.get(batches.size() - 1).returnInterfaceName;
+			Batch lastBatch = batches.get(batches.size() - 1);
+			if (!lastBatch.areAllModdersOptional()) {
+				res += commaRequired ? ", " : "";
+				res += lastBatch.returnInterfaceName;
+			}
 		}
 		res += " {";
 		res += newLine + "private final " + jTypeMyExpr + " myExpr;";
@@ -175,12 +205,19 @@ public class BeingBuilt {
 			Iterator<Batch> iB = batches.iterator();
 			while (iB.hasNext()) {
 				BeingBuilt.Batch b = (BeingBuilt.Batch) iB.next();
-				res += newLine + b.toStringInterface();
+				boolean amILastBatch = !iB.hasNext();
+				res += newLine + b.toStringInterface(amILastBatch);
 			}
 
-			res += "public interface " + batches.get(batches.size() - 1).returnInterfaceName + " { ";
-			res += newLine + String.format("public %1s toAST();", jTypeMyExpr);
-			res += "}";
+			Batch lastBatch = batches.get(batches.size() - 1);
+			if (lastBatch.areAllModdersOptional()) {
+				res += newLine + String.format("public %1s toAST();", jTypeMyExpr);
+				res += "}";
+			} else {
+				res += "public interface " + lastBatch.returnInterfaceName + " { ";
+				res += newLine + String.format("public %1s toAST();", jTypeMyExpr);
+				res += "}";
+			}
 
 		}
 

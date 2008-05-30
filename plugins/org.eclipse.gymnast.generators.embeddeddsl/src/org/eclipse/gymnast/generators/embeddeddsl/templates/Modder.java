@@ -179,7 +179,9 @@ public abstract class Modder {
 	public abstract String signatureDecl();
 	
 	protected String getReturnType() {
-		String jReturnType = (eSF.isUnsettable() ? myBatch.interfaceName : myBatch.returnInterfaceName);
+		boolean cond1 = eSF.isUnsettable();
+		boolean cond2 = eSF.getLowerBound() == 0 && !eSF.isMany();
+		String jReturnType = (cond1 || cond2 ? myBatch.interfaceName : myBatch.returnInterfaceName);
 		return  jReturnType;
 	}
 
