@@ -6,7 +6,7 @@ import org.eclipse.emf.codegen.ecore.genmodel.GenFeature;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.gymnast.generators.ecore.convert.MyEcoreUtil;
+import org.eclipse.gymnast.generators.embeddeddsl.MyEcoreUtil;
 
 /**
  * setter or yes/no methods, the latter derived from an annotation with

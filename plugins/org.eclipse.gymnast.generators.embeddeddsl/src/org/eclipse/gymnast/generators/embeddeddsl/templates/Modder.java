@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.gymnast.generators.ecore.convert.MyEcoreUtil;
+import org.eclipse.gymnast.generators.embeddeddsl.MyEcoreUtil;
 import org.eclipse.gymnast.generators.embeddeddsl.templates.BeingBuilt.Batch;
 
 public abstract class Modder {
