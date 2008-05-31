@@ -8,7 +8,7 @@ Bundle-Vendor: Miguel Garcia, http://www.sts.tu-harburg.de/~mi.garcia/
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;bundle-version="3.3.0",
  org.eclipse.emf.codegen.ecore;bundle-version="2.3.0",
- org.eclipse.emf.ecore.xmi;bundle-version="2.4.0"
+ org.eclipse.emf.ecore.xmi;bundle-version="2.3.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.gymnast.generators.embeddeddsl,
