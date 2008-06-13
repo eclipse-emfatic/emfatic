@@ -8,10 +8,8 @@ Bundle-Vendor: Miguel Garcia, http://www.sts.tu-harburg.de/~mi.garcia/
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.gymnast.generator.core,
  org.eclipse.gymnast.runtime.core,
- org.eclipse.emf.ecore,
  org.eclipse.core.resources,
  org.eclipse.emf.codegen.ecore,
- org.eclipse.emf.emfatic.core,
  org.eclipse.emf.ecore.xmi
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.gymnast.generators.ecore,
