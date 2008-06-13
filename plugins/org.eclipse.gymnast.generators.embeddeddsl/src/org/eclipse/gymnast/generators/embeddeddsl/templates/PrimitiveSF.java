@@ -15,7 +15,7 @@ public class PrimitiveSF extends Modder {
 	}
 
 	public static boolean hasPrimitiveType(EStructuralFeature eSF) {
-		boolean hasStrType = eSF.getEType() == EcorePackage.eINSTANCE.getEString();
+		boolean hasStrType = hasStringType(eSF);
 		boolean hasIntType = hasIntType(eSF);
 		boolean hasLongType = hasLongType(eSF);
 		boolean hasFloatType = hasFloatType(eSF);
@@ -24,9 +24,42 @@ public class PrimitiveSF extends Modder {
 		return hasStrType || hasIntType || hasLongType || hasCharType || hasFloatType || hasDoubleType;
 	}
 
+	private static boolean hasStringType(EStructuralFeature eSF){
+		boolean hasStrType = eSF.getEType() == EcorePackage.eINSTANCE.getEString();
+		if (hasStrType) {
+			return true;
+		}
+		if (eSF.getEType() instanceof EDataType) {
+			EDataType eDT = (EDataType) eSF.getEType();
+			String itn = eDT.getInstanceTypeName();
+			if (itn != null ) {
+				if (itn.equals("java.lang.String") ) {
+					// FIXME loss of precision without warning
+					hasStrType = true;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	private static boolean hasDoubleType(EStructuralFeature eSF) {
 		boolean hasDoubleType = eSF.getEType() == EcorePackage.eINSTANCE.getEDouble();
 		hasDoubleType |= eSF.getEType() == EcorePackage.eINSTANCE.getEDoubleObject();
+		if (hasDoubleType) {
+			return true;
+		}
+		if (eSF.getEType() instanceof EDataType) {
+			EDataType eDT = (EDataType) eSF.getEType();
+			String itn = eDT.getInstanceTypeName();
+			if (itn != null ) {
+				if (itn.equals("java.math.BigDecimal")) {
+					// FIXME loss of precision without warning
+					hasDoubleType = true;
+					return true;
+				}
+			}
+		}
 		return hasDoubleType;
 	}
 
@@ -42,31 +75,27 @@ public class PrimitiveSF extends Modder {
 		return hasCharType;
 	}
 
-	private static boolean hasStrType(EStructuralFeature eSF) {
-		boolean hasStrType = eSF.getEType() == EcorePackage.eINSTANCE.getEString();
-		return hasStrType;
-	}
-
 	private static boolean hasIntType(EStructuralFeature eSF) {
 		boolean hasIntType = eSF.getEType() == EcorePackage.eINSTANCE.getEInt();
 		hasIntType |= eSF.getEType() == EcorePackage.eINSTANCE.getEIntegerObject();
-		if (eSF.getEType() instanceof EDataType) {
-			EDataType eDT = (EDataType) eSF.getEType();
-			String itn = eDT.getInstanceTypeName();
-			if (itn != null ) {
-				if (itn.equals("java.math.BigInteger") || itn.equals("java.math.BigDecimal")) {
-					// FIXME loss of precision without warning
-					hasIntType = true; 
-				}
-			}
-		}
 		return hasIntType;
 	}
 
 	private static boolean hasLongType(EStructuralFeature eSF) {
-		boolean hasIntType = eSF.getEType() == EcorePackage.eINSTANCE.getELong();
-		hasIntType |= eSF.getEType() == EcorePackage.eINSTANCE.getELongObject();
-		return hasIntType;
+		boolean hasLongType = eSF.getEType() == EcorePackage.eINSTANCE.getELong();
+		hasLongType |= eSF.getEType() == EcorePackage.eINSTANCE.getELongObject();
+		if (eSF.getEType() instanceof EDataType) {
+			EDataType eDT = (EDataType) eSF.getEType();
+			String itn = eDT.getInstanceTypeName();
+			if (itn != null ) {
+				if (itn.equals("java.math.BigInteger") ) {
+					// FIXME loss of precision without warning
+					hasLongType = true;
+					return true;
+				}
+			}
+		}
+		return hasLongType;
 	}
 
 	@Override

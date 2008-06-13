@@ -49,18 +49,24 @@ public class BeingBuilt {
 	}
 
 	static String getJavaFQN(GenPackage gP) {
-		String res = "";
-		GenPackage tP = gP;
-		boolean notLooped = true;
-		while (tP != null) {
-			res = tP.getEcorePackage().getName() + (notLooped ? "" : "." + res);
-			notLooped = false;
-			tP = tP.getSuperGenPackage();
-		}
-		if (gP.getBasePackage() != null) {
-			res = gP.getBasePackage() + "." + res;
-		}
-		return res;
+		
+		final String strBP = gP.getBasePackage();
+		String gPName = gP.getEcorePackage().getName();
+		String res = strBP == null ? gPName : (strBP + "." + gPName);
+		return res; 
+		
+//		String res = "";
+//		GenPackage tP = gP;
+//		boolean notLooped = true;
+//		while (tP != null) {
+//			res = tP.getEcorePackage().getName() + (notLooped ? "" : "." + res);
+//			notLooped = false;
+//			tP = tP.getSuperGenPackage();
+//		}
+//		if (gP.getBasePackage() != null) {
+//			res = basePackageWithoutRoot + "." + res;
+//		}
+//		return res;
 	}
 
 	public static String getJavaFQN(GenClassifier gC) {
@@ -237,8 +243,12 @@ public class BeingBuilt {
 		return jConstructor;
 	}
 
-	public String jInstantiateFor(EClass refed) {
-		String res = String.format("%1s.create%2s()", _factoryFQN, ExprBuilder.toUppercaseName(refed.getName()));
+	public String jInstantiateFor(GenClass refed) {
+
+		String factoryInstanceName = refed.getGenPackage().getFactoryInstanceName();
+		String factoryOfRefedTypeFQN = getJavaFQN(refed.getGenPackage()) + "." + refed.getGenPackage().getFactoryInterfaceName() + "." + factoryInstanceName;
+		
+		String res = String.format("%1s.create%2s()", factoryOfRefedTypeFQN, ExprBuilder.toUppercaseName(refed.getName()));
 		return res;
 	}
 }

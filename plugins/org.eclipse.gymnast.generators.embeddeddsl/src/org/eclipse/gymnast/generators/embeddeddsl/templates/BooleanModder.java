@@ -2,6 +2,7 @@ package org.eclipse.gymnast.generators.embeddeddsl.templates;
 
 import java.util.Map;
 
+import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.ecore.genmodel.GenFeature;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -107,8 +108,8 @@ public class BooleanModder extends Modder {
 		String res;
 		String jSetStmt = "this.myExpr.set" + gSF.getAccessorName();
 		if (_refersToClassWithoutFields) {
-			EClass refed = (EClass) eSF.getEType();
-			String jInstantiate = beingBuilt.jInstantiateFor(refed);
+			GenClass genRefed = gSF.getTypeGenClass();
+			String jInstantiate = beingBuilt.jInstantiateFor(genRefed);
 			res = newLine + jSetStmt + " ( " + jInstantiate + " ); ";
 		} else {
 			res = jSetStmt + "(true);";
@@ -122,8 +123,8 @@ public class BooleanModder extends Modder {
 		String jModderNo = "public " + returnInterfaceName + " " + noMethodName + "() {";
 		String jSetStmt = "this.myExpr.set" + gSF.getAccessorName();
 		if (_refersToClassWithoutFields) {
-			EClass refed = (EClass) eSF.getEType();
-			String jInstantiate = beingBuilt.jInstantiateFor(refed);
+			GenClass genRefed = gSF.getTypeGenClass();
+			String jInstantiate = beingBuilt.jInstantiateFor(genRefed);
 			jModderYes += newLine + jSetStmt + "(" + jInstantiate + ");";
 			jModderNo += newLine + jSetStmt + "(null);";
 		} else {

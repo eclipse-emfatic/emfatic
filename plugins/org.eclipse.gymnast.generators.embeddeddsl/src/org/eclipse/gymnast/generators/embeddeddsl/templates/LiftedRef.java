@@ -2,6 +2,7 @@ package org.eclipse.gymnast.generators.embeddeddsl.templates;
 
 import java.util.Iterator;
 
+import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.ecore.genmodel.GenFeature;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
@@ -22,7 +23,8 @@ public class LiftedRef extends Modder {
 	@Override
 	public String toString() {
 		EClass refed = (EClass) eR.getEType();
-		String jInstantiate = beingBuilt.jInstantiateFor(refed);
+		GenClass genRefed = gSF.getTypeGenClass();
+		String jInstantiate = beingBuilt.jInstantiateFor(genRefed);
 		String jSetStmt = "this.myExpr.set" + gSF.getAccessorName() + "( " + jInstantiate + " );";
 		String jGetNonNull = String.format("if ( this.myExpr.get%1s() == null ) { %2s }", gSF.getAccessorName(), jSetStmt);
 
