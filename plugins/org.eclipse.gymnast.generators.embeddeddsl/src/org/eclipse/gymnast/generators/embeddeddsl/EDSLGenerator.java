@@ -23,9 +23,11 @@ public class EDSLGenerator {
 			throws CoreException {
 		IPath genModelPath = genModelFile.getFullPath();
 		ResourceSet resourceSet = new ResourceSetImpl();
-		URI genModelURI = URI.createFileURI(genModelPath.toString());
+		String gps = genModelPath.toString();
+		URI genModelURI = URI.createPlatformResourceURI(gps, true); 
 		Resource r = resourceSet.getResource(genModelURI, true);
 		GenModel genModel = (GenModel) r.getContents().get(0);
+		// EcoreUtil.resolveAll(resourceSet);
 		IStatus status = genModel.validate();
 		if (status.getChildren().length > 0 ) {
 			// FIXME add problem markers

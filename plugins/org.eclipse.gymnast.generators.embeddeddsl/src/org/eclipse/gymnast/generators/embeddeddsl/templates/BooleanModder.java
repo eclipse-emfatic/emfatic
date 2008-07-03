@@ -5,6 +5,7 @@ import java.util.Map;
 import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.ecore.genmodel.GenFeature;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.gymnast.generators.embeddeddsl.MyEcoreUtil;
@@ -47,7 +48,19 @@ public class BooleanModder extends Modder {
 
 	public static boolean canBeConsideredBoolean(EStructuralFeature eSF) {
 		boolean res = hasBooleanType(eSF) || refersToClassWithoutFields(eSF);
-		return res;
+		if (res) {
+			return true;
+		}
+		if (eSF.getEType() instanceof EDataType) {
+			EDataType eDT = (EDataType) eSF.getEType();
+			String itn = eDT.getInstanceTypeName();
+			if (itn != null ) {
+				if (itn.equals("java.lang.Boolean") || itn.toLowerCase().equals("boolean")) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
