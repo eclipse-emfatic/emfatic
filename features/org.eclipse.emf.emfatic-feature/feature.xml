@@ -24,7 +24,6 @@ Emfatic is hosted as an EMFT component with Incubation status.
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.emf.common"/>
-      <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.emf.ecore.edit"/>
       <import plugin="org.eclipse.emf.edit.ui"/>
       <import plugin="org.eclipse.gymnast.runtime.core"/>
@@ -37,7 +36,7 @@ Emfatic is hosted as an EMFT component with Incubation status.
       <import plugin="org.eclipse.jdt.ui"/>
       <import plugin="org.eclipse.core.expressions"/>
       <import plugin="org.eclipse.gymnast.runtime.ui"/>
-      <import feature="org.eclipse.gymnast.runtime" version="0.1.0"/>
+      <import plugin="org.eclipse.emf.ecore" version="2.3.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -49,13 +48,6 @@ Emfatic is hosted as an EMFT component with Incubation status.
 
    <plugin
          id="org.eclipse.emf.emfatic.ui"
-         download-size="0"
-         install-size="0"
-         version="0.3.0.qualifier"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.emf.emfatic.doc.user"
          download-size="0"
          install-size="0"
          version="0.3.0.qualifier"

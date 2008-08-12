@@ -20,10 +20,6 @@
          id="org.eclipse.emf.emfatic"
          version="0.0.0"/>
 
-   <includes
-         id="org.eclipse.gymnast.runtime"
-         version="0.0.0"/>
-
    <plugin
          id="org.eclipse.emf.emfatic.doc.user"
          download-size="0"
