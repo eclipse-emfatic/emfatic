@@ -17,10 +17,10 @@ import org.eclipse.swt.events.KeyListener;
 
 public class EmfaticKeyListener implements KeyListener {
 
-	private EmfaticEditor _editor = null;
+	//private EmfaticEditor _editor = null;
 
 	public EmfaticKeyListener(EmfaticEditor emfaticEditor) {
-		_editor  = emfaticEditor; 
+		//_editor  = emfaticEditor; 
 	}
 
 	public void keyPressed(KeyEvent e) {

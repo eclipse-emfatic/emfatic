@@ -55,10 +55,10 @@ public class EmfaticRedSquigglerDeltaVisitor implements IResourceDeltaVisitor {
 
 		RedSquigglerJob(IFile emfFile) {
 			super("Computing red squiggles (EmfaticRedSquiggler) for " + emfFile.getName());
-			this.emfFile = emfFile;
+			//this.emfFile = emfFile;
 		}
 
-		private IFile emfFile;
+		//private IFile emfFile;
 
 	}
 

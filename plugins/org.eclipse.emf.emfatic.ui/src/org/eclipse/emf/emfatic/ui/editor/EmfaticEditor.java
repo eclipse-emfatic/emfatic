@@ -170,19 +170,19 @@ public class EmfaticEditor extends LDTEditor implements IShowInTargetList,
 	 * LDT has already support for this (as well as for ITextListener). I
 	 * realized after adding it here
 	 */
-	public EmfaticASTNode getClosestEnclosingASTNodeAt(int offset, Class filter) {
+	public EmfaticASTNode getClosestEnclosingASTNodeAt(int offset, Class<?> filter) {
 		return getClosestEnclosingASTNodeAt(offset, 0, filter);
 	}
 
 	public EmfaticASTNode getClosestEnclosingASTNodeAt(int offset, int length,
-			Class filter) {
+			Class<?> filter) {
 		EmfaticASTNode node = getClosestEnclosingASTNodeAtWithin(
 				getParseRoot(), offset, length, filter);
 		return node;
 	}
 
 	private EmfaticASTNode getClosestEnclosingASTNodeAtWithin(ASTNode within,
-			int offset, int length, Class filter) {
+			int offset, int length, Class<?> filter) {
 		if (within == null) {
 			return null;
 		}
@@ -442,7 +442,7 @@ public class EmfaticEditor extends LDTEditor implements IShowInTargetList,
 		if (selection instanceof ITextSelection) {
 			ITextSelection ts = (ITextSelection) selection;
 			int offset = ts.getOffset();
-			int length = ts.getLength();
+			//int length = ts.getLength();
 			ASTNode node = getClosestEnclosingASTNodeAt(offset, ClassDecl.class);
 			if (node == null) {
 				return null; 

@@ -13,15 +13,12 @@
 
 package org.eclipse.emf.emfatic.ui.editor;
 
-import java.util.ResourceBundle;
-
 import org.eclipse.emf.emfatic.ui.editor.actions.OpenDeclarationAction;
 import org.eclipse.gymnast.runtime.ui.editor.LDTEditorActionContributor;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 
 public class EmfaticEditorActionContributor extends LDTEditorActionContributor {
 
@@ -30,13 +27,13 @@ public class EmfaticEditorActionContributor extends LDTEditorActionContributor {
 
 	public EmfaticEditorActionContributor() {
 		super();
-		ResourceBundle bundle = EmfaticEditorMessages.getResourceBundle();
+//		ResourceBundle bundle = EmfaticEditorMessages.getResourceBundle();
 
 		/*
 		 * fContentAssistProposal = new RetargetTextEditorAction(bundle,
 		 * "ContentAssistProposal."); //$NON-NLS-1$
 		 */
-		String commandId = ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS;
+//		String commandId = ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS;
 		// fContentAssistProposal.setActionDefinitionId(commandId);
 
 	}
