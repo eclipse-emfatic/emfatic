@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2006 IBM Corporation and others.
+ * Copyright (c) 2004, 2008 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Lucas Bigeardel - fix Generics warns
  *******************************************************************************/
 
 package org.eclipse.emf.emfatic.core.util;
@@ -22,10 +23,10 @@ public class EmfaticKeywords
 
     private static void initKeywords()
     {
-        _allKeywordsTable = new Hashtable();
-        _normalKeywordsTable = new Hashtable();
-        _specialKeywordsTable = new Hashtable();
-        _hoverTextTable = new Hashtable();
+        _allKeywordsTable = new Hashtable<String, String>();
+        _normalKeywordsTable = new Hashtable<String, String>();
+        _specialKeywordsTable = new Hashtable<String, String>();
+        _hoverTextTable = new Hashtable<String, String>();
         add("abstract", "EClass.isAbstract() == <T>");
         add("attr", true);
         add("class", true);
@@ -142,10 +143,12 @@ public class EmfaticKeywords
     public static final char KEYWORD_ESCAPE_CHAR = 126;
     public static final String KEYWORD_ESCAPE_STRING = String.valueOf('~');
     private static boolean _isInitialized = false;
-    private static Hashtable _allKeywordsTable;
-    private static Hashtable _normalKeywordsTable;
-    private static Hashtable _specialKeywordsTable;
-    private static Hashtable _hoverTextTable;
+    
+    private static Hashtable<String, String> _allKeywordsTable;
+    private static Hashtable<String, String> _normalKeywordsTable;
+    private static Hashtable<String, String> _specialKeywordsTable;
+    private static Hashtable<String, String> _hoverTextTable;
+    
     private static String _allKeywords[];
     private static String _normalKeywords[];
     private static String _specialKeywords[];
