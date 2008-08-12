@@ -29,12 +29,12 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 public class EmfaticKeywordContentAssistProcessor implements
 		IContentAssistProcessor {
 
-	private EmfaticEditor _editor = null;
+	//private EmfaticEditor _editor = null;
 	private TreeSet<String> proposalList = new TreeSet<String>();
 	private IContextInformationValidator fValidator = new Validator();
 
 	public EmfaticKeywordContentAssistProcessor(EmfaticEditor editor) {
-		_editor = editor;
+//		_editor = editor;
 	}
 
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,

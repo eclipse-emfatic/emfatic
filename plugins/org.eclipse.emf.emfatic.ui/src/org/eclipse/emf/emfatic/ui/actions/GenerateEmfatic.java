@@ -80,7 +80,7 @@ public class GenerateEmfatic implements IObjectActionDelegate {
 
 	public static boolean ecoreValidate(IFile ecoreFile, IProgressMonitor progressMonitor) {
 		String ecoreFilePath = ecoreFile.getFullPath().toString();
-		URI uri = URI.createPlatformResourceURI(ecoreFilePath);
+		URI uri = URI.createPlatformResourceURI(ecoreFilePath, false);
 		ResourceSet resourceSet = new ResourceSetImpl();
 		Resource ecoreResource = resourceSet.getResource(uri, true);
 		if (ecoreFile != null) {
@@ -103,7 +103,7 @@ public class GenerateEmfatic implements IObjectActionDelegate {
 
 	private static void handleDiagnostic(IFile ecoreFile, Diagnostic diagnostic) {
 
-		int severity = diagnostic.getSeverity();
+//		int severity = diagnostic.getSeverity();
 		if (diagnostic.getSeverity() == Diagnostic.OK) {
 			// TODO no error
 		}

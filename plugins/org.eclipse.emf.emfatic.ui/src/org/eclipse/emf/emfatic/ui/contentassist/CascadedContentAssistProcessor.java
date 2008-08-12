@@ -22,7 +22,7 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
 public class CascadedContentAssistProcessor implements IContentAssistProcessor {
 
-	private ProposalsComparator proposalsComparator = new ProposalsComparator();
+	//private ProposalsComparator proposalsComparator = new ProposalsComparator();
 
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
 			int offset) {

@@ -16,6 +16,7 @@ package org.eclipse.emf.emfatic.core.generator.emfatic;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
@@ -101,9 +102,9 @@ public class Writer {
 	private void writeImports(EPackage ePackage) {
 		if (_processingEcore)
 			return;
-		Hashtable resourceTable = new Hashtable();
-		for (TreeIterator ti = ePackage.eAllContents(); ti.hasNext();) {
-			EObject eObject = (EObject) ti.next();
+		Hashtable<Resource, Resource> resourceTable = new Hashtable<Resource, Resource>();
+		for (TreeIterator<EObject> ti = ePackage.eAllContents(); ti.hasNext();) {
+			EObject eObject = ti.next();
 			if (eObject instanceof ETypedElement) {
 				ETypedElement eTypedElement = (ETypedElement) eObject;
 				addExternalResource(eTypedElement.getEType(), ePackage,
@@ -112,7 +113,7 @@ public class Writer {
 			if (eObject instanceof EClass) {
 				EClass eClass = (EClass) eObject;
 				EClass superType;
-				for (Iterator i = eClass.getESuperTypes().iterator(); i
+				for (Iterator<EClass> i = eClass.getESuperTypes().iterator(); i
 						.hasNext(); addExternalResource(superType, ePackage,
 						resourceTable))
 					superType = (EClass) i.next();
@@ -121,7 +122,7 @@ public class Writer {
 			if (eObject instanceof EOperation) {
 				EOperation eOperation = (EOperation) eObject;
 				EClassifier exceptionType;
-				for (Iterator i = eOperation.getEExceptions().iterator(); i
+				for (Iterator<EClassifier> i = eOperation.getEExceptions().iterator(); i
 						.hasNext(); addExternalResource(exceptionType,
 						ePackage, resourceTable))
 					exceptionType = (EClassifier) i.next();
@@ -130,10 +131,9 @@ public class Writer {
 		}
 
 		String uri;
-		for (Iterator ri = resourceTable.values().iterator(); ri.hasNext(); writeln("import \""
+		for (Iterator<Resource> ri = resourceTable.values().iterator(); ri.hasNext(); writeln("import \""
 				+ uri + "\";")) {
-			Resource resource = (Resource) ri.next();
-			uri = resource.getURI().toString();
+			uri = ri.next().getURI().toString();
 		}
 
 		if (resourceTable.size() > 0)
@@ -141,7 +141,7 @@ public class Writer {
 	}
 
 	private void addExternalResource(EClassifier referencedType,
-			EPackage localMainPackage, Hashtable resourceTable) {
+			EPackage localMainPackage, Hashtable<Resource, Resource> resourceTable) {
 		if (referencedType == null)
 			return;
 		Resource resource = referencedType.eResource();
@@ -180,7 +180,7 @@ public class Writer {
 	}
 
 	private void writePackageContents(EPackage ePackage, int indentLevel) {
-		for (Iterator ic = ePackage.getEClassifiers().iterator(); ic.hasNext();) {
+		for (Iterator<EClassifier> ic = ePackage.getEClassifiers().iterator(); ic.hasNext();) {
 			Object o = ic.next();
 			if (o instanceof EClass) {
 				EClass eClass = (EClass) o;
@@ -195,7 +195,7 @@ public class Writer {
 		}
 
 		EPackage subPackage;
-		for (Iterator ip = ePackage.getESubpackages().iterator(); ip.hasNext(); writeSubPackage(
+		for (Iterator<EPackage> ip = ePackage.getESubpackages().iterator(); ip.hasNext(); writeSubPackage(
 				subPackage, indentLevel))
 			subPackage = (EPackage) ip.next();
 
@@ -373,7 +373,7 @@ public class Writer {
 		String name = escape(eEnum.getName());
 		write(name);
 		writeln(" {");
-		for (Iterator iel = eEnum.getELiterals().iterator(); iel.hasNext(); writeln(";")) {
+		for (Iterator<EEnumLiteral> iel = eEnum.getELiterals().iterator(); iel.hasNext(); writeln(";")) {
 			EEnumLiteral eLit = (EEnumLiteral) iel.next();
 			writeAnnotations(eLit, indentLevel + 1, true);
 			write(escape(eLit.getName()), indentLevel + 1);
@@ -404,13 +404,13 @@ public class Writer {
 
 	private void writeAnnotations(EModelElement eModelElement, int indentLevel,
 			boolean initialNewline) {
-		List annotations = eModelElement.getEAnnotations();
+		List<EAnnotation> annotations = eModelElement.getEAnnotations();
 		if (annotations.isEmpty())
 			return;
 		if (initialNewline)
 			writeln();
 		EAnnotation eAnnotation;
-		for (Iterator i = annotations.iterator(); i.hasNext(); writeAnnotation(
+		for (Iterator<EAnnotation> i = annotations.iterator(); i.hasNext(); writeAnnotation(
 				eAnnotation, indentLevel))
 			eAnnotation = (EAnnotation) i.next();
 
@@ -423,7 +423,7 @@ public class Writer {
 		String sourceLabel = _annotationMap.getLabelForSourceURI(sourceURI,
 				detailsCount);
 		String outputSourceURI = sourceLabel == null ? sourceURI : sourceLabel;
-		Iterator i = eAnnotation.getDetails().iterator();
+		Iterator<Entry<String, String>> i = eAnnotation.getDetails().iterator();
 		if (!i.hasNext()) {
 			writeln("@" + quoteIfNecessary(outputSourceURI), indentLevel);
 			return;
@@ -432,7 +432,7 @@ public class Writer {
 		int index = -1;
 		while (i.hasNext()) {
 			index++;
-			java.util.Map.Entry mapEntry = (java.util.Map.Entry) i.next();
+			java.util.Map.Entry<String, String> mapEntry = i.next();
 			String key = (String) mapEntry.getKey();
 			String value = (String) mapEntry.getValue();
 			String implicitKey = _annotationMap.getImplicitKeyName(sourceURI,
