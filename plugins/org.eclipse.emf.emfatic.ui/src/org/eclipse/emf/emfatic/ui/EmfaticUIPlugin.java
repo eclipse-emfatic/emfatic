@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Lucas Bigeardel - fix EPL header and innapropriate tag
  *******************************************************************************/
 
 package org.eclipse.emf.emfatic.ui;
