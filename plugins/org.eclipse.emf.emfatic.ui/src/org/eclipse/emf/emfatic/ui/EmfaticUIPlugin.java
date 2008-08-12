@@ -37,7 +37,6 @@ import org.osgi.framework.BundleContext;
 
 /**
  * 
- * @author miguel.garcia@tuhh.de
  */
 public class EmfaticUIPlugin extends AbstractUIPlugin {
 
