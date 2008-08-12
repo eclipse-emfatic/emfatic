@@ -53,12 +53,12 @@ public class EmfaticAnnotationMap {
 	//
 	//
 	
-    private Hashtable _keyToSourceURI;
-    private Hashtable _sourceURIToDetails;
+    private Hashtable<String, String> _keyToSourceURI;
+    private Hashtable<String, SourceURIDetails> _sourceURIToDetails;
     
     public EmfaticAnnotationMap() {
-        _keyToSourceURI = new Hashtable();
-        _sourceURIToDetails = new Hashtable();
+        _keyToSourceURI = new Hashtable<String, String>();
+        _sourceURIToDetails = new Hashtable<String, SourceURIDetails>();
         
         initPredefinedMappings();
     }
@@ -156,11 +156,11 @@ public class EmfaticAnnotationMap {
     
     private static class SourceURIDetails {
         private String _sourceURI;
-        private Hashtable _keyCountToLabelMapping;
+        private Hashtable<Integer, LabelMapping> _keyCountToLabelMapping;
         
         public SourceURIDetails(String sourceURI) {
             _sourceURI = sourceURI;
-            _keyCountToLabelMapping = new Hashtable();
+            _keyCountToLabelMapping = new Hashtable<Integer, LabelMapping>();
         }
         
         public String getSourceURI() {

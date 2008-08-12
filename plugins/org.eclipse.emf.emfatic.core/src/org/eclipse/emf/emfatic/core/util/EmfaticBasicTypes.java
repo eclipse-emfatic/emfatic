@@ -22,11 +22,9 @@ public class EmfaticBasicTypes {
 	}
 
 	private static void initBasicTypes() {
-		_nameToType = new Hashtable();
-		_typeToName = new Hashtable();
+		_nameToType = new Hashtable<String, EClassifier>();
+		_typeToName = new Hashtable<EClassifier, String>();
 
-		
-		
 		EcorePackage ecore = EcorePackage.eINSTANCE;
 		
 		/*
@@ -119,8 +117,8 @@ public class EmfaticBasicTypes {
 	}
 
 	private static boolean _isInitialized = false;
-	private static Hashtable _nameToType;
-	private static Hashtable _typeToName;
+	private static Hashtable<String, EClassifier> _nameToType;
+	private static Hashtable<EClassifier, String> _typeToName;
 	private static String _array[];
 
 }

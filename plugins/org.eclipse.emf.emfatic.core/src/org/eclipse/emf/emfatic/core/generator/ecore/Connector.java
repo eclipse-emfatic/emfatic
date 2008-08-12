@@ -217,7 +217,7 @@ import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 		new EmfaticASTNodeVisitor() {
 			@Override
 			public boolean beginVisit(TypeParam tp) {
-				String tp2 = TokenText.Get(tp.getTypeVarName()).trim();
+				TokenText.Get(tp.getTypeVarName()).trim();
 				if (tp.getTypeBoundsInfo() != null) {
 					for (ASTNode tbN : tp.getTypeBoundsInfo().getOneOrMoreTypeParamBounds().getChildren()) {
 						if (tbN instanceof BoundExceptWildcard) {
@@ -410,7 +410,7 @@ import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 	}
 
 	private EClassifier resolve(EPackage context, QualifiedID qualifiedID) {
-		String rawQIDText = TokenText.Get(qualifiedID);
+		TokenText.Get(qualifiedID);
 		EClassifier eClassifier = resolveHelper(context, qualifiedID);
 		if (eClassifier == null)
 			logError(new EmfaticSemanticError.NameResolutionFailure(qualifiedID));
@@ -574,14 +574,14 @@ import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 		return null;
 	}
 
-	private static boolean isClassifier(EGenericType egt) {
-		if (egt == null) {
-			return false;
-		}
-		boolean res = (egt.getEClassifier() != null) && (egt.getETypeArguments().size() == 0)
-				&& (egt.getETypeParameter() == null);
-		return res;
-	}
+//	private static boolean isClassifier(EGenericType egt) {
+//		if (egt == null) {
+//			return false;
+//		}
+//		boolean res = (egt.getEClassifier() != null) && (egt.getETypeArguments().size() == 0)
+//				&& (egt.getETypeParameter() == null);
+//		return res;
+//	}
 
 	private void placeBewInBigMap(final BoundExceptWildcard bew, final EGenericType gt) {
 		EObject ecoreDecl = getEcoreDeclForTypeRef(gt);
@@ -629,16 +629,16 @@ import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 		return ecoreDecl;
 	}
 
-	private ASTNode getCstDeclForTypeRef(EGenericType gt) {
-		ASTNode cstDecl = null;
-		if (GenericsUtil.isRefToClassifier(gt)) {
-			EClassifier c = gt.getEClassifier();
-			cstDecl = cstDecl2EcoreAST.getInv(c);
-		} else {
-			ETypeParameter tp = gt.getETypeParameter();
-			cstDecl = cstDecl2EcoreAST.getInv(tp);
-		}
-		return cstDecl;
-	}
+//	private ASTNode getCstDeclForTypeRef(EGenericType gt) {
+//		ASTNode cstDecl = null;
+//		if (GenericsUtil.isRefToClassifier(gt)) {
+//			EClassifier c = gt.getEClassifier();
+//			cstDecl = cstDecl2EcoreAST.getInv(c);
+//		} else {
+//			ETypeParameter tp = gt.getETypeParameter();
+//			cstDecl = cstDecl2EcoreAST.getInv(tp);
+//		}
+//		return cstDecl;
+//	}
 
 }

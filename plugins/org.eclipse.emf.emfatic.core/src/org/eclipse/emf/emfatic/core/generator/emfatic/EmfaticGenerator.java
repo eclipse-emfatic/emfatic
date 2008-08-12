@@ -55,7 +55,7 @@ public class EmfaticGenerator {
 
     private Resource getResource(ResourceSet resourceSet, String filePath)
     {
-        URI uri = URI.createPlatformResourceURI(filePath);
+        URI uri = URI.createPlatformResourceURI(filePath, false);
         Resource resource = resourceSet.getResource(uri, true);
         return resource;
     }

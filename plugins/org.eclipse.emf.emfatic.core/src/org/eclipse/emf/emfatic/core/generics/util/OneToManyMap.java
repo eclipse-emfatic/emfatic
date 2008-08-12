@@ -46,7 +46,7 @@ public class OneToManyMap<K, V> {
 	 */
 	public Set<V> get(K k) {
 		if (m.get(k) == null) {
-			return Collections.EMPTY_SET;
+			return Collections.emptySet();
 		} else {
 			return m.get(k);
 		}

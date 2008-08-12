@@ -59,13 +59,13 @@ public class EcoreWalker {
 	 *            the visitor that should visit the expression
 	 * @return
 	 */
-	public EcoreSwitch walk(EModelElement eME, EcoreSwitch v) {
+	public EcoreSwitch<?> walk(EModelElement eME, EcoreSwitch<?> v) {
 		v.doSwitch(eME);
 		visitOwnedParts(eME, v);
 		return v;
 	}
 
-	private EcoreSwitch visitOwnedParts(EModelElement e, EcoreSwitch v) {
+	private EcoreSwitch<?> visitOwnedParts(EModelElement e, EcoreSwitch<?> v) {
 		// the annotations
 		for (Object oa : e.getEAnnotations()) {
 			EAnnotation a = (EAnnotation) oa;
@@ -127,7 +127,7 @@ public class EcoreWalker {
 				return v;
 			}
 			// it's a non-EEnum EDataType
-			EDataType eD = (EDataType) e;
+			//EDataType eD = (EDataType) e;
 			// the datatype itself was already visited by virtue of it being an
 			// EClassifier
 			return v;
