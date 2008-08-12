@@ -82,7 +82,7 @@ public class EcoreGenerator {
 
 	private Resource createResource(String filePath) {
 		ResourceSet resourceSet = new ResourceSetImpl();
-		URI uri = URI.createPlatformResourceURI(filePath);
+		URI uri = URI.createPlatformResourceURI(filePath, false);
 		Resource resource = resourceSet.createResource(uri);
 		return resource;
 	}
