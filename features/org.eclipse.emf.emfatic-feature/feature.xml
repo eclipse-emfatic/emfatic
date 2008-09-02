@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.emf.emfatic"
       label="Emfatic (Incubation)"
-      version="0.3.0.qualifier"
+      version="0.7.0.qualifier"
       provider-name="Eclipse.org">
 
    <description url="http://wiki.eclipse.org/Emfatic">

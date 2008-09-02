@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.gymnast.runtime"
       label="Gymnast Runtime (Incubation)"
-      version="0.3.0.qualifier"
+      version="0.7.0.qualifier"
       provider-name="Eclipse.org">
 
    <description url="http://www.sts.tu-harburg.de/%7Emi.garcia/SoC2007/GymnastSlides.pdf">
