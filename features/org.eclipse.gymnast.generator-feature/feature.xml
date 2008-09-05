@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.gymnast.generator_feature"
+      id="org.eclipse.gymnast.generator"
       label="Gymnast Generator (Incubation)"
-      version="0.3.0.qualifier"
+      version="0.7.0.qualifier"
       provider-name="Eclipse.org">
 
    <description url="http://www.sts.tu-harburg.de/%7Emi.garcia/SoC2007/GymnastSlides.pdf">
@@ -46,48 +46,48 @@ Custom DSLs&quot;, to be found at http://www.sts.tu-harburg.de/%7Emi.garcia/SoC2
          id="org.eclipse.gymnast.generator.core"
          download-size="0"
          install-size="0"
-         version="0.3.0.qualifier"
+         version="0.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.gymnast.generator.ui"
          download-size="0"
          install-size="0"
-         version="0.3.0.qualifier"
+         version="0.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.gymnast.generators.parser.antlr"
          download-size="0"
          install-size="0"
-         version="0.3.0.qualifier"
+         version="0.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.gymnast.generators.parser.javacc"
          download-size="0"
          install-size="0"
-         version="0.3.0.qualifier"
+         version="0.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.gymnast.generators.ast.primordial"
          download-size="0"
          install-size="0"
-         version="0.3.0.qualifier"
+         version="0.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.gymnast.generators.parser.lpg"
          download-size="0"
          install-size="0"
-         version="0.3.0.qualifier"
+         version="0.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.gymnast.generator.doc.user"
          download-size="0"
          install-size="0"
-         version="0.3.0.qualifier"/>
+         version="0.7.0.qualifier"/>
 
 </feature>
