@@ -19,6 +19,10 @@ Emfatic is hosted as an EMFT component with Incubation status.
       Eclipse Public License - v 1.0
    </license>
 
+   <includes
+         id="org.eclipse.gymnast.runtime"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
