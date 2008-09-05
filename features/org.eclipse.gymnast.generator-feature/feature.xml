@@ -24,7 +24,6 @@ Custom DSLs&quot;, to be found at http://www.sts.tu-harburg.de/%7Emi.garcia/SoC2
    </license>
 
    <requires>
-      <import feature="org.eclipse.gymnast.runtime_feature" version="0.1.0"/>
       <import plugin="org.antlr"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.jdt.core"/>
@@ -39,6 +38,8 @@ Custom DSLs&quot;, to be found at http://www.sts.tu-harburg.de/%7Emi.garcia/SoC2
       <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.gymnast.runtime.ui"/>
       <import plugin="org.eclipse.text"/>
+      <import feature="org.eclipse.gymnast.runtime"/>
+      <import plugin="org.eclipse.emf.ecore"/>
    </requires>
 
    <plugin
