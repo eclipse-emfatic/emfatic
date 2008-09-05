@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.emf.emfatic.all.runtime"
-      label="EMFatic All Runtime Feature"
-      version="0.7.0">
+      label="EMFatic All Runtime (Incubation)"
+      version="0.7.0.qualifier">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
