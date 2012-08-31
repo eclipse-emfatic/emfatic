@@ -28,6 +28,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = EmfaticUIPlugin.getDefault()
 				.getPreferenceStore();
+		store.setDefault(PreferenceConstants.AUTO_GENERATE_ECORE, false);
 		store.setDefault(PreferenceConstants.P_BOOLEAN, true);
 		store.setDefault(PreferenceConstants.P_CHOICE, "choice2");
 		store.setDefault(PreferenceConstants.P_STRING,
