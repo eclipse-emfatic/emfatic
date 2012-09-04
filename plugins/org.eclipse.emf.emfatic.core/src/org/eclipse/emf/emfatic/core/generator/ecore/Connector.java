@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -94,6 +95,10 @@ import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 
 	private void doImports(ImportStmts importStmts) {
 		final ResourceSet resourceSet = new ResourceSetImpl();
+		// make sure to first try to load plugin resources from the workspace....
+		// see bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=249635 comment 12
+		resourceSet.getURIConverter().getURIMap().putAll(EcorePlugin.computePlatformURIMap());
+
 		(new EmfaticASTNodeVisitor() {
 
 			public boolean beginVisit(ImportStmt importStmt) {
@@ -170,7 +175,7 @@ import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 						EClassifier superClass = superType.getEClassifier();
 						if (GenericsUtil.isRefToClassifier(superType)) {
 							if (superClass instanceof EClass) {
-								eClass.getESuperTypes().add((EClass)superClass);
+								eClass.getEGenericSuperTypes().add(superType);
 							} else {
 								QualifiedID qualifiedID = bew.getRawTNameOrTVarOrParamzedTName();
 								logError(new EmfaticSemanticError.IllegalSuperClassKind(qualifiedID));
