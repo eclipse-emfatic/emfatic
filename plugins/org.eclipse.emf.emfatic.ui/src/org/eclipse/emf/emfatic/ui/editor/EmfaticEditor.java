@@ -196,16 +196,23 @@ public class EmfaticEditor extends LDTEditor implements IShowInTargetList,
 			 * An outer node fulfilling the filter condition may have been found
 			 * which hides a more specific node also fulfilling the filter
 			 */
+			/*
+			 * [dkolovos] The following code appears to be prone to StackOverflowExceptions
+			 * A brief debugging session hasn't helped with pinning down the cause of this
+			 * so I'm commenting out for now as it doesn't seem to be terribly important anyway
+			 */
+			/*
 			if (node.getChildren().length > 0) {
-				for (ASTNode child : node.getChildren()) {
-					ASTNode innerNode = getClosestEnclosingASTNodeAtWithin(
-							child, offset, length, filter);
-					if (innerNode != null) {
-						node = innerNode;
-						break;
-					}
+				for (ASTNode child : node.getChildren()) {					
+						ASTNode innerNode = getClosestEnclosingASTNodeAtWithin(
+								child, offset, length, filter);
+						if (innerNode != null) {
+							node = innerNode;
+							break;
+						}
 				}
-			}
+			}*/
+			
 			/*
 			 * search upwards till finding a node of type filter, or reaching
 			 * the root
