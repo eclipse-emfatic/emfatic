@@ -208,8 +208,9 @@ Annotation annotation() :
   KeyEqualsValueList keyEqualsValueList = null;
   Token rparen = null; }
 {
-at=<AT> source=stringLiteralOrQualifiedID() lparen=<LPAREN> keyEqualsValueList=keyEqualsValueList() rparen=<RPAREN> 
-  { retVal = new Annotation(createTokenInfo(at), source, createTokenInfo(lparen), keyEqualsValueList, createTokenInfo(rparen));
+at=<AT> source=stringLiteralOrQualifiedID() (lparen=<LPAREN> (keyEqualsValueList=keyEqualsValueList())? rparen=<RPAREN>)? 
+  { if (keyEqualsValueList == null) keyEqualsValueList = new KeyEqualsValueList();
+  	retVal = new Annotation(createTokenInfo(at), source, createTokenInfo(lparen), keyEqualsValueList, createTokenInfo(rparen));
     return retVal; }
 }
 
