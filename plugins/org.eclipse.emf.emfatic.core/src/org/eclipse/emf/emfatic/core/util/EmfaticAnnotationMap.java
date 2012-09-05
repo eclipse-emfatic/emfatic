@@ -75,8 +75,6 @@ public class EmfaticAnnotationMap {
     }
     
     public String addMapping(String labelDecl, String sourceURI, KeyEqualsValue keyEqualsValue, GenerationPhase reporter) {
-        // System.out.println("addMapping: " + labelDecl + ", " + sourceURI);
-        
         LabelMapping labelMapping = new LabelMapping(labelDecl);
         if (!labelMapping.isWellFormed()) {
             reportAddMappingProblem("label not well formed!", keyEqualsValue, reporter);
@@ -122,9 +120,6 @@ public class EmfaticAnnotationMap {
     private void reportAddMappingProblem(String message, KeyEqualsValue keyEqualsValue, GenerationPhase reporter) {
         if ((keyEqualsValue != null) && (reporter != null)) {
             reporter.logWarning(new EmfaticSemanticWarning.AnnotationMappingProblem(keyEqualsValue, message));
-        }
-        else {
-            System.out.println(message);
         }
     }
     

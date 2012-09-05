@@ -244,13 +244,6 @@ public abstract class ASTNodeImpl implements ASTNode {
 			if (tokenText != null) {
 				try {
 					String inputText = input.substring(offset, offset + tokenText.length());
-					if (!tokenText.equals(inputText)) {
-						System.out.println(
-							"ERROR: Expected token: [" + tokenText + "]" +
-							" but found: [" + inputText + "]" +
-							" at offset: " + offset
-							);
-					}
 				}
 				catch (Exception ex) {
 					ex.printStackTrace();
@@ -267,14 +260,7 @@ public abstract class ASTNodeImpl implements ASTNode {
 	
 	
 	public void dump(int level){
-		indent(level);
-		System.out.println(
-			"[" + getTypeName() + "]" +
-			"  id: " + getTokenType() +
-			", text: " + ((getText() == null) ? "null" : "\"" + getText() + "\"") +
-			", offset: " + getOffset() +
-			"(" + getRangeStart() + ".." + getRangeEnd() + ")"
-		);
+
 		
 		for (int i = 0; i < getChildCount(); i++) {
 			ASTNode child = getChild(i);
@@ -282,14 +268,7 @@ public abstract class ASTNodeImpl implements ASTNode {
 		}
 		
 	}
-	//
-	private static void indent(int level)
-	{
-		for (int i = 0; i < level; i++)
-		{
-			System.out.print(" ");
-		}
-	}
+
 	//
 	public String getTypeName()
 	{

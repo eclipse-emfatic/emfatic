@@ -55,15 +55,6 @@ public class EmfaticParserDriver implements IParser {
 			compUnit.setAST(rootPackage);
 		}
 
-		if (parseContext.getMessageCount() == 0) {
-			System.out.println("Parse OK!");
-		} else {
-			ParseMessage[] msgs = parseContext.getMessages();
-			for (int i = 0; i < msgs.length; i++) {
-				// System.err.println(msgs[i].getMessage());
-			}
-		}
-
 		return parseContext;
 	}
 

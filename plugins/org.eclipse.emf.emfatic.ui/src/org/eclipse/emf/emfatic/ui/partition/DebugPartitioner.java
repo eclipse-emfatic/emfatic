@@ -69,9 +69,8 @@ public class DebugPartitioner extends FastPartitioner
 			}
 			catch (BadLocationException e)
 			{
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
-		System.out.print(buffer);
 	}
 }
