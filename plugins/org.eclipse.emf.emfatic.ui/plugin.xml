@@ -7,7 +7,7 @@
       <editor
             name="EmfaticEditor"
             extensions="emf"
-            icon="icons/emfatic.gif"
+            icon="icons/emfatic.png"
             class="org.eclipse.emf.emfatic.ui.editor.EmfaticEditor"
             contributorClass="org.eclipse.emf.emfatic.ui.editor.EmfaticEditorActionContributor"
             id="org.eclipse.emf.emfatic.ui.editor.EmfaticEditor">
@@ -23,7 +23,7 @@
             id="org.eclipse.emf.emfatic.ui.actions.GenerateEcore">
          <action
                label="Generate Ecore Model"
-               icon="icons/emfatic.gif"
+               icon="icons/emfatic.png"
                class="org.eclipse.emf.emfatic.ui.actions.GenerateEcore"
                menubarPath="additions"
                enablesFor="1"
@@ -41,7 +41,7 @@
             id="org.eclipse.emf.emfatic.ui.actions.GenerateEmfatic">
          <action
                label="Generate Emfatic Source"
-               icon="icons/emfatic.gif"
+               icon="icons/emfatic.png"
                class="org.eclipse.emf.emfatic.ui.actions.GenerateEmfatic"
                menubarPath="additions"
                enablesFor="1"
@@ -56,7 +56,7 @@
       <wizard
             category="org.eclipse.emf.ecore.Wizard.category.ID"
             class="org.eclipse.emf.emfatic.ui.wizards.EmfaticNewWizard"
-            icon="icons/emfatic.gif"
+            icon="icons/emfatic.png"
             id="org.eclipse.emf.emfatic.ui.wizards.EmfaticNewWizard"
             name="Emfatic file">
          <selection
