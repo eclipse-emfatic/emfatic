@@ -58,7 +58,7 @@
             class="org.eclipse.emf.emfatic.ui.wizards.EmfaticNewWizard"
             icon="icons/emfatic.png"
             id="org.eclipse.emf.emfatic.ui.wizards.EmfaticNewWizard"
-            name="Emfatic file">
+            name="Emfatic File">
          <selection
                class="org.eclipse.core.resources.IResource">
          </selection>
