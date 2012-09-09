@@ -35,6 +35,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class GenerateEmfatic implements IObjectActionDelegate {
 	private class GenerateEmfaticJob extends Job {
+		final private IFile _file;
 
 		protected IStatus run(IProgressMonitor monitor) {
 
@@ -47,8 +48,9 @@ public class GenerateEmfatic implements IObjectActionDelegate {
 			return Status.OK_STATUS;
 		}
 
-		GenerateEmfaticJob() {
-			super("Generating Emfatic Source for " + _file.getName());
+		GenerateEmfaticJob(IFile file) {
+			super("Generating Emfatic Source for " + file.getName());
+			_file=file;
 		}
 	}
 
@@ -70,13 +72,15 @@ public class GenerateEmfatic implements IObjectActionDelegate {
 
 	public void run(IAction action) {
 		if (_file != null && _job == null) {
-			_job = new GenerateEmfaticJob();
+			_job = new GenerateEmfaticJob(_file);
+			// we might create a new file in the container
+			_job.setRule(_file.getParent());
 			_job.schedule();
 		}
 	}
 
 	private IFile _file;
-	private GenerateEmfaticJob _job;
+	volatile private GenerateEmfaticJob _job;
 
 	public static boolean ecoreValidate(IFile ecoreFile, IProgressMonitor progressMonitor) {
 		String ecoreFilePath = ecoreFile.getFullPath().toString();

@@ -30,7 +30,7 @@ import org.eclipse.ui.IWorkbenchPart;
 public class GenerateEcore implements IObjectActionDelegate {
 	
 	private IFile _file;
-	private GenerateEcoreJob _job;
+	volatile private GenerateEcoreJob _job;
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 	}
@@ -49,14 +49,18 @@ public class GenerateEcore implements IObjectActionDelegate {
 
 	public void run(IAction action) {
 		if ((_file != null) && (_job == null)) {
-			_job = new GenerateEcoreJob();
+			_job = new GenerateEcoreJob(_file);
+			// we might create a new file in the container
+			_job.setRule(_file.getParent());
 			_job.schedule();
 		}
 	}
 	
 	private class GenerateEcoreJob extends Job {
-		private GenerateEcoreJob() {
-			super("Generating Ecore Model for " + _file.getName());
+		private IFile _file;
+		private GenerateEcoreJob(IFile file) {
+			super("Generating Ecore Model for " + file.getName());
+			_file=file;
 		}
 		
 		protected IStatus run(IProgressMonitor monitor) {
