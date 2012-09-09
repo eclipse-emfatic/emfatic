@@ -14,8 +14,10 @@ package org.eclipse.emf.emfatic.ui.editor;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EClass;
@@ -177,15 +179,18 @@ public class EmfaticEditor extends LDTEditor implements IShowInTargetList,
 	public EmfaticASTNode getClosestEnclosingASTNodeAt(int offset, int length,
 			Class<?> filter) {
 		EmfaticASTNode node = getClosestEnclosingASTNodeAtWithin(
-				getParseRoot(), offset, length, filter);
+				new HashSet<ASTNode>(), getParseRoot(), offset, length, filter);
 		return node;
 	}
 
-	private EmfaticASTNode getClosestEnclosingASTNodeAtWithin(ASTNode within,
+	private EmfaticASTNode getClosestEnclosingASTNodeAtWithin(Set<ASTNode>seenNodes, ASTNode within,
 			int offset, int length, Class<?> filter) {
 		if (within == null) {
 			return null;
 		}
+		if(seenNodes.contains(within))
+			return null;
+		seenNodes.add(within);
 		ASTNode node = within.getNodeAt(offset, 0);
 		// search within the for any ASTNode
 		for (int i = offset + 1; (node == null) && (i < offset + length); i++) {
@@ -196,23 +201,16 @@ public class EmfaticEditor extends LDTEditor implements IShowInTargetList,
 			 * An outer node fulfilling the filter condition may have been found
 			 * which hides a more specific node also fulfilling the filter
 			 */
-			/*
-			 * [dkolovos] The following code appears to be prone to StackOverflowExceptions
-			 * A brief debugging session hasn't helped with pinning down the cause of this
-			 * so I'm commenting out for now as it doesn't seem to be terribly important anyway
-			 */
-			/*
 			if (node.getChildren().length > 0) {
-				for (ASTNode child : node.getChildren()) {					
-						ASTNode innerNode = getClosestEnclosingASTNodeAtWithin(
-								child, offset, length, filter);
-						if (innerNode != null) {
-							node = innerNode;
-							break;
-						}
+				for (ASTNode child : node.getChildren()) {
+					ASTNode innerNode = getClosestEnclosingASTNodeAtWithin(
+							seenNodes, child, offset, length, filter);
+					if (innerNode != null) {
+						node = innerNode;
+						break;
+					}
 				}
-			}*/
-			
+			}
 			/*
 			 * search upwards till finding a node of type filter, or reaching
 			 * the root
