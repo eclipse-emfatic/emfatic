@@ -128,10 +128,8 @@ public class EmfaticTemplateCompletionProcessor extends
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
 			int offset) {
-		boolean activated = false;
 		try {
 			if (viewer.getDocument().getChar(offset - 1) == '@') {
-				activated = true;
 				ICompletionProposal[] res = super.computeCompletionProposals(
 						viewer, offset);
 				return res;

@@ -121,10 +121,7 @@ public class EmfaticCSTChangeListener implements IParseTreeChangedListener {
 				String[] lines = doc.get(offset, length).split("\n");
 				boolean res = lines.length > 2;
 				return res;
-			} catch (BadLocationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} catch (BadLocationException e) {}
 		}
 		return false;
 	}
