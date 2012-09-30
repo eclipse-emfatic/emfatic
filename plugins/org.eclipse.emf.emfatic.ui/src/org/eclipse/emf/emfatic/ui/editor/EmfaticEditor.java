@@ -20,8 +20,13 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.emfatic.core.generator.ecore.EcoreGenerator;
 import org.eclipse.emf.emfatic.core.generics.util.OneToManyMap;
 import org.eclipse.emf.emfatic.core.generics.util.OneToOneMap;
 import org.eclipse.emf.emfatic.core.lang.gen.ast.BoundExceptWildcard;
@@ -31,9 +36,11 @@ import org.eclipse.emf.emfatic.core.lang.gen.ast.EmfaticASTNode;
 import org.eclipse.emf.emfatic.core.lang.gen.ast.Reference;
 import org.eclipse.emf.emfatic.core.lang.gen.ast.TypeWithMulti;
 import org.eclipse.emf.emfatic.core.lang.gen.ast.Wildcard;
+import org.eclipse.emf.emfatic.ui.EmfaticUIPlugin;
 import org.eclipse.emf.emfatic.ui.hyperlinks.EmfaticHyperlinkDetector;
 import org.eclipse.emf.emfatic.ui.outline.EmfaticContentOutlinePage;
 import org.eclipse.emf.emfatic.ui.partition.EmfaticDocumentProvider;
+import org.eclipse.emf.emfatic.ui.preferences.PreferenceConstants;
 import org.eclipse.emf.emfatic.ui.redsquiggles.EmfaticCSTChangeListener;
 import org.eclipse.emf.emfatic.ui.views.TypesView;
 import org.eclipse.gymnast.runtime.core.ast.ASTNode;
@@ -54,6 +61,8 @@ import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
@@ -83,6 +92,33 @@ public class EmfaticEditor extends LDTEditor implements IShowInTargetList,
 
 	protected LDTSourceViewerConfiguration createSourceViewerConfiguration() {
 		return new EmfaticSourceViewerConfiguration(this);
+	}
+	
+	@Override
+	public void doSave(IProgressMonitor progressMonitor) {
+		super.doSave(progressMonitor);
+		if(EmfaticUIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.AUTO_GENERATE_ECORE))
+			generateEcoreFile();
+	}
+
+	/**
+	 * Creates/updates the ecore file when saving the emf file
+	 */
+	private void generateEcoreFile() {
+		IEditorInput input = getEditorInput();
+		if(input instanceof IFileEditorInput) {
+			final IFile file=((IFileEditorInput)input).getFile();
+			// use a job to create/override the ecore file...
+			Job job = new Job("Generating Ecore Model for " + file.getName()) {
+				protected IStatus run(IProgressMonitor monitor) {
+				    new EcoreGenerator().generate(file, monitor);
+					return Status.OK_STATUS;
+				}				
+			};
+			// we might create a new file in the container
+			job.setRule(file.getParent());
+			job.schedule();
+		}
 	}
 
 	@Override
