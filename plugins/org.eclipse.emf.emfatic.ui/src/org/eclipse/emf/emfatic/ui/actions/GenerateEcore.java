@@ -30,7 +30,7 @@ import org.eclipse.ui.IWorkbenchPart;
 public class GenerateEcore implements IObjectActionDelegate {
 	
 	private IFile _file;
-	volatile private GenerateEcoreJob _job;
+	volatile private GenerateEcoreJob _job; 
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 	}
