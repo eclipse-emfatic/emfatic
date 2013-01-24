@@ -1,0 +1,4 @@
+features
+plugins
+*.jar
+*.jar.pack.gz
