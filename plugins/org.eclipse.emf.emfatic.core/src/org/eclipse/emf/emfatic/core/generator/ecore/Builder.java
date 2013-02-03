@@ -78,7 +78,9 @@ public class Builder extends GenerationPhase {
 		initParseContext(parseContext);
 		_annotationMap = new EmfaticAnnotationMap();
 		CompUnit compUnit = (CompUnit) parseContext.getParseRoot();
-		buildPackage(compUnit, resource);
+		if (compUnit != null) {
+			buildPackage(compUnit, resource);
+		}
 	}
 
 	private void buildPackage(CompUnit compUnit, Resource resource) {

@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.emfatic.core.generator.ecore.Builder;
 import org.eclipse.emf.emfatic.core.generator.ecore.Connector;
 import org.eclipse.emf.emfatic.core.generator.ecore.EmfaticSemanticWarning;
@@ -53,6 +54,10 @@ public class EmfaticParserDriver implements IParser {
 		NullProgressMonitor npm = new NullProgressMonitor();
 		ResourceSet resourceSet = new ResourceSetImpl();
 		URI uri = URI.createPlatformResourceURI("dummy");
+		
+		if (Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().get("ecore") == null) {
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		}
 		Resource resource = resourceSet.createResource(uri);
 		try {
 			builder.build(parseContext, resource, npm);

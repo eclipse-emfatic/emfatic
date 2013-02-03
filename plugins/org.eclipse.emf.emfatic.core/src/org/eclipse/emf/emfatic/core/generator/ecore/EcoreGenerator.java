@@ -12,14 +12,18 @@
 package org.eclipse.emf.emfatic.core.generator.ecore;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.emfatic.core.lang.gen.parser.EmfaticParserDriver;
 import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 import org.eclipse.gymnast.runtime.core.parser.ParseMessage;
@@ -30,7 +34,7 @@ import org.eclipse.gymnast.runtime.core.util.MarkerUtil;
  * @author cjdaly@us.ibm.com
  */
 public class EcoreGenerator {
-
+	
 	public EcoreGenerator() {
 	}
 
@@ -44,7 +48,7 @@ public class EcoreGenerator {
 			EmfaticParserDriver parser = new EmfaticParserDriver();
 			ParseContext parseContext = parser.parse(reader);
 			String filePath = getEcoreFilePath(emfFile);
-			Resource resource = createResource(filePath);
+			Resource resource = createResource(filePath, true);
 			Builder builder = new Builder();
 			builder.build(parseContext, resource, monitor);
 			if (!parseContext.hasErrors()) {
@@ -69,7 +73,30 @@ public class EcoreGenerator {
 			ex.printStackTrace();
 		}
 	}
+	
+	public void generate(File emfFile, boolean writeEcore) throws Exception {
+		NullProgressMonitor monitor = new NullProgressMonitor();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(emfFile)));
+		EmfaticParserDriver parser = new EmfaticParserDriver();
+		ParseContext parseContext = parser.parse(reader);
+		String filePath = emfFile.getAbsolutePath().replaceAll("\\.emf$", ".ecore");
+		Resource resource = createResource(filePath, false);
+		Builder builder = new Builder();
+		builder.build(parseContext, resource, monitor);
 
+		if (!parseContext.hasErrors() && writeEcore) {
+			Connector connector = new Connector(builder);
+			connector.connect(parseContext, resource, monitor);
+			resource.save(null);
+		}
+		else {
+			String message = parseContext.getMessages()[0].getMessage();
+			message = message.replaceAll("\\r|\\n", " ");
+			message = message.trim();
+			throw new Exception("Syntax error: " + message);
+		}
+	}
+	
 	private String getEcoreFilePath(IFile emfFile) {
 		String emfFileExt = emfFile.getFileExtension();
 		int extLen = emfFileExt != null ? emfFileExt.length() + 1 : 0;
@@ -80,9 +107,16 @@ public class EcoreGenerator {
 		return filePath;
 	}
 
-	private Resource createResource(String filePath) {
+	private Resource createResource(String filePath, boolean inWorkspace) {
 		ResourceSet resourceSet = new ResourceSetImpl();
-		URI uri = URI.createPlatformResourceURI(filePath, false);
+		URI uri = null;
+		if (!inWorkspace) {
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new XMIResourceFactoryImpl());
+			uri = URI.createFileURI(filePath);
+		}
+		else {
+			uri = URI.createPlatformResourceURI(filePath, false);
+		}
 		Resource resource = resourceSet.createResource(uri);
 		return resource;
 	}
