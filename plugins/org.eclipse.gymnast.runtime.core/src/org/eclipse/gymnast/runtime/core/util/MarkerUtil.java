@@ -12,16 +12,19 @@
 package org.eclipse.gymnast.runtime.core.util;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 import org.eclipse.gymnast.runtime.core.parser.ParseError;
 import org.eclipse.gymnast.runtime.core.parser.ParseMessage;
 import org.eclipse.gymnast.runtime.core.parser.ParseWarning;
-import org.eclipse.ui.texteditor.MarkerUtilities;
 
 
 /**
@@ -84,12 +87,24 @@ public class MarkerUtil {
 		map.put(IMarker.TRANSIENT, new Boolean(true));
 			
 		try {
-			MarkerUtilities.createMarker(file, map, getMarkerType());
+			createMarker(file, map, getMarkerType());
 		}
 		catch (CoreException ex) {
 		    ex.printStackTrace();
 		}
 		
 	}
+	
+	protected static void createMarker(final IResource resource, final Map attributes, final String markerType) throws CoreException {
 
+		IWorkspaceRunnable r= new IWorkspaceRunnable() {
+			public void run(IProgressMonitor monitor) throws CoreException {
+				IMarker marker= resource.createMarker(markerType);
+				marker.setAttributes(attributes);
+			}
+		};
+
+		resource.getWorkspace().run(r, null,IWorkspace.AVOID_UPDATE, null);
+	}
+	
 }
