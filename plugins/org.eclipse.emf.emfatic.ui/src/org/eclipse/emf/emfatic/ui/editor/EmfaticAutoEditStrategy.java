@@ -55,7 +55,7 @@ public class EmfaticAutoEditStrategy implements IAutoEditStrategy {
 			return;
 		}
 		String computedIndent = computeIndent(d, c);
-		String beforeCaret = "\r\n" + computedIndent + "   ";
+		String beforeCaret = "\r\n" + computedIndent + "\t";
 		String afterCaret = "\r\n" + computedIndent + "}"; 
 		insert(c, beforeCaret, afterCaret);
 	}
