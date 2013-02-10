@@ -69,37 +69,42 @@ public class EmfaticParserDriver implements IParser {
 			connector.connect(parseContext, resource, npm);
 			rootPackage = (EPackage) resource.getContents().get(0);
 			if (rootPackage != null) {
-				// invoke EcoreValidator
-				Diagnostician diagnostician = new Diagnostician();
-				final Diagnostic diagnostic = diagnostician.validate(rootPackage);
-				if (diagnostic.getSeverity() == Diagnostic.OK) {
-					return rootPackage;
-				}
-				/*
-				 * A tutorial on markers:
-				 * 
-				 * http://www.eclipse.org/articles/Article-Mark%20My%20Words/mark-my-words.html
-				 * 
-				 */
-
-				CompUnit compUnit = (CompUnit) parseContext.getParseRoot();
-				for (Diagnostic childDiagnostic : diagnostic.getChildren()) {
-					Set<ASTNode> problemNodes = new HashSet<ASTNode>();
-					String dMsg = childDiagnostic.getMessage();
-					if (childDiagnostic.getData().size() > 0) {
-						Object primarySourceOfProblem = childDiagnostic.getData().get(0);
-						if (primarySourceOfProblem != null && primarySourceOfProblem instanceof EObject) {
-							Set<ASTNode> cstUses = compUnit.getEcoreDecl2CstUse().get((EObject) primarySourceOfProblem);
-							problemNodes.addAll(cstUses);
-							if (problemNodes.size() == 0) {
-								problemNodes.add(compUnit.getPackageDecl());
+				try {
+					// invoke EcoreValidator
+					Diagnostician diagnostician = new Diagnostician();
+					final Diagnostic diagnostic = diagnostician.validate(rootPackage);
+					if (diagnostic.getSeverity() == Diagnostic.OK) {
+						return rootPackage;
+					}
+					/*
+					 * A tutorial on markers:
+					 * 
+					 * http://www.eclipse.org/articles/Article-Mark%20My%20Words/mark-my-words.html
+					 * 
+					 */
+	
+					CompUnit compUnit = (CompUnit) parseContext.getParseRoot();
+					for (Diagnostic childDiagnostic : diagnostic.getChildren()) {
+						Set<ASTNode> problemNodes = new HashSet<ASTNode>();
+						String dMsg = childDiagnostic.getMessage();
+						if (childDiagnostic.getData().size() > 0) {
+							Object primarySourceOfProblem = childDiagnostic.getData().get(0);
+							if (primarySourceOfProblem != null && primarySourceOfProblem instanceof EObject) {
+								Set<ASTNode> cstUses = compUnit.getEcoreDecl2CstUse().get((EObject) primarySourceOfProblem);
+								problemNodes.addAll(cstUses);
+								if (problemNodes.size() == 0) {
+									problemNodes.add(compUnit.getPackageDecl());
+								}
 							}
 						}
+						for (ASTNode problemNode : problemNodes) {
+							ParseMessage pMsg = new EmfaticSemanticWarning.EcoreValidatorDiagnostic(problemNode, dMsg);
+							parseContext.addParseMessage(pMsg);
+						}
 					}
-					for (ASTNode problemNode : problemNodes) {
-						ParseMessage pMsg = new EmfaticSemanticWarning.EcoreValidatorDiagnostic(problemNode, dMsg);
-						parseContext.addParseMessage(pMsg);
-					}
+				}
+				catch (Exception ex) {
+					return rootPackage;
 				}
 			}
 		}
