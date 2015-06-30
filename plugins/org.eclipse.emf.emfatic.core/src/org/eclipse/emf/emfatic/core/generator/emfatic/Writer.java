@@ -339,9 +339,10 @@ public class Writer {
 		for (Iterator<EParameter> ip = eOp.getEParameters().iterator(); ip
 				.hasNext();) {
 			EParameter eParam = ip.next();
-			String paramDoc = EcoreUtil.getDocumentation(eParam);
-			if (paramDoc != null)
-				write("?\"" + paramDoc + "\" ");
+			//String paramDoc = EcoreUtil.getDocumentation(eParam);
+			//if (paramDoc != null)
+			//	write("?\"" + paramDoc + "\" ");
+			writeAnnotations(eParam, 0, false);
 			String paramMods = getModifiers(eParam);
 			String paramName = escape(eParam.getName());
 			String paramType = getTypeExpr(eParam, eOp.getEContainingClass());
