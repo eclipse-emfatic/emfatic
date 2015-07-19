@@ -6,7 +6,8 @@ options {
   JDK_VERSION = "1.5";
   STATIC = false ;
   LOOKAHEAD=4; 
-  FORCE_LA_CHECK = true; 
+  FORCE_LA_CHECK = true;
+  UNICODE_INPUT = true;
 }
 
 PARSER_BEGIN(EmfaticParser)
@@ -112,7 +113,22 @@ TOKEN :
 |   < STRING_LITERAL : <DOUBLEQUOTE> (<ESC> | ~["\""])* <DOUBLEQUOTE> >
 |   < CHAR_LITERAL   : <SINGLEQUOTE> (<ESC> | (~["'"])) <SINGLEQUOTE> >
 
-|   < #LETTERORUNDERSCORE : ["a"-"z", "A"-"Z", "_"] > 
+//|   < #LETTERORUNDERSCORE : ["a"-"z", "A"-"Z", "_"] > 
+|   < #LETTERORUNDERSCORE : [
+	   "\u0041"-"\u005a" ,
+       "\u005f" ,
+       "\u0061"-"\u007a" ,
+       "\u00c0"-"\u00d6" ,
+       "\u00d8"-"\u00f6" ,
+       "\u00f8"-"\u00ff" ,
+       "\u0100"-"\u1fff" ,
+       "\u3040"-"\u318f" ,
+       "\u3300"-"\u337f" ,
+       "\u3400"-"\u3d2d" ,
+       "\u4e00"-"\u9fff" ,
+       "\uf900"-"\ufaff"
+] >
+
 |   < #LETTERORUNDERSCOREORDIGIT : ( <LETTERORUNDERSCORE> | <DIGIT> ) > 
 
 | < INT_LITERAL : (<DIGIT>)+ > 

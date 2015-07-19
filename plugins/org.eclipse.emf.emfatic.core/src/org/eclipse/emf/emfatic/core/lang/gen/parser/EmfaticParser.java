@@ -1610,96 +1610,6 @@ public class EmfaticParser implements EmfaticParserConstants {
     finally { jj_save(75, xla); }
   }
 
-  private boolean jj_3_67() {
-    if (jj_scan_token(MINUS)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_47() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_67()) jj_scanpos = xsp;
-    if (jj_scan_token(INT_LITERAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3_27() {
-    if (jj_scan_token(AMP)) return true;
-    if (jj_3R_30()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_15() {
-    if (jj_scan_token(STRING_LITERAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3_19() {
-    if (jj_3R_28()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_64() {
-    if (jj_3R_30()) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3_27()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
-  private boolean jj_3_66() {
-    if (jj_scan_token(FALSEKW)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_69() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_65()) {
-    jj_scanpos = xsp;
-    if (jj_3_66()) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3_5() {
-    if (jj_3R_16()) return true;
-    return false;
-  }
-
-  private boolean jj_3_26() {
-    if (jj_3R_32()) return true;
-    return false;
-  }
-
-  private boolean jj_3_47() {
-    if (jj_scan_token(HASH)) return true;
-    if (jj_scan_token(ID)) return true;
-    return false;
-  }
-
-  private boolean jj_3_65() {
-    if (jj_scan_token(TRUEKW)) return true;
-    return false;
-  }
-
-  private boolean jj_3_4() {
-    if (jj_3R_15()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_57() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_4()) {
-    jj_scanpos = xsp;
-    if (jj_3_5()) return true;
-    }
-    return false;
-  }
-
   private boolean jj_3R_46() {
     if (jj_3R_69()) return true;
     return false;
@@ -2554,6 +2464,96 @@ public class EmfaticParser implements EmfaticParserConstants {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_28()) jj_scanpos = xsp;
+    return false;
+  }
+
+  private boolean jj_3_67() {
+    if (jj_scan_token(MINUS)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_47() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_67()) jj_scanpos = xsp;
+    if (jj_scan_token(INT_LITERAL)) return true;
+    return false;
+  }
+
+  private boolean jj_3_27() {
+    if (jj_scan_token(AMP)) return true;
+    if (jj_3R_30()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_15() {
+    if (jj_scan_token(STRING_LITERAL)) return true;
+    return false;
+  }
+
+  private boolean jj_3_19() {
+    if (jj_3R_28()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_64() {
+    if (jj_3R_30()) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3_27()) { jj_scanpos = xsp; break; }
+    }
+    return false;
+  }
+
+  private boolean jj_3_66() {
+    if (jj_scan_token(FALSEKW)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_69() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_65()) {
+    jj_scanpos = xsp;
+    if (jj_3_66()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3_5() {
+    if (jj_3R_16()) return true;
+    return false;
+  }
+
+  private boolean jj_3_26() {
+    if (jj_3R_32()) return true;
+    return false;
+  }
+
+  private boolean jj_3_47() {
+    if (jj_scan_token(HASH)) return true;
+    if (jj_scan_token(ID)) return true;
+    return false;
+  }
+
+  private boolean jj_3_65() {
+    if (jj_scan_token(TRUEKW)) return true;
+    return false;
+  }
+
+  private boolean jj_3_4() {
+    if (jj_3R_15()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_57() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_4()) {
+    jj_scanpos = xsp;
+    if (jj_3_5()) return true;
+    }
     return false;
   }
 
