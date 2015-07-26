@@ -128,8 +128,7 @@ import org.omg.CORBA._PolicyStub;
 						return resource;
 					}
 				} catch (Exception ex) {
-					System.err.println(ex.getMessage());
-					
+					ex.printStackTrace();
 				}
 				return null;
 			}
