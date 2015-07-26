@@ -45,7 +45,7 @@ public class EcoreGenerator {
 	public void generate(IFile emfFile, boolean writeEcore, IProgressMonitor monitor) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(emfFile.getContents()));
-			EmfaticParserDriver parser = new EmfaticParserDriver();
+			EmfaticParserDriver parser = new EmfaticParserDriver(URI.createPlatformResourceURI(emfFile.getFullPath().toPortableString(), true));
 			ParseContext parseContext = parser.parse(reader);
 			String filePath = getEcoreFilePath(emfFile);
 			Resource resource = createResource(filePath, true);
@@ -77,7 +77,7 @@ public class EcoreGenerator {
 	public void generate(File emfFile, boolean writeEcore) throws Exception {
 		NullProgressMonitor monitor = new NullProgressMonitor();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(emfFile)));
-		EmfaticParserDriver parser = new EmfaticParserDriver();
+		EmfaticParserDriver parser = new EmfaticParserDriver(URI.createFileURI(emfFile.getAbsolutePath()));
 		ParseContext parseContext = parser.parse(reader);
 		String filePath = emfFile.getAbsolutePath().replaceAll("\\.emf$", ".ecore");
 		Resource resource = createResource(filePath, false);

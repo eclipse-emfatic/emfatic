@@ -16,6 +16,7 @@ package org.eclipse.emf.emfatic.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.emfatic.core.lang.gen.parser.EmfaticParserDriver;
 import org.eclipse.emf.emfatic.ui.contentassist.CascadedContentAssistProcessor;
 import org.eclipse.emf.emfatic.ui.contentassist.EmfaticContentAssistProcessor;
@@ -64,7 +65,7 @@ public class EmfaticSourceViewerConfiguration extends
 	}
 
 	public IParser getParser() {
-		return new EmfaticParserDriver();
+		return new EmfaticParserDriver(URI.createPlatformResourceURI(_editor.getFile().getFullPath().toPortableString(), true));
 	}
 
 	public ITextHover getTextHover(ISourceViewer sourceViewer,

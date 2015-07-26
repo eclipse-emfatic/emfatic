@@ -64,6 +64,7 @@ import org.eclipse.emf.emfatic.core.lang.gen.ast.Wildcard;
 import org.eclipse.emf.emfatic.core.util.EmfaticBasicTypes;
 import org.eclipse.gymnast.runtime.core.ast.ASTNode;
 import org.eclipse.gymnast.runtime.core.parser.ParseContext;
+import org.omg.CORBA._PolicyStub;
 
 
 
@@ -76,12 +77,14 @@ import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 
 	private OneToOneMap<ASTNode, EObject> cstDecl2EcoreAST = null;
 	private OneToManyMap<EObject, ASTNode> ecoreDecl2cstUse = new OneToManyMap<EObject, ASTNode>();
-
+	protected URI uri = null;
+	
 	public Connector(Builder b) {
 		this.cstDecl2EcoreAST = b.getCstDecl2EcoreASTMap();
 	}
 
 	public void connect(ParseContext parseContext, Resource resource, IProgressMonitor monitor) {
+		uri = resource.getURI();
 		ecoreDecl2cstUse.clear();
 		initParseContext(parseContext);
 		CompUnit compUnit = (CompUnit) parseContext.getParseRoot();
@@ -116,11 +119,17 @@ import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 
 			private Resource tryLoadResource(URI uri) {
 				try {
+					if (uri != null && Connector.this.uri != null && uri.isRelative()) {
+						uri = uri.resolve(Connector.this.uri);
+					}
+					
 					Resource resource = resourceSet.getResource(uri, true);
-					if (resource != null && resource.isLoaded())
+					if (resource != null && resource.isLoaded()) {
 						return resource;
+					}
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					System.err.println(ex.getMessage());
+					
 				}
 				return null;
 			}

@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
@@ -30,7 +31,13 @@ import org.eclipse.gymnast.runtime.core.parser.ParseError;
 import org.eclipse.gymnast.runtime.core.parser.ParseMessage;
 
 public class EmfaticParserDriver implements IParser {
-
+	
+	protected URI uri = null;
+	
+	public EmfaticParserDriver(URI uri) {
+		this.uri = uri;
+	}
+	
     public ParseContext parse(Reader input) {
     	
     	ExtSimpleCharStream stream = new ExtSimpleCharStream(input);
@@ -53,7 +60,6 @@ public class EmfaticParserDriver implements IParser {
 		Builder builder = new Builder();
 		NullProgressMonitor npm = new NullProgressMonitor();
 		ResourceSet resourceSet = new ResourceSetImpl();
-		URI uri = URI.createPlatformResourceURI("dummy");
 		
 		if (Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().get("ecore") == null) {
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
