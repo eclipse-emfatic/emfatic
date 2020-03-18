@@ -52,7 +52,7 @@ public abstract class LDTCodeScanner extends RuleBasedScanner {
 	}
 	
 	public IToken getLiteralToken() {
-		return makeToken(LDTColorProvider.DARK_BLUE, null, SWT.BOLD);
+		return makeToken(LDTColorProvider.DARK_BLUE, null, SWT.NORMAL);
 	}
 	
 	public void initLiterals() {
