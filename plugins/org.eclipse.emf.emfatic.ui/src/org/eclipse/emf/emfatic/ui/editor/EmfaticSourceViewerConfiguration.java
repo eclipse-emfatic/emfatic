@@ -29,10 +29,13 @@ import org.eclipse.gymnast.runtime.core.parser.IParser;
 import org.eclipse.gymnast.runtime.ui.editor.LDTCodeScanner;
 import org.eclipse.gymnast.runtime.ui.editor.LDTSourceViewerConfiguration;
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
+import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextHover;
+import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
@@ -87,13 +90,7 @@ public class EmfaticSourceViewerConfiguration extends
 	@Override
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer arg0) {
 		PresentationReconciler reconciler = new PresentationReconciler();
-		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(
-				createCodeScanner());
-
-		/*
-		 * make syntax coloring work for all document partitions except the
-		 * comment ones
-		 */
+		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(createCodeScanner());
 
 		// i.e., IDocument.DEFAULT_CONTENT_TYPE
 		reconciler.setDamager(dr, "__dftl_partition_content_type");
@@ -112,7 +109,20 @@ public class EmfaticSourceViewerConfiguration extends
 		setDR(reconciler, dr, EmfaticPartitionScanner.mapentryPart);
 		setDR(reconciler, dr, EmfaticPartitionScanner.classHeadingPart);
 		setDR(reconciler, dr, EmfaticPartitionScanner.ifaceHeadingPart);
-
+		setDR(reconciler, dr, EmfaticPartitionScanner.singleLineComment);
+		
+		DefaultDamagerRepairer cr = new DefaultDamagerRepairer(
+				createCodeScanner()) {
+			@Override
+			public IRegion getDamageRegion(ITypedRegion partition, DocumentEvent e,
+					boolean documentPartitioningChanged) {
+				return partition;
+			}
+		};
+		
+		setDR(reconciler, cr, EmfaticPartitionScanner.multiLineComment);
+		
+		
 		return reconciler;
 	}
 

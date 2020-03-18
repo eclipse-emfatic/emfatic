@@ -65,7 +65,7 @@ public abstract class LDTCodeScanner extends RuleBasedScanner {
 	}
 	
 	public IToken getCommentToken() {
-	    return makeToken(LDTColorProvider.DARK_BLUE, LDTColorProvider.GREY1, SWT.BOLD);
+	    return makeToken(LDTColorProvider.DARK_GREEN, null, SWT.NORMAL);
 	}
 	
 	public void initComments() {
