@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site
       digestURL="http://download.eclipse.org/emfatic/update/">
-   <feature url="features/org.eclipse.emf.emfatic_0.8.0.201302031045.jar" id="org.eclipse.emf.emfatic" version="0.8.0.201302031045">
+   <feature url="features/org.eclipse.emf.emfatic_0.8.0.202003200747.jar" id="org.eclipse.emf.emfatic" version="0.8.0.202003200747">
       <category name="Emfatic (Incubation)"/>
    </feature>
    <category-def name="Emfatic (Incubation)" label="Emfatic (Incubation)"/>

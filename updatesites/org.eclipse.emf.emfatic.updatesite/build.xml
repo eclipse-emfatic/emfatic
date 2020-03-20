@@ -1,37 +1,10 @@
 <project default="main">
-	
-	<target name="main" depends="categorise,compress,refresh"/>
-	
-	<target name="categorise">
+	<!-- We need to run this every time we build a new version of Emfatic to add categories to its update site -->
+	<target name="main">
 		<echo>Adding category information to repository</echo>
 		<eclipse.publish.featuresAndBundles
 			compress="true"
 			site="file:${basedir}/site.xml"
 			repository="file:${basedir}"/>
-	</target>
-
-	<target name="compress">
-		<echo>Packing JARS</echo>
-		<p2.process.artifacts
-			pack="true"
-			normalize="true"
-			repositorypath="file:${basedir}"/>
-	</target>
-	
-	<target name="clean" depends="delete,refresh" />
-	
-	<target name="delete">
-		<delete file="content.jar"/>
-		<delete file="content.jar.pack.gz"/>
-		
-		<delete file="artifacts.jar"/>
-		<delete file="artifacts.jar.pack.gz"/>
-		
-		<delete dir="plugins"/>
-		<delete dir="features"/>
-	</target>
-	
-	<target name="refresh">
-		<eclipse.refreshLocal resource="org.eclipse.epsilon.updatesite" depth="infinite" />
 	</target>
 </project>
