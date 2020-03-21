@@ -16,26 +16,52 @@ package org.eclipse.emf.emfatic.ui.editor;
 import org.eclipse.emf.emfatic.core.util.EmfaticBasicTypes;
 import org.eclipse.emf.emfatic.core.util.EmfaticKeywords;
 import org.eclipse.gymnast.runtime.ui.editor.LDTCodeScanner;
-import org.eclipse.gymnast.runtime.ui.util.LDTColorProvider;
+import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.MultiLineRule;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.RGB;
 
 public class EmfaticCodeScanner extends LDTCodeScanner
 {
+    protected HighlightingManager highlightingManager;
 
     public EmfaticCodeScanner()
     {
     }
 
-    public void initKeywords()
-    {
-        addKeywords(EmfaticKeywords.GetNormalKeywords(), LDTColorProvider.BLUE);
-        addKeywords(EmfaticKeywords.GetSpecialKeywords(), LDTColorProvider.DARK_BLUE, null, 1);
-        addKeywords(EmfaticBasicTypes.GetBasicTypeNames(), LDTColorProvider.DARK_GREEN);
+    @Override
+    public void initSetup() {
+        highlightingManager = new HighlightingManager();
+        super.initSetup();
     }
 
+    @Override
+    public void initKeywords()
+    {
+        addKeywords(EmfaticKeywords.GetNormalKeywords(), highlightingManager.getNormalKeywordsColor());
+        addKeywords(EmfaticKeywords.GetSpecialKeywords(), highlightingManager.getSpecialKeywordsColor(), null, 1);
+        addKeywords(EmfaticBasicTypes.GetBasicTypeNames(), highlightingManager.getBasicTypesColor());
+    }
+
+    @Override
     public void initLiterals()
     {
         org.eclipse.jface.text.rules.IToken literalToken = getLiteralToken();
         addRule(new MultiLineRule("\"", "\"", literalToken, '\\'));
+    }
+
+    @Override
+    public IToken getLiteralToken() {
+        return makeToken(highlightingManager.getLiteralColor(), null, SWT.NORMAL);
+    }
+
+    @Override
+    public IToken getCommentToken() {
+        return makeToken(highlightingManager.getCommentColor(), null, SWT.NORMAL);
+    }
+
+    @Override
+    public RGB getIdColor() {
+        return highlightingManager.getIdColor();
     }
 }

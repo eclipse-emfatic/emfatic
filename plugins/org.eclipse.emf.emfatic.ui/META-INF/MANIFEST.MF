@@ -24,5 +24,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.core.expressions,
  org.eclipse.gymnast.runtime.core,
- org.eclipse.gymnast.runtime.ui
+ org.eclipse.gymnast.runtime.ui,
+ org.eclipse.e4.ui.css.swt.theme
 Eclipse-LazyStart: true

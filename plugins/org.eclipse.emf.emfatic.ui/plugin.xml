@@ -79,6 +79,12 @@
             id="org.eclipse.emf.emfatic.ui.preferences.EmfaticTemplatesPreferencePage"
             name="Templates">
       </page>
+      <page
+        category="org.eclipse.emf.emfatic.ui.preferences.EmfaticPreferencePage"
+        class="org.eclipse.emf.emfatic.ui.preferences.EmfaticSyntaxColoringPreferencePage"
+        id="org.eclipse.emf.emfatic.ui.preferences.EmfaticSyntaxColoringPreferencePage"
+        name="Syntax Coloring">
+      </page>
    </extension>
    
    

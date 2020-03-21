@@ -53,11 +53,14 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.ISourceViewerExtension2;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
@@ -84,10 +87,39 @@ public class EmfaticEditor extends LDTEditor implements IShowInTargetList,
 	private EmfaticKeyListener _keyListener = null;
 	private OutlineNode[] lastShownOutlineNodes = new OutlineNode[0];
 	private IViewReference _typesViewReference = null;
+	private HighlightingManager highlightingManager;
 
 	public EmfaticEditor() {
 		addParseTreeChangedListener(new EmfaticCSTChangeListener(this));
 		setDocumentProvider(new EmfaticDocumentProvider());
+		
+		highlightingManager = new HighlightingManager();
+		
+		PlatformUI.getWorkbench().getThemeManager().addPropertyChangeListener(new ThemeChangeListener() {
+			@Override
+			public void themeChange() {
+				highlightingManager.initialiseDefaultColors();
+				refreshText();
+			}
+		});
+
+		highlightingManager.getPreferenceStore().addPropertyChangeListener(new IPropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				if (highlightingManager.isColorPreference(event.getProperty())) {
+					refreshText();
+				}
+			}
+		});
+	}
+
+	public void refreshText() {
+		ISourceViewer viewer= getSourceViewer();
+		if (!(viewer instanceof ISourceViewerExtension2))
+			return;
+		((ISourceViewerExtension2)viewer).unconfigure();
+		initializeEditor();
+		viewer.configure(getSourceViewerConfiguration());
 	}
 
 	protected LDTSourceViewerConfiguration createSourceViewerConfiguration() {
@@ -548,6 +580,4 @@ public class EmfaticEditor extends LDTEditor implements IShowInTargetList,
 		}
 	}
 
-	
-	
 }
