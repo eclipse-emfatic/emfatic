@@ -102,6 +102,10 @@ public class Builder extends GenerationPhase {
 		cstDecl2EcoreAST.put(topLevelDecls.getParent(), ePackage);
 		ePackage.setName(name);
 		buildAnnotations(annotations, ePackage);
+		
+		if (ePackage.getNsURI() == null) ePackage.setNsURI(ePackage.getName());
+		if (ePackage.getNsPrefix() == null) ePackage.setNsPrefix("");
+		
 		parentContents.add(ePackage);
 		(new EmfaticASTNodeVisitor() {
 

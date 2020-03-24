@@ -657,11 +657,10 @@ public class Writer {
 		_buf.append(s);
 	}
 
-	private void indent(int units) {
-		int spaces = units * 2;
-		StringBuffer sb = new StringBuffer(spaces);
-		for (int i = 0; i < spaces; i++)
-			sb.append(' ');
+	private void indent(int tabs) {
+		StringBuffer sb = new StringBuffer(tabs);
+		for (int i = 0; i < tabs; i++)
+			sb.append("\t");
 
 		write(sb.toString());
 	}
