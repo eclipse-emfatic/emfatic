@@ -37,35 +37,30 @@ public class LDTReconcilingStrategy implements IReconcilingStrategy {
 	}
 
 	public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
-		try {
-			ParseContext parseContext = parse();
-			_editor.setParseRoot(parseContext.getParseRoot());
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			_editor.setParseRoot(null);
-		}
+		updateEditorParseRoot();
 	}
 
 	public void reconcile(IRegion partition) {
-		try {
-			ParseContext parseContext = parse();
-			_editor.setParseRoot(parseContext.getParseRoot());
-		}
-		catch (Exception ex) {
-		    ex.printStackTrace();
-			_editor.setParseRoot(null);
-		}
+		updateEditorParseRoot();
 	}
 
 	public void setDocument(IDocument document) {
+		_document = document;
+		updateEditorParseRoot();
+	}
+	
+	private void updateEditorParseRoot() {
 		try {
-			_document = document;
 			ParseContext parseContext = parse();
-			_editor.setParseRoot(parseContext.getParseRoot());
+			if (parseContext != null) {
+				_editor.setParseRoot(parseContext.getParseRoot());
+			}
+			else {
+				_editor.setParseRoot(null);
+			}
 		}
 		catch (Exception ex) {
-		    ex.printStackTrace();
+			ex.printStackTrace();
 			_editor.setParseRoot(null);
 		}
 	}
@@ -73,6 +68,10 @@ public class LDTReconcilingStrategy implements IReconcilingStrategy {
 	private ParseContext parse() {
 		
 		IFile file = _editor.getFile();
+		
+		if (file == null) {
+			return null;
+		}
 
 		MarkerUtil.clearMarkers(file);
 		

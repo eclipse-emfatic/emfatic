@@ -531,11 +531,11 @@ public class EmfaticEditor extends LDTEditor implements IShowInTargetList,
 	 * see p. 467 and p. 499 of JDGE 2nd Ed
 	 */
 	public ShowInContext getShowInContext() {
-		FileEditorInput fei = (FileEditorInput) getEditorInput();
-		ISelection selection = getSelectionProvider().getSelection();
-		IFile f = fei.getFile();
-		ShowInContext res = new ShowInContext(f, selection);
-		return res;
+		if (getEditorInput() instanceof FileEditorInput) {
+			FileEditorInput fei = (FileEditorInput) getEditorInput();
+			return new ShowInContext(fei.getFile(), getSelectionProvider().getSelection());
+		}
+		return new ShowInContext(getEditorInput(), getSelectionProvider().getSelection());
 	}
 
 	public void showInTypeHierarchy(EClass openedDecl) {
