@@ -7,6 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.emf.emfatic.ui.EmfaticUIPlugin
 Bundle-Vendor: Eclipse.org
 Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.emf.emfatic.ui,
  org.eclipse.emf.emfatic.ui.actions,
  org.eclipse.emf.emfatic.ui.editor
@@ -26,4 +27,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.gymnast.runtime.core,
  org.eclipse.gymnast.runtime.ui,
  org.eclipse.e4.ui.css.swt.theme
-Eclipse-LazyStart: true
+Automatic-Module-Name: org.eclipse.emf.emfatic.ui
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
