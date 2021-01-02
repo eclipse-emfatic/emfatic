@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="org.eclipse.emf.emfatic">
+      <category name="org.eclipse.emf.emfatic.feature"/>
+   </feature>
+   <category-def name="org.eclipse.emf.emfatic.feature" label="Emfatic (Incubation)"/>
+</site>
