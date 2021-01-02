@@ -64,7 +64,6 @@ import org.eclipse.emf.emfatic.core.lang.gen.ast.Wildcard;
 import org.eclipse.emf.emfatic.core.util.EmfaticBasicTypes;
 import org.eclipse.gymnast.runtime.core.ast.ASTNode;
 import org.eclipse.gymnast.runtime.core.parser.ParseContext;
-import org.omg.CORBA._PolicyStub;
 
 
 
