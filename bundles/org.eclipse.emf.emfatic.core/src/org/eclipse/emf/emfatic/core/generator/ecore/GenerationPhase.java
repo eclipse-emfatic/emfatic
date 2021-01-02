@@ -7,7 +7,7 @@
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     Miguel Garcia - Technischen Universit‰t Hamburg-Harburg (TUHH)
+ *     Miguel Garcia - Technischen Universit√§t Hamburg-Harburg (TUHH)
  *******************************************************************************/
 
 package org.eclipse.emf.emfatic.core.generator.ecore;
