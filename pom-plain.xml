@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eclipse.emf.emfatic</groupId>
+  <artifactId>plain-parent</artifactId>
+  <version>0.8.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Eclipse Emfatic Parent</name>
+  <url>https://www.eclipse.org/emfatic/</url>
+  <description>
+    A textual syntax for EMF Ecore (meta-)models.
+  </description>
+
+  <scm>
+    <connection>scm:git:git://git.eclipse.org/gitroot/emfatic/org.eclipse.emfatic.git</connection>
+    <developerConnection>scm:git:ssh://user_id@git.eclipse.org:29418/emfatic/org.eclipse.emfatic.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://git.eclipse.org/c/emfatic/org.eclipse.emfatic.git/</url>
+  </scm>
+
+  <licenses>
+    <license>
+      <name>Eclipse Public License 2.0</name>
+      <url>https://www.eclipse.org/legal/epl-2.0/</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>dkolovos</id>
+      <name>Dimitris Kolovos</name>
+      <url>https://www.cs.york.ac.uk/people/dkolovos</url>
+      <roles><role>Lead</role></roles>
+    </developer>
+    <developer>
+      <id>smadani</id>
+      <name>Sina Madani</name>
+      <roles><role>Committer</role></roles>
+    </developer>
+    <developer>
+      <id>agarciad</id>
+      <name>Antonio Garcia Dominguez</name>
+      <url>https://cs.aston.ac.uk/~garcia-a/</url>
+      <roles><role>Committer</role></roles>
+    </developer>
+  </developers>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <swt.version>3.114.0</swt.version>
+  </properties>
+
+  <modules>
+    <module>bundles/org.eclipse.emf.emfatic.core/pom-plain.xml</module>
+    <module>bundles/org.eclipse.gymnast.runtime.core/pom-plain.xml</module>
+  </modules>
+
+  <!--
+      Eclipse POMs normally use version ranges for their dependencies, to mimic
+      the Require-Bundle support for version ranges, unlike most Maven artifacts
+      which depend on specific versions for reproducibility.
+
+      In order to have a reproducible build, we need to use dependencyManagement
+      so we decide on a specific version within those ranges, and we keep to the
+      same version of EMF / other bits always.
+  -->
+  <dependencyManagement>
+    <dependencies>
+      <!-- SWT / JFace -->
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.swt</artifactId>
+        <version>${swt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.jface</artifactId>
+        <version>3.14.100</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.jface.databinding</artifactId>
+        <version>1.11.0</version>
+      </dependency>
+
+      <!-- Eclipse Core -->
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.commands</artifactId>
+        <version>3.8.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.contenttype</artifactId>
+        <version>3.7.600</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.databinding</artifactId>
+        <version>1.8.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.databinding.observable</artifactId>
+        <version>1.9.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.databinding.property</artifactId>
+        <version>1.8.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.expressions</artifactId>
+        <version>3.6.700</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.filebuffers</artifactId>
+        <version>3.6.900</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.filesystem</artifactId>
+        <version>1.7.700</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.jobs</artifactId>
+        <version>3.10.700</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.resources</artifactId>
+        <version>3.13.700</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.runtime</artifactId>
+        <version>3.17.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.variables</artifactId>
+        <version>3.4.800</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.urischeme</artifactId>
+        <version>1.1.100</version>
+      </dependency>
+
+      <!-- OSGi and Equinox -->
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.common</artifactId>
+        <version>3.8.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.registry</artifactId>
+        <version>3.8.700</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.app</artifactId>
+        <version>1.4.400</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.ds</artifactId>
+        <version>1.6.100</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.bidi</artifactId>
+        <version>1.2.300</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.p2.core</artifactId>
+        <version>2.6.300</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.p2.engine</artifactId>
+        <version>2.6.600</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.p2.metadata</artifactId>
+        <version>2.4.700</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.preferences</artifactId>
+        <version>3.7.700</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.osgi</artifactId>
+        <version>3.15.200</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.osgi.services</artifactId>
+        <version>3.8.0</version>
+      </dependency>
+
+      <!-- Eclipse UI -->
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.ant.core</artifactId>
+        <version>3.5.700</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.compare.core</artifactId>
+        <version>3.6.800</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.debug.core</artifactId>
+        <version>3.15.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.debug.ui</artifactId>
+        <version>3.14.400</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.jface.text</artifactId>
+        <version>3.16.500</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.help</artifactId>
+        <version>3.8.700</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.text</artifactId>
+        <version>3.10.100</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.ui</artifactId>
+        <version>3.116.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.ui.console</artifactId>
+        <version>3.9.100</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.ui.editors</artifactId>
+        <version>3.13.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.ui.ide</artifactId>
+        <version>3.17.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.ui.navigator</artifactId>
+        <version>3.9.200</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.ui.views</artifactId>
+        <version>3.10.200</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.ui.workbench</artifactId>
+        <version>3.118.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.ui.workbench.texteditor</artifactId>
+        <version>3.14.100</version>
+      </dependency>
+
+      <!-- EMF -->
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.emf.common</artifactId>
+        <version>2.18.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.emf.ecore</artifactId>
+        <version>2.21.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.emf.ecore.change</artifactId>
+        <version>2.14.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.emf.ecore.edit</artifactId>
+        <version>2.13.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.emf.edit</groupId>
+        <artifactId>ui</artifactId>
+        <version>2.3.0-v200706262000</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+        <version>2.16.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.xsd</artifactId>
+        <version>2.17.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.emf</groupId>
+        <artifactId>org.eclipse.emf.mapping.ecore2xml</artifactId>
+        <version>2.11.0</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <directory>target-plain</directory>
+    <outputDirectory>target-plain/classes</outputDirectory>
+    <testOutputDirectory>target-plain/test-classes</testOutputDirectory>
+    <plugins>
+      <!-- <plugin> -->
+      <!--   <groupId>org.apache.maven.plugins</groupId> -->
+      <!--   <artifactId>maven-compiler-plugin</artifactId> -->
+      <!--   <version>3.8.1</version> -->
+
+      <!--   <!-\- Important: Epsilon's code (as of 2.0.0) does NOT compile under -->
+      <!--        plain javac. ECJ is more lenient toward some type erasure -->
+      <!--        ambiguities present in the code. -\-> -->
+
+      <!--   <configuration> -->
+      <!--     <compilerId>eclipse</compilerId> -->
+      <!--   </configuration> -->
+      <!--   <dependencies> -->
+      <!--     <dependency> -->
+      <!--       <groupId>org.codehaus.plexus</groupId> -->
+      <!--       <artifactId>plexus-compiler-eclipse</artifactId> -->
+      <!--       <version>2.8.6</version> -->
+      <!--     </dependency> -->
+      <!--   </dependencies> -->
+      <!-- </plugin> -->
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <additionalOptions>
+                <additionalOption>-Xdoclint:none</additionalOption>
+              </additionalOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>cbi</id>
+      <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <distributionManagement>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>ossrh</id>
+      <name>OSSRH Release Staging Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>ossrh</id>
+      <name>OSSRH Snapshots Repository</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <profiles>
+    <!-- NOTE: these two profiles have to be in this exact order, so we first
+         sign the JAR with a certificate, and then we GPG sign the resulting
+         JAR. The opposite order won't work. -->
+    <profile>
+      <id>eclipse-sign</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <!-- https://www.eclipse.org/cbi/sitedocs/eclipse-jarsigner-plugin/plugin-info.html -->
+          <plugin>
+            <groupId>org.eclipse.cbi.maven.plugins</groupId>
+            <artifactId>eclipse-jarsigner-plugin</artifactId>
+            <version>1.1.7</version>
+            <executions>
+              <execution>
+                <id>sign</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>ossrh</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.8</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org</nexusUrl>
+              <!-- We want to check staged releases manually on
+                   Sonatype OSSRH before we propagate to Central. -->
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+          <!-- Anything that goes to Central must be GPG signed -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Profiles to select appropriate SWT impl -->
+    <!-- Thanks to: https://stackoverflow.com/questions/6455652 -->
+    <profile>
+      <id>swt-mac</id>
+      <activation>
+        <os>
+          <name>mac os x</name>
+        </os>
+      </activation>
+      <properties>
+        <swt.artifactId>org.eclipse.swt.cocoa.macosx.x86_64</swt.artifactId>
+      </properties>
+    </profile>
+    <profile>
+      <id>swt-windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <swt.artifactId>org.eclipse.swt.win32.win32.x86_64</swt.artifactId>
+      </properties>
+    </profile>
+    <profile>
+      <id>swt-linux</id>
+      <activation>
+        <os>
+          <family>linux</family>
+        </os>
+      </activation>
+      <properties>
+        <swt.artifactId>org.eclipse.swt.gtk.linux.x86_64</swt.artifactId>
+      </properties>
+    </profile>
+
+  </profiles>
+
+</project>

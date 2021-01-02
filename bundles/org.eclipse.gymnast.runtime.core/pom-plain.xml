@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+	       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eclipse.emf.emfatic</groupId>
+  <artifactId>org.eclipse.gymnast.runtime.core</artifactId>
+  <name>Eclipse Gymnast Runtime Core</name>
+
+  <parent>
+    <groupId>org.eclipse.emf.emfatic</groupId>
+    <artifactId>plain-parent</artifactId>
+    <version>0.8.0-SNAPSHOT</version>
+    <relativePath>../../pom-plain.xml</relativePath>
+  </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse.platform</groupId>
+      <artifactId>org.eclipse.ui.ide</artifactId>
+
+      <!-- JNA 4.5.1+ only seems to be available in an Eclipse repo -->
+      <exclusions>
+        <exclusion>
+          <groupId>com.sun.jna</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.platform</groupId>
+      <artifactId>org.eclipse.ui.views</artifactId>
+
+      <!-- JNA 4.5.1+ only seems to be available in an Eclipse repo -->
+      <exclusions>
+        <exclusion>
+          <groupId>com.sun.jna</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.platform</groupId>
+      <artifactId>org.eclipse.core.runtime</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.platform</groupId>
+      <artifactId>org.eclipse.core.resources</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.platform</groupId>
+      <artifactId>org.eclipse.jface.text</artifactId>
+    </dependency>
+
+    <!-- Platform-specific SWT artifact -->
+    <dependency>
+      <groupId>org.eclipse.platform</groupId>
+      <artifactId>${swt.artifactId}</artifactId>
+      <version>${swt.version}</version>
+    </dependency>
+  </dependencies>
+
+</project>
