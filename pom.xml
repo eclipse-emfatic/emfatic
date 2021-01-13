@@ -65,6 +65,7 @@
             .META-INF_MANIFEST.MF
             .polyglot.build.properties
             .polyglot.feature.xml
+            .polyglot.category.xml
             .polyglot..META-INF_MANIFEST.MF
           </jgit.ignore>
         </configuration>
