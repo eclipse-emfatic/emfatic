@@ -26,6 +26,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions,
  org.eclipse.gymnast.runtime.core,
  org.eclipse.gymnast.runtime.ui,
- org.eclipse.e4.ui.css.swt.theme
+ org.eclipse.e4.ui.css.swt.theme,
+ org.eclipse.emf.edit.ui,
+ org.eclipse.emf.ecore.edit
 Automatic-Module-Name: org.eclipse.emf.emfatic.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

@@ -9,7 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.emf.emfatic.core.util;
+package org.eclipse.emf.emfatic.ui.views;
 
 import java.util.ArrayList;
 import java.util.HashMap;

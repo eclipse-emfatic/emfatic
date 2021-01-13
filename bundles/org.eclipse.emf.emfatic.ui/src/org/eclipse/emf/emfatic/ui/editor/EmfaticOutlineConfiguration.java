@@ -13,8 +13,8 @@
 
 package org.eclipse.emf.emfatic.ui.editor;
 
-import org.eclipse.emf.emfatic.core.util.EmfaticOutlineBuilder;
 import org.eclipse.emf.emfatic.ui.outline.EmfaticContentOutlinePage;
+import org.eclipse.emf.emfatic.ui.views.EmfaticOutlineBuilder;
 import org.eclipse.gymnast.runtime.core.outline.IOutlineBuilder;
 import org.eclipse.gymnast.runtime.ui.outline.LDTContentOutlinePage;
 import org.eclipse.gymnast.runtime.ui.outline.LDTOutlineConfiguration;
