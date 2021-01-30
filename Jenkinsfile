@@ -20,7 +20,7 @@ pipeline {
         stages {
           stage('Build') {
             steps {
-              sh 'mvn -B -T 1C clean install'
+              sh 'mvn -B -T 1C clean install -P eclipse-sign'
             }
           }
           stage('Plain Maven build') {
