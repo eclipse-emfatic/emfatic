@@ -20,12 +20,36 @@ pipeline {
         stages {
           stage('Build') {
             steps {
-              sh 'mvn -B -T 1C clean install -P eclipse-sign'
+              sh 'mvn -B -T 1C clean verify -P eclipse-sign'
             }
           }
           stage('Plain Maven build') {
             steps {
               sh 'mvn -B -T 1C -f pom-plain.xml compile'
+            }
+          }
+          stage('Update site') {
+            when {
+              anyOf {
+                branch 'master'
+                branch 'agarciad/ossrh'
+              }
+            }
+            steps {
+              sh 'mvn -B package -DskipTests'
+              lock('download-area') {
+                sshagent (['projects-storage.eclipse.org-bot-ssh']) {
+                  sh '''
+                    INTERIM=/home/data/httpd/download.eclipse.org/emfatic/interim-jenkins
+                    SITEDIR="$WORKSPACE/releng/org.eclipse.emf.emfatic.updatesite/target"
+                    if [ -d "$SITEDIR" ]; then
+                      ssh genie.emfatic@projects-storage.eclipse.org rm -rf $INTERIM
+                      scp -r "$SITEDIR/repository" genie.emfatic@projects-storage.eclipse.org:$INTERIM
+                      scp "$SITEDIR"/*.zip genie.emfatic@projects-storage.eclipse.org:$INTERIM/emfatic-interim-site.zip
+                    fi
+                  '''
+                }
+              }
             }
           }
           stage('Deploy to OSSRH') {
