@@ -341,27 +341,6 @@
     <outputDirectory>target-plain/classes</outputDirectory>
     <testOutputDirectory>target-plain/test-classes</testOutputDirectory>
     <plugins>
-      <!-- <plugin> -->
-      <!--   <groupId>org.apache.maven.plugins</groupId> -->
-      <!--   <artifactId>maven-compiler-plugin</artifactId> -->
-      <!--   <version>3.8.1</version> -->
-
-      <!--   <!-\- Important: Epsilon's code (as of 2.0.0) does NOT compile under -->
-      <!--        plain javac. ECJ is more lenient toward some type erasure -->
-      <!--        ambiguities present in the code. -\-> -->
-
-      <!--   <configuration> -->
-      <!--     <compilerId>eclipse</compilerId> -->
-      <!--   </configuration> -->
-      <!--   <dependencies> -->
-      <!--     <dependency> -->
-      <!--       <groupId>org.codehaus.plexus</groupId> -->
-      <!--       <artifactId>plexus-compiler-eclipse</artifactId> -->
-      <!--       <version>2.8.6</version> -->
-      <!--     </dependency> -->
-      <!--   </dependencies> -->
-      <!-- </plugin> -->
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
