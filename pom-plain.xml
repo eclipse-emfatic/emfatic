@@ -400,8 +400,14 @@
 
   <pluginRepositories>
     <pluginRepository>
-      <id>cbi</id>
-      <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
+      <id>eclipse</id>
+      <url>https://repo.eclipse.org/content/groups/cbi</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </pluginRepository>
   </pluginRepositories>
 
