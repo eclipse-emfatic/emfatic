@@ -40,7 +40,7 @@ pipeline {
               lock('download-area') {
                 sshagent (['projects-storage.eclipse.org-bot-ssh']) {
                   sh '''
-                    INTERIM=/home/data/httpd/download.eclipse.org/emfatic/interim-jenkins
+                    INTERIM=/home/data/httpd/download.eclipse.org/emfatic/interim
                     SITEDIR="$WORKSPACE/releng/org.eclipse.emf.emfatic.updatesite/target"
                     if [ -d "$SITEDIR" ]; then
                       ssh genie.emfatic@projects-storage.eclipse.org rm -rf $INTERIM
