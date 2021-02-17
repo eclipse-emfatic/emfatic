@@ -1,3 +1,0 @@
-- Rebuild update site in 2019-09
-- Run build.xml
-- Upload to build.eclipse.org
