@@ -2,6 +2,6 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Emfatic Online Documentation (Incubation)
 Bundle-SymbolicName: org.eclipse.emf.emfatic.doc.user; singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-Vendor: Eclipse.org
 Automatic-Module-Name: org.eclipse.emf.emfatic.doc.user
