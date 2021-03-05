@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feature
-      id="org.eclipse.emf.emfatic"
-      label="Emfatic (Incubation)"
-      version="0.8.0.qualifier"
-      provider-name="Eclipse.org">
+<feature id="org.eclipse.emf.emfatic" label="Emfatic (Incubation)" version="1.0.0.qualifier" provider-name="Eclipse.org">
 
    <description url="http://www.eclipse.org/modeling/emft/emfatic">
       Emfatic is a text editor supporting navigation, editing,  and
