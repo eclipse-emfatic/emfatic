@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %Plugin.name (Incubation)
+Bundle-Name: %Plugin.name
 Bundle-SymbolicName: org.eclipse.gymnast.runtime.ui;singleton:=true
 Bundle-Version: 1.0.1.qualifier
 Bundle-ClassPath: .
