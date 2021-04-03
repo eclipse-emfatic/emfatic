@@ -17,7 +17,9 @@ import org.eclipse.emf.emfatic.core.lang.gen.parser.EmfaticParserDriver;
 import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 
 public class EmfaticResource extends ResourceImpl {
-
+	
+	protected ParseContext parseContext = null;
+	
 	public EmfaticResource(URI uri) {
 		super(uri);
 	}
@@ -26,7 +28,7 @@ public class EmfaticResource extends ResourceImpl {
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		EmfaticParserDriver parser = new EmfaticParserDriver(uri);
-		ParseContext parseContext = parser.parse(reader);
+		parseContext = parser.parse(reader);
 		Builder builder = new Builder();
 		NullProgressMonitor monitor = new NullProgressMonitor();
 		builder.build(parseContext, this, monitor);
@@ -44,5 +46,9 @@ public class EmfaticResource extends ResourceImpl {
 		outputStream.flush();
 		outputStream.close();
 	}
-
+	
+	public ParseContext getParseContext() {
+		return parseContext;
+	}
+	
 }
