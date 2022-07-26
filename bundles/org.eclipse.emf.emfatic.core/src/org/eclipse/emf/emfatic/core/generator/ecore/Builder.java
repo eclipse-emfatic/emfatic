@@ -467,6 +467,9 @@ public class Builder extends GenerationPhase {
 					}
 					value = getValue(keyEqualsValue.getKey());
 				}
+				
+				if (value != null) value = value.replace("\\\"", "\"");
+				
 				eAnnotation.getDetails().put(key, value);
 				return false;
 			}
