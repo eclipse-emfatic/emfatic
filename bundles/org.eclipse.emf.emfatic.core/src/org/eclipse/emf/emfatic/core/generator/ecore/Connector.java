@@ -99,8 +99,8 @@ import org.eclipse.gymnast.runtime.core.parser.ParseContext;
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		// make sure to first try to load plugin resources from the workspace....
 		// see bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=249635 comment 12
-		resourceSet.getURIConverter().getURIMap().putAll(EcorePlugin.computePlatformURIMap());
-
+		resourceSet.getURIConverter().getURIMap().putAll(EcorePlugin.computePlatformURIMap(true));
+		
 		(new EmfaticASTNodeVisitor() {
 
 			public boolean beginVisit(ImportStmt importStmt) {
