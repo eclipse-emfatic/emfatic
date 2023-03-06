@@ -17,6 +17,7 @@
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.ui.ide</artifactId>
+      <optional>true</optional>
 
       <!-- JNA 4.5.1+ only seems to be available in an Eclipse repo -->
       <exclusions>
@@ -29,6 +30,7 @@
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.ui.views</artifactId>
+      <optional>true</optional>
 
       <!-- JNA 4.5.1+ only seems to be available in an Eclipse repo -->
       <exclusions>
@@ -41,14 +43,17 @@
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.core.runtime</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.core.resources</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.jface.text</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <!-- Platform-specific SWT artifact -->
@@ -56,6 +61,7 @@
       <groupId>org.eclipse.platform</groupId>
       <artifactId>${swt.artifactId}</artifactId>
       <version>${swt.version}</version>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 

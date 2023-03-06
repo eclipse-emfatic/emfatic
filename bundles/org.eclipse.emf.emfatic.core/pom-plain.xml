@@ -14,40 +14,21 @@
   </parent>
 
   <dependencies>
-    <!-- Users wishing to use the UI-facing parts of Gymnast should just depend
-         directly on it: this Maven artifact tries to bring in fewer transitive
-         deps by excluding the UI-specific parts of Gymnast. -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>org.eclipse.gymnast.runtime.core</artifactId>
       <version>${project.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.eclipse.platform</groupId>
-          <artifactId>org.eclipse.ui.ide</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.platform</groupId>
-          <artifactId>org.eclipse.ui.views</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.platform</groupId>
-          <artifactId>org.eclipse.jface.text</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.platform</groupId>
-          <artifactId>${swt.artifactId}</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.core.runtime</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.core.resources</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.eclipse.emf</groupId>
