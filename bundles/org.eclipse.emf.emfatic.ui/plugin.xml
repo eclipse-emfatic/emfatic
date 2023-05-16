@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="EmfaticEditor"
+            name="Emfatic Editor"
             extensions="emf"
             icon="icons/emfatic.png"
             class="org.eclipse.emf.emfatic.ui.editor.EmfaticEditor"
