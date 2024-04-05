@@ -1,4 +1,4 @@
-# Notices for Eclipse emfatic
+# Notices for Eclipse Emfatic
 
 This content is produced and maintained by the Eclipse emfatic project.
 
@@ -26,7 +26,8 @@ SPDX-License-Identifier: EPL-2.0
 
 The project maintains the following source code repositories:
 
-* https://git.eclipse.org/r/plugins/gitiles/emfatic/org.eclipse.emfatic
+* https://github.com/eclipse-emfatic/emfatic
+* https://github.com/eclipse-emfatic/emfatic-website
 
 ## Third-party Content
 
