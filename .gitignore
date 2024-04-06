@@ -2,3 +2,6 @@ bin/
 target/
 target-plain/
 *.jar
+
+# Metadata from Dash tool
+DEPENDENCIES*
