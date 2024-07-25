@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.compare.contentMergeViewers">
+      <viewer
+            class="org.eclipse.emf.emfatic.compare.ecore.EcoreToEmfaticViewerCreator"
+            extensions="org.eclipse.emf.compare.rcp.ui.ematch"
+            id="org.eclipse.emf.emfatic.compare.ecore.viewer"
+            label="Emfatic Compare">
+      </viewer>
+   </extension>
+
+</plugin>
