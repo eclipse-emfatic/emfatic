@@ -51,11 +51,15 @@ import org.eclipse.emf.emfatic.core.util.EmfaticKeywords;
 
 public class Writer {
 
-	public Writer() {
+	/**
+	 * @deprecated Use {@link #write(Resource)} instead.
+	 */
+	@Deprecated
+	public String write(Resource ecoreResource, IProgressMonitor monitor, IFile ecoreFile) {
+		return write(ecoreResource);
 	}
 
-	public String write(Resource ecoreResource, IProgressMonitor monitor,
-			IFile ecoreFile) {
+	public String write(Resource ecoreResource) {
 		_buf = new StringBuffer();
 
 		if (ecoreResource.getContents().size() > 1) {

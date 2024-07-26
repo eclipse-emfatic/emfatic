@@ -14,12 +14,19 @@ import org.eclipse.compare.ITypedElement;
 import org.eclipse.compare.contentmergeviewer.TextMergeViewer;
 import org.eclipse.compare.structuremergeviewer.ICompareInput;
 import org.eclipse.compare.structuremergeviewer.ICompareInputChangeListener;
+import org.eclipse.emf.compare.ide.ui.internal.contentmergeviewer.accessor.AccessorAdapter;
+import org.eclipse.emf.compare.rcp.ui.internal.contentmergeviewer.accessor.impl.MatchAccessor;
+import org.eclipse.emf.compare.rcp.ui.mergeviewer.item.IMergeViewerItem;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.emfatic.core.generator.emfatic.Writer;
 import org.eclipse.jface.text.AbstractDocument;
 import org.eclipse.jface.text.DefaultLineTracker;
 import org.eclipse.jface.text.ITextStore;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
+@SuppressWarnings("restriction")
 public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 	protected static class DummyDocument extends AbstractDocument implements ITypedElement {
@@ -76,10 +83,15 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 	}
 
 	protected static class EmfaticCompareInput implements ICompareInput {
-		private final ICompareInput originalInput;
 
-		protected EmfaticCompareInput(ICompareInput originalInput) {
+		private final ICompareInput originalInput;
+		private final EObject left;
+		private final EObject right;
+
+		public EmfaticCompareInput(ICompareInput originalInput, EObject left, EObject right) {
 			this.originalInput = originalInput;
+			this.left = left;
+			this.right = right;
 		}
 
 		@Override
@@ -105,18 +117,21 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 		@Override
 		public ITypedElement getLeft() {
-			// TODO compute Emfatic text from the left element
+			return getDocument(left.eResource());
+		}
+
+		private ITypedElement getDocument(Resource eResource) {
+			Writer w = new Writer();
+			String text = w.write(eResource);
+
 			DummyDocument leftDoc = new DummyDocument();
-			leftDoc.set("common\nleft");
+			leftDoc.set(text);
 			return leftDoc;
 		}
 
 		@Override
 		public ITypedElement getRight() {
-			// TODO compute Emfatic text from the right element
-			DummyDocument rightDoc = new DummyDocument();
-			rightDoc.set("common\nright");
-			return rightDoc;
+			return getDocument(right.eResource());
 		}
 
 		@Override
@@ -141,13 +156,32 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 	@Override
 	public void setInput(Object input) {
-		ICompareInput originalInput = (ICompareInput) input;
-		super.setInput(new EmfaticCompareInput(originalInput));
+		if (input instanceof ICompareInput) {
+			ICompareInput originalInput = (ICompareInput) input;
+			EObject left = getEObject(originalInput.getLeft(), true);
+			EObject right = getEObject(originalInput.getRight(), false);
+			super.setInput(new EmfaticCompareInput(originalInput, left, right));
+		} else {
+			super.setInput(input);
+		}
 	}
 
 	@Override
 	public String getTitle() {
 		return "Emfatic Compare";
 	}
-	
+
+	protected EObject getEObject(Object inputSide, boolean isLeft) {
+		if (inputSide instanceof AccessorAdapter) {
+			AccessorAdapter accAdapter = (AccessorAdapter) inputSide;
+			Object target = accAdapter.getTarget();
+			if (target instanceof MatchAccessor) {
+				MatchAccessor ma = (MatchAccessor) target;
+				IMergeViewerItem mergeItem = ma.getInitialItem();
+				return (EObject) (isLeft ? mergeItem.getLeft() : mergeItem.getRight());
+			}
+		}
+
+		return null;
+	}
 }
