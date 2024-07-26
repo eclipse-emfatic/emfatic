@@ -88,11 +88,13 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 		private final ICompareInput originalInput;
 		private final EObject left;
 		private final EObject right;
+		private final EObject ancestor;
 
-		public EmfaticCompareInput(ICompareInput originalInput, EObject left, EObject right) {
+		public EmfaticCompareInput(ICompareInput originalInput, EObject left, EObject right, EObject ancestor) {
 			this.originalInput = originalInput;
 			this.left = left;
 			this.right = right;
+			this.ancestor = ancestor;
 		}
 
 		@Override
@@ -112,17 +114,12 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 		@Override
 		public ITypedElement getAncestor() {
-			// TODO no three way support for now
-			return null;
+			return ancestor == null ? null : getDocument(ancestor.eResource());
 		}
 
 		@Override
 		public ITypedElement getLeft() {
-			if (left != null) {
-				return getDocument(left.eResource());
-			} else {
-				return null;
-			}
+			return left == null ? null : getDocument(left.eResource());
 		}
 
 		private ITypedElement getDocument(Resource eResource) {
@@ -144,11 +141,7 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 		@Override
 		public ITypedElement getRight() {
-			if (right != null) {
-				return getDocument(right.eResource());
-			} else {
-				return null;
-			}
+			return right == null ? null : getDocument(right.eResource());
 		}
 
 		@Override
@@ -175,9 +168,10 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 	public void setInput(Object input) {
 		if (input instanceof ICompareInput) {
 			ICompareInput originalInput = (ICompareInput) input;
-			EObject left = getEObject(originalInput.getLeft(), true);
-			EObject right = getEObject(originalInput.getRight(), false);
-			super.setInput(new EmfaticCompareInput(originalInput, left, right));
+			EObject ancestor = getEObject(originalInput.getAncestor());
+			EObject left = getEObject(originalInput.getLeft());
+			EObject right = getEObject(originalInput.getRight());
+			super.setInput(new EmfaticCompareInput(originalInput, left, right, ancestor));
 		} else {
 			super.setInput(input);
 		}
@@ -188,14 +182,21 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 		return "Emfatic Compare";
 	}
 
-	protected EObject getEObject(Object inputSide, boolean isLeft) {
+	protected EObject getEObject(Object inputSide) {
 		if (inputSide instanceof AccessorAdapter) {
 			AccessorAdapter accAdapter = (AccessorAdapter) inputSide;
 			Object target = accAdapter.getTarget();
 			if (target instanceof MatchAccessor) {
 				MatchAccessor ma = (MatchAccessor) target;
 				IMergeViewerItem mergeItem = ma.getInitialItem();
-				return (EObject) (isLeft ? mergeItem.getLeft() : mergeItem.getRight());
+				switch (mergeItem.getSide()) {
+				case LEFT:
+					return (EObject) mergeItem.getLeft();
+				case RIGHT:
+					return (EObject) mergeItem.getRight();
+				case ANCESTOR:
+					return (EObject) mergeItem.getAncestor();
+				}
 			}
 		}
 
