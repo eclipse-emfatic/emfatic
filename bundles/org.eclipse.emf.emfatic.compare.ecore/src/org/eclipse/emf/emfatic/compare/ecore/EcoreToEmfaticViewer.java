@@ -73,7 +73,7 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 		@Override
 		public Image getImage() {
-			// TODO Auto-generated method stub
+			// no image
 			return null;
 		}
 
