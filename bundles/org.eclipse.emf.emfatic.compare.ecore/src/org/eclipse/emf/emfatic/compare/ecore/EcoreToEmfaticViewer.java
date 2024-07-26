@@ -18,6 +18,7 @@ import org.eclipse.emf.compare.ide.ui.internal.contentmergeviewer.accessor.Acces
 import org.eclipse.emf.compare.rcp.ui.internal.contentmergeviewer.accessor.impl.MatchAccessor;
 import org.eclipse.emf.compare.rcp.ui.mergeviewer.item.IMergeViewerItem;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.emfatic.core.generator.emfatic.Writer;
 import org.eclipse.jface.text.AbstractDocument;
@@ -117,12 +118,24 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 		@Override
 		public ITypedElement getLeft() {
-			return getDocument(left.eResource());
+			if (left != null) {
+				return getDocument(left.eResource());
+			} else {
+				return null;
+			}
 		}
 
 		private ITypedElement getDocument(Resource eResource) {
-			Writer w = new Writer();
-			String text = w.write(eResource);
+			String text = null;
+			for (EObject root : eResource.getContents()) {
+				if (!(root instanceof EPackage)) {
+					text = "Not an Ecore metamodel - cannot turn into Emfatic source";
+				}
+			}
+			if (text == null) {
+				Writer w = new Writer();
+				text = w.write(eResource);
+			}
 
 			DummyDocument leftDoc = new DummyDocument();
 			leftDoc.set(text);
@@ -131,7 +144,11 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 		@Override
 		public ITypedElement getRight() {
-			return getDocument(right.eResource());
+			if (right != null) {
+				return getDocument(right.eResource());
+			} else {
+				return null;
+			}
 		}
 
 		@Override
