@@ -51,11 +51,15 @@ import org.eclipse.emf.emfatic.core.util.EmfaticKeywords;
 
 public class Writer {
 
-	public Writer() {
+	/**
+	 * @deprecated Use {@link #write(Resource)} instead.
+	 */
+	@Deprecated
+	public String write(Resource ecoreResource, IProgressMonitor monitor, IFile ecoreFile) {
+		return write(ecoreResource);
 	}
 
-	public String write(Resource ecoreResource, IProgressMonitor monitor,
-			IFile ecoreFile) {
+	public String write(Resource ecoreResource) {
 		_buf = new StringBuffer();
 
 		if (ecoreResource.getContents().size() > 1) {
@@ -672,6 +676,20 @@ public class Writer {
 	private EmfaticAnnotationMap _annotationMap;
 
 	private Pattern _escapeQuotes;
+
+	public static String stringify(EPackage ePackage) {
+		Writer w = new Writer();
+
+		EPackage mainPackage = getRootEPackage(ePackage);
+		if (mainPackage != null) {
+			w._processingEcore = w.initProcessingEcore(mainPackage);
+		}
+		w._annotationMap = new EmfaticAnnotationMap();
+		w._buf = new StringBuffer();
+
+		w.writeSubPackage(ePackage, 0);
+		return w._buf.toString();
+	}
 
 	public static String stringify(EObject ecoreDecl) {
 		Writer w = new Writer();

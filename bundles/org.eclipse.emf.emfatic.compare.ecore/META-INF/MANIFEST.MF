@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ecore comparison support for Emfatic
+Bundle-SymbolicName: org.eclipse.emf.emfatic.compare.ecore;singleton:=true
+Bundle-Version: 1.2.0.qualifier
+Export-Package: org.eclipse.emf.emfatic.compare.ecore
+Require-Bundle: org.eclipse.compare;bundle-version="3.0.0",
+ org.eclipse.swt;bundle-version="3.0.0",
+ org.eclipse.jface;bundle-version="3.0.0",
+ org.eclipse.core.runtime;bundle-version="3.0.0",
+ org.eclipse.text;bundle-version="3.0.0",
+ org.eclipse.emf.compare.ide.ui;bundle-version="4.0.0",
+ org.eclipse.emf.compare.rcp.ui;bundle-version="4.0.0",
+ org.eclipse.emf.compare;bundle-version="3.0.0",
+ org.eclipse.emf.emfatic.core;bundle-version="1.2.0",
+ org.eclipse.jface.text;bundle-version="3.0.0",
+ org.eclipse.emf.emfatic.ui,
+ org.eclipse.gymnast.runtime.ui
+Bundle-Vendor: Eclipse.org
+Automatic-Module-Name: org.eclipse.emf.emfatic.compare.ecore
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

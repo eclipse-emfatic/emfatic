@@ -44,7 +44,7 @@ public class EmfaticGenerator {
             Resource ecoreResource = getResource(_resourceSet, ecoreFilePath);
             String emfaticFilePath = getEmfaticFilePath(ecoreFile);
             Writer writer = new Writer();
-            String emfaticText = writer.write(ecoreResource, monitor, ecoreFile);
+            String emfaticText = writer.write(ecoreResource);
             writeEmfaticFile(emfaticFilePath, emfaticText.toString());
         }
         catch(Exception ex)

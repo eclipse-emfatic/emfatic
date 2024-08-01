@@ -2,6 +2,9 @@ bin/
 target/
 target-plain/
 *.jar
+.DS_Store
+.META-INF_MANIFEST.MF
+.polyglot.*
 
 # Metadata from Dash tool
 DEPENDENCIES*
