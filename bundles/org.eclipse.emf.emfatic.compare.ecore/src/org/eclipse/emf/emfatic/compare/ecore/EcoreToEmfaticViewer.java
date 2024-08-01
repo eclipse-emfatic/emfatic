@@ -19,7 +19,8 @@ import org.eclipse.emf.compare.rcp.ui.internal.contentmergeviewer.accessor.impl.
 import org.eclipse.emf.compare.rcp.ui.mergeviewer.item.IMergeViewerItem;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.emfatic.core.generator.emfatic.Writer;
 import org.eclipse.emf.emfatic.ui.editor.EmfaticEditor;
 import org.eclipse.emf.emfatic.ui.editor.EmfaticSourceViewerConfiguration;
@@ -119,24 +120,31 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 		@Override
 		public ITypedElement getAncestor() {
-			return ancestor == null ? null : getDocument(ancestor.eResource());
+			return ancestor == null ? null : getDocument(ancestor);
 		}
 
 		@Override
 		public ITypedElement getLeft() {
-			return left == null ? null : getDocument(left.eResource());
+			return left == null ? null : getDocument(left);
 		}
 
-		private ITypedElement getDocument(Resource eResource) {
+		private ITypedElement getDocument(EObject eObject) {
 			String text = null;
-			for (EObject root : eResource.getContents()) {
-				if (!(root instanceof EPackage)) {
-					text = "Not an Ecore metamodel - cannot turn into Emfatic source";
-				}
+			if (eObject == null || !EcorePackage.eNS_URI.equals(eObject.eClass().getEPackage().getNsURI())) {
+				text = "Not an Ecore metamodel - cannot turn into Emfatic source";
 			}
+
 			if (text == null) {
-				Writer w = new Writer();
-				text = w.write(eResource);
+				if (eObject.eContainer() == null) {
+					Writer w = new Writer();
+					text = w.write(eObject.eResource());
+				} else if (eObject instanceof EPackage) {
+					text = Writer.stringify((EPackage) eObject);
+				} else if (eObject instanceof EStructuralFeature) {
+					text = Writer.stringify((EStructuralFeature) eObject);
+				} else {
+					text = Writer.stringify(eObject);
+				}
 			}
 
 			DummyDocument leftDoc = new DummyDocument();
@@ -146,7 +154,7 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 
 		@Override
 		public ITypedElement getRight() {
-			return right == null ? null : getDocument(right.eResource());
+			return right == null ? null : getDocument(right);
 		}
 
 		@Override

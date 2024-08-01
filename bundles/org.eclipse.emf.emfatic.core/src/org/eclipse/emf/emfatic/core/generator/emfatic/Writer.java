@@ -677,6 +677,20 @@ public class Writer {
 
 	private Pattern _escapeQuotes;
 
+	public static String stringify(EPackage ePackage) {
+		Writer w = new Writer();
+
+		EPackage mainPackage = getRootEPackage(ePackage);
+		if (mainPackage != null) {
+			w._processingEcore = w.initProcessingEcore(mainPackage);
+		}
+		w._annotationMap = new EmfaticAnnotationMap();
+		w._buf = new StringBuffer();
+
+		w.writeSubPackage(ePackage, 0);
+		return w._buf.toString();
+	}
+
 	public static String stringify(EObject ecoreDecl) {
 		Writer w = new Writer();
 		EPackage mainPackage = getRootEPackage(ecoreDecl);
