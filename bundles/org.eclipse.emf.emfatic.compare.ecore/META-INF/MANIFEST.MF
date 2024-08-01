@@ -12,7 +12,10 @@ Require-Bundle: org.eclipse.compare;bundle-version="3.0.0",
  org.eclipse.emf.compare.ide.ui;bundle-version="4.0.0",
  org.eclipse.emf.compare.rcp.ui;bundle-version="4.0.0",
  org.eclipse.emf.compare;bundle-version="3.0.0",
- org.eclipse.emf.emfatic.core;bundle-version="1.2.0"
+ org.eclipse.emf.emfatic.core;bundle-version="1.2.0",
+ org.eclipse.jface.text;bundle-version="3.0.0",
+ org.eclipse.emf.emfatic.ui,
+ org.eclipse.gymnast.runtime.ui
 Bundle-Vendor: Eclipse.org
 Automatic-Module-Name: org.eclipse.emf.emfatic.compare.ecore
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

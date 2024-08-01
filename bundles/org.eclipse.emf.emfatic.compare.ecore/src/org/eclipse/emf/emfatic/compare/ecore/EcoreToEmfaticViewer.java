@@ -21,9 +21,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.emfatic.core.generator.emfatic.Writer;
+import org.eclipse.emf.emfatic.ui.editor.EmfaticEditor;
+import org.eclipse.emf.emfatic.ui.editor.EmfaticSourceViewerConfiguration;
 import org.eclipse.jface.text.AbstractDocument;
 import org.eclipse.jface.text.DefaultLineTracker;
 import org.eclipse.jface.text.ITextStore;
+import org.eclipse.jface.text.TextViewer;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
@@ -180,6 +185,16 @@ public class EcoreToEmfaticViewer extends TextMergeViewer {
 	@Override
 	public String getTitle() {
 		return "Emfatic Compare";
+	}
+
+	@Override
+	protected void configureTextViewer(TextViewer textViewer) {
+		super.configureTextViewer(textViewer);
+
+		if (textViewer instanceof ISourceViewer) {
+			SourceViewerConfiguration configuration = new EmfaticSourceViewerConfiguration(new EmfaticEditor());
+			configuration.getPresentationReconciler((ISourceViewer) textViewer).install(textViewer);
+		}
 	}
 
 	protected EObject getEObject(Object inputSide) {
